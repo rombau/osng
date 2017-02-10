@@ -15,39 +15,16 @@ osApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 	}).when('/index.php', {
 		template : "<login-form></login-form>"
 	}).when('/zugabgabe.php', {
-		template : "<zugabgabe-component></zugabgabe-component>"
+		template : "<move-component></move-component>"
 	}).when('/:site', {
 		template : function ($routeProvider) {
 			return '<embedded-site site="../' + $routeProvider.site + '"></embedded-site>';
 		}
 	}).otherwise({
-		template : "ERROR!"
+		template : '<div class="scrollable"><div class="scrollable-content"><div class="section">Fehler!</div></div></div>'
 	});
 
 	// $locationProvider.html5Mode(true);
-
-	// XXX wirklich nötig? os/lc aus cookies nehmen
-	// $httpProvider.interceptors.push(function (UserData, $q) {
-	// return {
-	// request : function (config) {
-	// if (!UserData.loggedIn) {
-	// var cookieHeader = config.headers.Cookie || '';
-	// if (UserData.lc) {
-	// cookieHeader += (cookieHeader.length === 0 ? '' : '; ');
-	// cookieHeader = cookieHeader + 'lc=' + UserData.lc;
-	// }
-	// if (UserData.os) {
-	// cookieHeader += (cookieHeader.length === 0 ? '' : '; ');
-	// cookieHeader = cookieHeader + 'os=' + UserData.os;
-	// }
-	// if (cookieHeader.length > 0) {
-	// config.headers.Cookie = cookieHeader;
-	// }
-	// }
-	// return config;
-	// }
-	// };
-	// });
 
 });
 

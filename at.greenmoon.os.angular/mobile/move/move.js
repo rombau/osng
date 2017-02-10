@@ -53,9 +53,9 @@ osApp.factory('HtmlTransformationUtil', [function () {
 	};
 }]);
 
-osApp.factory('Zugabgabe', ['Player',function (Player) {
+osApp.factory('Move', ['Player',function (Player) {
 
-	function Zugabgabe () {
+	function Move () {
 
 		this.players = [];
 
@@ -70,15 +70,13 @@ osApp.factory('Zugabgabe', ['Player',function (Player) {
 		this.information.against.name = '';
 	}
 
-	Zugabgabe.GRID_ROWS = 15;
-	Zugabgabe.GRID_COLUMNS = 11;
+	Move.GRID_ROWS = 15;
+	Move.GRID_COLUMNS = 11;
 
-	Zugabgabe.prototype = {
+	Move.prototype = {
 
 		sortPlayers : function () {
 
-			console.log('Player: ' + Player);
-			console.log('Player.Positions: ' + Player.Positions);
 			if (this.players.length > 0) {
 				this.players.sort(function (a, b) {
 					var pdiff = Player.Positions.indexOf(b.pos) - Player.Positions.indexOf(a.pos);
@@ -93,11 +91,11 @@ osApp.factory('Zugabgabe', ['Player',function (Player) {
 		}
 	};
 
-	return Zugabgabe;
+	return Move;
 
 }]);
 
-osApp.factory('ZugabgabeTransformation', ['Zugabgabe','Player','HtmlTransformationUtil',function (Zugabgabe, Player, HtmlTransformationUtil) {
+osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',function (Move, Player, HtmlTransformationUtil) {
 
 	return {
 
@@ -112,35 +110,35 @@ osApp.factory('ZugabgabeTransformation', ['Zugabgabe','Player','HtmlTransformati
 			var tableRaster = tables[3];
 			var tableSpieler = tables[4];
 
-			var za = new Zugabgabe();
+			var move = new Move();
 
 			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+, (\w+ )*(\d+)\. (\w+) (\d\d\d\d) (\w+ )*(\d+):(\d+)/gm;
 			var matches = pattern.exec(timeInformation.textContent);
 			if (matches) {
-				za.information.zat = +matches[1];
+				move.information.zat = +matches[1];
 				var day = matches[3];
 				var month = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"].indexOf(matches[4]);
 				var year = matches[5];
 				var hour = matches[7];
 				var min = matches[8];
-				za.information.date = new Date(year, month, day, hour, min, 0);
+				move.information.date = new Date(year, month, day, hour, min, 0);
 			}
 			pattern = /(\w+) ([\w|ä]+) : <a href="javascript:teaminfo\((\d+)\)">(.*)<\/a>/gm;
 			matches = pattern.exec(againstInformation.innerHTML);
 			if (matches) {
-				za.information.type = matches[1];
-				za.information.home = (matches[2] === 'Heim');
-				za.information.against = {};
-				za.information.against.id = +matches[3];
-				za.information.against.name = matches[4];
+				move.information.type = matches[1];
+				move.information.home = (matches[2] === 'Heim');
+				move.information.against = {};
+				move.information.against.id = +matches[3];
+				move.information.against.name = matches[4];
 			}
 
 			var row, r, cell, c;
 
 			var grid = [];
-			for (r = 1; r <= Zugabgabe.GRID_ROWS; r++) {
+			for (r = 1; r <= Move.GRID_ROWS; r++) {
 				row = tableRaster.rows[r];
-				for (c = 1; c <= Zugabgabe.GRID_COLUMNS; c++) {
+				for (c = 1; c <= Move.GRID_COLUMNS; c++) {
 					grid.push(row.cells[c].textContent);
 				}
 			}
@@ -181,28 +179,28 @@ osApp.factory('ZugabgabeTransformation', ['Zugabgabe','Player','HtmlTransformati
 						}
 					}
 
-					za.players.push(player);
+					move.players.push(player);
 				}
 			}
-			return za;
+			return move;
 		}
 	};
 }]);
 
-osApp.factory('ZugabgabeWebClient', ['$http','Zugabgabe','ZugabgabeTransformation',function ($http, Zugabgabe, ZugabgabeTransformation) {
+osApp.factory('MoveWebClient', ['$http','Move','MoveTransformation',function ($http, Move, MoveTransformation) {
 
 	return {
 
-		loadZugabgabe : function (zat) {
+		loadMove : function (num) {
 
 			return $http({
 				url : '../zugabgabe.php',
 				method : 'GET',
-				transformResponse : ZugabgabeTransformation.transformSetup
+				transformResponse : MoveTransformation.transformSetup
 			});
 		},
 
-		saveZugabgabe : function (zugabgabe) {
+		saveMove : function (move) {
 
 			// TODO transform parameters
 
@@ -214,11 +212,11 @@ osApp.factory('ZugabgabeWebClient', ['$http','Zugabgabe','ZugabgabeTransformatio
 	};
 }]);
 
-osApp.component('zugabgabeComponent', {
+osApp.component('moveComponent', {
 
-	templateUrl : 'zugabgabe/zugabgabe.html',
+	templateUrl : 'move/move.html',
 
-	controller : function ($scope, $location, SharedState, ZugabgabeWebClient, Zugabgabe) {
+	controller : function ($scope, $location, SharedState, MoveWebClient, Move) {
 
 		var ctrl = this;
 
@@ -231,9 +229,9 @@ osApp.component('zugabgabeComponent', {
 		 */
 		ctrl.grid = (function initGrid () {
 
-			var rows = new Array(Zugabgabe.GRID_ROWS);
-			for (var r = 0; r < Zugabgabe.GRID_ROWS; r++) {
-				rows[r] = new Array(Zugabgabe.GRID_COLUMNS);
+			var rows = new Array(Move.GRID_ROWS);
+			for (var r = 0; r < Move.GRID_ROWS; r++) {
+				rows[r] = new Array(Move.GRID_COLUMNS);
 			}
 			return rows;
 		})();
@@ -301,7 +299,7 @@ osApp.component('zugabgabeComponent', {
 			console.log('SAVE: ' + JSON.stringify(ctrl.players));
 		};
 
-		ZugabgabeWebClient.loadZugabgabe().then(function (response) {
+		MoveWebClient.loadMove().then(function (response) {
 
 			ctrl.information = response.data.information;
 			ctrl.players = response.data.sortPlayers();
@@ -323,7 +321,7 @@ osApp.component('zugabgabeComponent', {
 
 osApp.component('player', {
 
-	templateUrl : 'zugabgabe/gridplayer.html',
+	templateUrl : 'move/gridplayer.html',
 
 	bindings : {
 		player : '<object',

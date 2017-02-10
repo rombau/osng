@@ -1,12 +1,12 @@
 // 
-describe('Zugabgabe transformation service', function () {
+describe('Move transformation service', function () {
 
 	var transformationService;
 
 	beforeEach(module('OnlineSoccer'));
 
 	beforeEach(inject(function ($injector) {
-		transformationService = $injector.get('ZugabgabeTransformation');
+		transformationService = $injector.get('MoveTransformation');
 	}));
 
 	it('should throw error when html is invalid', function () {
@@ -19,46 +19,46 @@ describe('Zugabgabe transformation service', function () {
 
 	it('should extract information from setup html', function () {
 
-		var fixture = __html__['fixtures/zugabgabe.setup.html'];
+		var fixture = __html__['fixtures/move.setup.html'];
 
-		var za = transformationService.transformSetup(fixture);
+		var move = transformationService.transformSetup(fixture);
 
-		expect(za).toBeDefined();
+		expect(move).toBeDefined();
 
-		expect(za.information).toBeDefined();
-		expect(za.information.zat).toEqual(8);
-		expect(za.information.date.toUTCString()).toEqual('Sat, 04 Feb 2017 12:00:00 GMT');
-		expect(za.information.type).toEqual('Liga');
-		expect(za.information.home).toEqual(false);
-		expect(za.information.against.id).toEqual(781);
-		expect(za.information.against.name).toEqual('Shamrock Rangers');
+		expect(move.information).toBeDefined();
+		expect(move.information.zat).toEqual(8);
+		expect(move.information.date.toUTCString()).toEqual('Sat, 04 Feb 2017 12:00:00 GMT');
+		expect(move.information.type).toEqual('Liga');
+		expect(move.information.home).toEqual(false);
+		expect(move.information.against.id).toEqual(781);
+		expect(move.information.against.name).toEqual('Shamrock Rangers');
 
-		expect(za.players).toBeDefined();
-		expect(za.players.length).toEqual(37);
+		expect(move.players).toBeDefined();
+		expect(move.players.length).toEqual(37);
 
-		expect(za.players[0].id).toEqual(41930);
-		expect(za.players[0].name).toEqual('Steve Stapleton');
-		expect(za.players[0].pos).toEqual('TOR');
-		expect(za.players[0].alter).toEqual(27);
-		expect(za.players[0].moral).toEqual(98);
-		expect(za.players[0].fitness).toEqual(99);
-		expect(za.players[0].skill).toEqual(55.41);
-		expect(za.players[0].opti).toEqual(85.26);
-		expect(za.players[0].sonder).toEqual('E');
-		expect(za.players[0].row).toEqual(0);
-		expect(za.players[0].col).toEqual(0);
+		expect(move.players[0].id).toEqual(41930);
+		expect(move.players[0].name).toEqual('Steve Stapleton');
+		expect(move.players[0].pos).toEqual('TOR');
+		expect(move.players[0].alter).toEqual(27);
+		expect(move.players[0].moral).toEqual(98);
+		expect(move.players[0].fitness).toEqual(99);
+		expect(move.players[0].skill).toEqual(55.41);
+		expect(move.players[0].opti).toEqual(85.26);
+		expect(move.players[0].sonder).toEqual('E');
+		expect(move.players[0].row).toEqual(0);
+		expect(move.players[0].col).toEqual(0);
 
-		expect(za.players[36].id).toEqual(113415);
-		expect(za.players[36].name).toEqual('Jim Thornton');
-		expect(za.players[36].pos).toEqual('STU');
-		expect(za.players[36].alter).toEqual(17);
-		expect(za.players[36].moral).toEqual(77);
-		expect(za.players[36].fitness).toEqual(99);
-		expect(za.players[36].skill).toEqual(33);
-		expect(za.players[36].opti).toEqual(37.96);
-		expect(za.players[36].sonder).toEqual('');
-		expect(za.players[36].row).toBeUndefined();
-		expect(za.players[36].col).toBeUndefined();
+		expect(move.players[36].id).toEqual(113415);
+		expect(move.players[36].name).toEqual('Jim Thornton');
+		expect(move.players[36].pos).toEqual('STU');
+		expect(move.players[36].alter).toEqual(17);
+		expect(move.players[36].moral).toEqual(77);
+		expect(move.players[36].fitness).toEqual(99);
+		expect(move.players[36].skill).toEqual(33);
+		expect(move.players[36].opti).toEqual(37.96);
+		expect(move.players[36].sonder).toEqual('');
+		expect(move.players[36].row).toBeUndefined();
+		expect(move.players[36].col).toBeUndefined();
 
 	});
 
@@ -68,22 +68,22 @@ describe('Zugabgabe transformation service', function () {
 });
 
 //
-describe('Zugabgabe web client service', function () {
+describe('Move web client service', function () {
 
 	var webClient, $httpBackend;
 
 	beforeEach(module('OnlineSoccer'));
 
 	beforeEach(inject(function ($injector) {
-		webClient = $injector.get('ZugabgabeWebClient');
+		webClient = $injector.get('MoveWebClient');
 		$httpBackend = $injector.get('$httpBackend');
 	}));
 
-	it('should load current za from affected web sites', function () {
+	it('should load current move from affected web sites', function () {
 
-		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['fixtures/zugabgabe.html']);
+		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['fixtures/move.html']);
 
-		webClient.loadZugabgabe().then(function (reponse) {
+		webClient.loadMove().then(function (reponse) {
 
 			expect(reponse.data).toBeDefined();
 			expect(reponse.data.information).toBeDefined();
@@ -101,7 +101,7 @@ describe('Zugabgabe web client service', function () {
 });
 
 // 
-describe('Zugabgabe controller', function () {
+describe('Move controller', function () {
 
 	var ctrl, Player, $httpBackend;
 
@@ -112,10 +112,10 @@ describe('Zugabgabe controller', function () {
 		Player = $injector.get('Player');
 		$httpBackend = $injector.get('$httpBackend');
 
-		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['fixtures/zugabgabe.html']);
+		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['fixtures/move.html']);
 
 		$componentController = $injector.get('$componentController');
-		ctrl = $componentController('zugabgabeComponent');
+		ctrl = $componentController('moveComponent');
 
 		$httpBackend.flush();
 
