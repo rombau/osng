@@ -263,6 +263,8 @@ osApp.component('moveComponent', {
 
 			player.row = y;
 			player.col = x;
+
+			return (playerToReplace);
 		};
 
 		/**
@@ -415,11 +417,13 @@ osApp.component('player', {
 								newX = (newX - 1) * -1;
 								newY = -1;
 							}
-							ctrl.onMove({
+							if (ctrl.onMove({
 								player : ctrl.player,
 								x : newX,
 								y : newY
-							});
+							})) {
+								drag.reset();
+							}
 							inArea = true;
 						}
 					}
@@ -434,7 +438,6 @@ osApp.component('player', {
 					}
 				}
 				$timeout(function () {
-					drag.reset();
 					toggleMoving();
 				}, 100);
 			}
