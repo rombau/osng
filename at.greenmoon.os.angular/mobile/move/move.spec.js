@@ -164,10 +164,45 @@ describe('Move controller', function () {
 
 		ctrl.grid.setPlayer(player, 2, 2);
 
-		expect(ctrl.grid[0][0]).toBeNull();
+		expect(ctrl.grid[0][0]).toBeUndefined();
 		expect(ctrl.grid[1][1]).not.toBeNull();
 		expect(ctrl.grid[1][1].row).toEqual(2);
 		expect(ctrl.grid[1][1].col).toEqual(2);
+
+	});
+
+	it('should set player to occupied grid position', function () {
+
+		var player1 = new Player();
+		var player2 = new Player();
+		ctrl.grid.setPlayer(player1, 1, 1);
+
+		ctrl.grid.setPlayer(player2, 1, 1);
+
+		expect(ctrl.grid[0][0]).toBeDefined();
+		expect(ctrl.grid[0][0]).toEqual(player2);
+		expect(player1.row).toBeUndefined();
+		expect(player1.col).toBeUndefined();
+		expect(player2.row).toEqual(1);
+		expect(player2.col).toEqual(1);
+
+	});
+
+	it('should move player to occupied grid position', function () {
+
+		var player1 = new Player();
+		var player2 = new Player();
+		ctrl.grid.setPlayer(player1, 1, 1);
+		ctrl.grid.setPlayer(player2, 2, 2);
+
+		ctrl.grid.setPlayer(player2, 1, 1);
+
+		expect(ctrl.grid[0][0]).toBeDefined();
+		expect(ctrl.grid[0][0]).toEqual(player2);
+		expect(player1.row).toEqual(2);
+		expect(player1.col).toEqual(2);
+		expect(player2.row).toEqual(1);
+		expect(player2.col).toEqual(1);
 
 	});
 

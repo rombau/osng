@@ -241,23 +241,28 @@ osApp.component('moveComponent', {
 		 */
 		ctrl.grid.setPlayer = function (player, x, y) {
 
-			if (player.isSet() && player.row > 0) {
-				ctrl.grid[player.row - 1][player.col - 1] = null;
-			}
+			var playerToReplace = null;
 
 			if (y > 0) {
-				if (ctrl.grid[y - 1][x - 1]) {
-					return false;
-				}
+				playerToReplace = ctrl.grid[y - 1][x - 1];
 				ctrl.grid[y - 1][x - 1] = player;
-			} else if (x === 0 && y === 0 && ctrl.getKeeper()) {
-				return false;
+			} else if (x === 0 && y === 0) {
+				playerToReplace = ctrl.getKeeper();
+			} else {
+				playerToReplace = ctrl.getSubst()[-x];
+			}
+
+			if (player.isSet() && player.row > 0) {
+				ctrl.grid[player.row - 1][player.col - 1] = playerToReplace;
+			}
+
+			if (playerToReplace) {
+				playerToReplace.row = player.row;
+				playerToReplace.col = player.col;
 			}
 
 			player.row = y;
 			player.col = x;
-
-			return true;
 		};
 
 		/**
@@ -307,7 +312,7 @@ osApp.component('moveComponent', {
 			for (var p = 0; p < ctrl.players.length; p++) {
 				var player = ctrl.players[p];
 				if (player.row > 0 && player.col > 0) {
-					ctrl.grid.setPlayer(player, player.col, player.row);
+					ctrl.grid[player.row - 1][player.col - 1] = player;
 				}
 			}
 
@@ -410,13 +415,11 @@ osApp.component('player', {
 								newX = (newX - 1) * -1;
 								newY = -1;
 							}
-							if (!ctrl.onMove({
+							ctrl.onMove({
 								player : ctrl.player,
 								x : newX,
 								y : newY
-							})) {
-								drag.reset();
-							}
+							});
 							inArea = true;
 						}
 					}
@@ -431,6 +434,7 @@ osApp.component('player', {
 					}
 				}
 				$timeout(function () {
+					drag.reset();
 					toggleMoving();
 				}, 100);
 			}
