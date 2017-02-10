@@ -348,7 +348,8 @@ osApp.component('player', {
 		var playerElement = $element[0].firstChild;
 		var playerRect = playerElement.getBoundingClientRect();
 
-		angular.element(playerElement).css('background-image', 'url("/faceprev.php?sid=' + ctrl.player.id + '")');
+		// angular.element(playerElement).css('background-image', 'url("/faceprev.php?sid=' +
+		// ctrl.player.id + '")');
 
 		var toggleMoving = (function () {
 
@@ -439,6 +440,7 @@ osApp.component('player', {
 				}
 				$timeout(function () {
 					toggleMoving();
+					$scope.$apply();
 				}, 100);
 			}
 
