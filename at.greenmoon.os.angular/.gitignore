@@ -3,3 +3,4 @@
 /node_modules/
 /junit-report.xml
 /*.php
+/*.html
