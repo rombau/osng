@@ -83,7 +83,7 @@
 	.player-container {
 		width: 301px;
 		width: calc(100vw - 467px);
-		z-index: 0;
+		z-index: 300;
 	}
 	.player-container.moving {
 		width: 100%;
