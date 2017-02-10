@@ -1,0 +1,115 @@
+<ui-shared-state id="activeTab" default="1"></ui-shared-state>
+
+<div class="navbar-brand navbar-brand-center" ui-content-for="title">
+	<div style="position: relative; ">
+		<div style="position: absolute; top: -6px;">
+		    <span style="white-space: nowrap;"><span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.information.zat}} am {{$ctrl.information.date | date : "dd.MM.yyyy"}}<span class="hidden-xs"> {{$ctrl.information.date | date : "hh:mm"}} Uhr</span></span>
+		    <br>
+		    <span style="font-size: 10px; line-height: 1; white-space: nowrap;">{{$ctrl.information.type}} <span class="hidden-xs">{{$ctrl.information.home ? 'Heim' : 'Auswärts'}} </span> g<span class="hidden-xs">e</span>g<span class="hidden-xs">en</span> {{$ctrl.information.against.name}}</span>
+	    </div>
+    </div>
+</div>
+
+<div class="btn-group pull-right" ui-content-for="navbarAction">
+	<a ui-set="{'activeTab': 1}" 
+	    ui-class="{'active': activeTab == 1}" class="btn btn-navbar">
+	    <i class="fa fa-th"></i><span class="hidden-xs"> Aufstellung</span>
+	</a>
+	<a ui-set="{'activeTab': 4}" 
+	    ui-class="{'active': activeTab == 4}" class="btn btn-navbar">
+	    <i class="fa fa-gear"></i><span class="hidden-xs"> Einstellungen</span>
+	</a>
+    <a class="btn btn-navbar" ng-click="$ctrl.save()">
+    	<span style="color:red;">
+        	<i class="fa fa-save"></i> <span class="hidden-xs">Speichern</span>
+        </span>
+    </a>
+    <a class="visible-xs btn btn-navbar" ui-toggle="leftSwipe">
+       	<i class="fa fa-users"></i>
+    </a>
+</div>
+
+<div class="scrollable">
+  <div class="scrollable-content">
+    <div class="section">
+
+      <div ui-if="activeTab == 1">
+      	
+	    	<div class="grid-border">
+		    	<div class="grid-container">
+					<div ng-repeat="row in $ctrl.grid">
+						<div ng-repeat="cell in row track by $index" class="grid-cell">
+							<player ng-if="cell.id" 
+								object="cell" 
+								on-move="$ctrl.grid.setPlayer(player, x, y)"
+								on-remove="$ctrl.grid.removePlayer(player)"/>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="grid-cell" style="margin-left: 2px;"></div>
+			<div class="grid-cell"></div>
+			<div class="grid-cell"></div>
+			<div class="grid-cell"></div>
+			<div class="grid-cell"></div>
+			<div class="grid-cell keeper-container">
+				<div></div>
+				<player ng-if="$ctrl.getKeeper()" 
+					object="$ctrl.getKeeper()" 
+					on-move="$ctrl.grid.setPlayer(player, x, y)"
+					on-remove="$ctrl.grid.removePlayer(player)"></player>
+			</div>
+
+			<div style="clear: both;"><br>Ersatzbank</div>
+			<div class="subst-border">
+				<div class="subst-container">
+					<div ng-repeat="cell in $ctrl.getSubst() track by $index" class="grid-cell">
+						<player ng-if="cell.id" 
+							object="cell" 
+							on-move="$ctrl.grid.setPlayer(player, x, y)"
+							on-remove="$ctrl.grid.removePlayer(player)"/>
+					</div>
+				</div>
+			</div>
+			
+		    <div class="player-container" ui-class="{'visible': leftSwipe == true}"
+		    	ui-turn-off="leftSwipe">
+		    	
+		    	<div ng-repeat="player in $ctrl.players" style="padding-top: 5px; width: 100%;">
+		    		<div class="grid-cell">
+	    				<div class="grid-face grid-face-{{player.pos}} noselect btn-group pull-right"
+	    					style="background-image: url('/faceprev.php?sid={{player.id}}'); opacity: 0.5; cursor: inherit;"></div>
+	    				<player ng-if="!player.isSet()"
+	    					object="player" on-move="$ctrl.grid.setPlayer(player, x, y)"></player>
+		    		</div>
+		    		<div class="noselect player-info">
+						<div class="noselect"><a href="javascript:spielerinfo({{player.id}})" 
+							class="{{player.pos}}" >{{player.name}}</a></div>
+						<div class="noselect">
+							Mor<span class="hidden-xs">al</span> {{player.moral}} / 
+							Fit<span class="hidden-xs">ness</span> {{player.fitness}} - 
+							<span class="hidden-xs">Skill</span> {{player.skill | number : 2}} / 
+							<span class="hidden-xs">Opti</span> <b>{{player.opti | number : 2}}</b>
+							<span ng-if="player.sonder">/ 
+							{{player.sonder}}</span>
+						</div>
+					</div>
+		    	</div>
+		    	
+		    </div>
+
+      </div>
+
+      <div ui-if="activeTab == 2">
+      </div>
+
+      <div ui-if="activeTab == 3">
+      </div>
+
+      <div ui-if="activeTab == 4">
+      </div>
+
+    </div>
+  </div>
+</div>

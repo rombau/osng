@@ -1,0 +1,5 @@
+/coverage/
+/launch/
+/node_modules/
+/junit-report.xml
+/*.php
