@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+<title>Online-Soccer 2.0</title>
+
+<script src="js/sorttable.js" type="text/javascript"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<link rel="STYLESHEET" type="text/css" href="js/dxhtml/codebase/dhtmlxgrid.css">
+
+<link rel="stylesheet" href="css/os_styles.css" />
+
+<link rel="stylesheet" href="css/print.css" media="print" />
+
+<link rel="SHORTCUT ICON" href="images/favicon.ico" type="image/ico" />
+
+<script type="text/javascript" src="js/osfunc.js"></script>
+
+</head>
+
+<body><div>
+<p class="noprint" id="TopThema"><iframe src="http://rcm-de.amazon.de/e/cm?t=onlinsocce20-21&o=3&p=26&l=ur1&category=de_mp3_download&banner=16PHPC1TRHC8FJX2R782&f=ifr" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe></p><SCRIPT LANGUAGE="JavaScript"><!-- Hide script
+
+function checkza (hnr) {msg=open("","checkza","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,height=600,width=400");msg.location = "checkza.php"}
+
+function confirmdelete() {
+
+	check = confirm("Aufstellung unwiederruflich verwerfen?");
+
+	if (check == true) {
+
+		document.delete_form.submit();
+
+	} else {
+
+		return false;
+
+	}
+
+}
+
+-->
+
+</script>
+
+<TABLE border=0 cellpadding=5>
+
+ <tr>
+
+   <TD align=middle><a href="?p=0">Aufstellung</a></td>
+
+
+
+   <TD align=middle><a href="?p=1">Aktionen</a></td>
+
+   <TD align=middle><a href="?p=2">Einstellungen</a></td>
+
+
+
+   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:os_wiki('OS_Hilfesystem_Aktionen')"><img src="/images/os_hilfe.gif" border=0></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+   <td align=middle><font size ="+1">Mannschaftsaufstellung</font></td>
+
+   <td>
+
+    <input type=button value="Zugabgabe speichern" onclick="javascript:checkza(1)">
+
+   </td>
+
+
+
+ </tr>
+
+</TABLE>
+
+<hr />
+
+<table>
+
+ <tr>
+
+  <td>ZA f&uuml;r ZAT 11 Termin: Dienstag, 14.02.2017 19:29:59 Spiel :  </td><td class="OMI">Friendly Heim : <a href="javascript:teaminfo(374)">AS Les Lilas</a> </td>
+
+  <td class="STU">Zugabgabe: Ung&uuml;ltig</td>
+
+ </tr>
+
+</table>
+
+<hr /><form method="GET">
+
+<input type="hidden" name="p" value="1">
+
+<table border="0">
+
+	<tr>
+
+		<td>
+
+			<select name="item">
+
+								<option value="0">Neue Aktion ausw&auml;hlen</option>
+				<option value="1">Einwechslung</option>
+				<option value="2">Einsatz festlegen</option>
+				<option value="3">H&auml;rte festlegen</option>
+				<option value="4">Spielweise festlegen</option>
+				<option value="5">Positionswechsel</option>
+				<option value="6">Manndeckung</option>
+
+
+			</select>
+
+		</td>
+
+		<td>&nbsp;&nbsp;&nbsp;</td>
+
+		<td><input type="Submit" value="   Neue Aktion starten   "></td>
+
+	</tr>
+
+</table></form>
+
+<hr />
+
+<form method="GET"><table border="0"><input type="hidden" name="p" value=1><tr><td><input type="radio" name="delzae" value="11005"></td><td>Bei roter Karte TOR : Einwechslung von Steve Stapleton f&uuml;r Nick Keogh  der 76. Minute als Torwart</td></tr><tr><td><input type="radio" name="delzae" value="11004"></td><td>Bei R&uuml;ckstand : Einwechslung von Clifford Murphy f&uuml;r Ian Quigley in der 11. Minute auf Kartenposition</td></tr><tr><td><input type="radio" name="delzae" value="11003"></td><td>Immer : Einwechslung von Anthony Downes f&uuml;r Anthony Madden in der 2. Minute auf Position E7</td></tr><tr><td><input type="radio" name="delzae" value="11006"></td><td>Bei Mehr-Tore-R&uuml;ckstand : Einsatz einstellen auf 70% ab der 8. Minute</td></tr><tr><td><input type="radio" name="delzae" value="11007"></td><td>Immer : H&auml;rte einstellen auf Fairplay in der 1. Minute</td></tr><tr><td><input type="radio" name="delzae" value="11008"></td><td>Bei F&uuml;hrung : Spielweise einstellen auf leicht Defensiv ab der 46. Minute</td></tr><tr><td><input type="radio" name="delzae" value="11009"></td><td>Immer : Positionswechsel von Conrad Nash auf Position E5 in der 50. Minute</td></tr><tr><td><input type="radio" name="delzae" value="11010"></td><td>Immer : Positionsbezogene Manndeckung durch Martin Downey in der 1. Minute</td></tr><tr><td><input type="radio" name="delzae" value="11013"></td><td>Immer : Manndeckung aufheben durch Martin Downey in der 46. Minute</td></tr><tr><td><input type="radio" name="delzae" value="11015"></td><td>Bei R&uuml;ckstand : Manndeckung von Anthony Figere durch Joseph Mulligan in der 55. Minute</td></tr><tr><td colspan="2"><input type="submit" name="delete" value="    Gew&auml;hlte Aktion l&ouml;schen   "></td></tr></table></form>
+</div>
+
+</body>
+
+</html>

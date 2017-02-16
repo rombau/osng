@@ -15,17 +15,17 @@
 	    ui-class="{'active': activeTab == 1}" class="btn btn-navbar">
 	    <i class="fa fa-th"></i><span class="hidden-xs"> Aufstellung</span>
 	</a>
-	<a ui-set="{'activeTab': 4}" 
-	    ui-class="{'active': activeTab == 4}" class="btn btn-navbar">
-	    <i class="fa fa-gear"></i><span class="hidden-xs"> Einstellungen</span>
+	<a ui-set="{'activeTab': 2}" 
+	    ui-class="{'active': activeTab == 2}" class="btn btn-navbar">
+	    <i class="fa fa-gears"></i><span class="hidden-xs"> Einstellungen</span>
 	</a>
+    <a class="btn btn-navbar">
+		<i class="fa fa-folder-open-o"></i> <span class="hidden-xs">Laden</span>
+    </a>
     <a class="btn btn-navbar" ng-click="$ctrl.save()">
     	<span style="color:red;">
         	<i class="fa fa-save"></i> <span class="hidden-xs">Speichern</span>
         </span>
-    </a>
-    <a class="visible-xs btn btn-navbar" ui-toggle="leftSwipe">
-       	<i class="fa fa-users"></i>
     </a>
 </div>
 
@@ -73,6 +73,10 @@
 				</div>
 			</div>
 			
+			<div class="player-container-button visible-xs">
+				<a ui-toggle="leftSwipe"><i class="fa fa-user-plus"></i></a>
+			</div>
+			
 		    <div class="player-container" ui-class="{'visible': leftSwipe == true}"
 		    	ui-turn-off="leftSwipe">
 		    	
@@ -91,8 +95,7 @@
 							Fit<span class="hidden-xs">ness</span> {{player.fitness}} - 
 							<span class="hidden-xs">Skill</span> {{player.skill | number : 2}} / 
 							<span class="hidden-xs">Opti</span> <b>{{player.opti | number : 2}}</b>
-							<span ng-if="player.sonder">/ 
-							{{player.sonder}}</span>
+							<span ng-if="player.sonder">/ {{player.sonder}}</span>
 						</div>
 					</div>
 		    	</div>
@@ -102,14 +105,116 @@
       </div>
 
       <div ui-if="activeTab == 2">
+      
+      		<h4><b>Aktionen</b></h4>
+      		
+      		<div class="list-group" style="margin-bottom: 0px;">
+				<div ng-repeat="adjustment in $ctrl.adjustments">
+					<div ng-if="adjustment.option.page==1" class="list-group-item" style="padding: 3px 0px; border-bottom: 1px solid #050555; display: inline-block;">
+						<span ng-bind-html="adjustment.text"></span> <a style="color: white; margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
+					</div> 
+				</div> 
+			</div>
+			
+			<div ng-repeat="option in $ctrl.options" class="hidden-xs btn-group">
+				<button ng-if="option.page==1" class="btn" 
+					style="margin: 15px 4px 10px 0px; background-color: #FBF9B3; border-color: white; color: #050555;">
+					<span ng-bind-html="option.text"></span> 
+				</button>
+			</div>
+      		
+      		<h4 style="margin-top: 20px;"><b>Einstellungen</b></h4>
+
+      		<div class="list-group" style="margin-bottom: 0px;">
+				<div ng-repeat="adjustment in $ctrl.adjustments">
+					<div ng-if="adjustment.option.page==2" class="list-group-item" style="padding: 3px 0px; border-bottom: 1px solid #050555; display: inline-block;">
+						<span ng-bind-html="adjustment.text"></span> <a style="color: white; margin-left: 5px;"><i class="fa fa-trash"></i></a>
+					</div> 
+				</div> 
+			</div>
+
+			<div ng-repeat="option in $ctrl.options" class="hidden-xs btn-group">
+				<button ng-if="option.page==2" class="btn" 
+					style="margin: 15px 4px 10px 0px; background-color: #FBF9B3; border-color: white; color: #050555;">
+					<span ng-bind-html="option.text"></span> 
+				</button>
+			</div>
+      
+      		<div class="player-container-button visible-xs">
+				<a ui-toggle="leftSwipe"><i class="fa fa-plus"></i></a>
+
+			</div>
+						
+		    <div class="player-container visible-xs" ui-class="{'visible': leftSwipe == true}"
+		    	ui-turn-off="leftSwipe">
+		    	
+				<div class="list-group">
+					<div ng-repeat="option in $ctrl.options">
+						<a class="list-group-item" style="background-color: #050555;">
+							<i class="fa fa-caret-square-o-right"></i> 
+							<span ng-bind-html="option.text"></span> 
+						</a>
+					</div> 
+				</div>
+		    	
+		    </div>
+      
       </div>
 
-      <div ui-if="activeTab == 3">
-      </div>
+    </div>
+  </div>
+</div>
 
-      <div ui-if="activeTab == 4">
-      </div>
+<div ui-content-for="modals">
+  <div class="modal" ui-if="action" ui-state='action'>
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" 
+                  ui-turn-off="modal1">&times;</button>
+          <h4 class="modal-title">Aktion hinzufügen</h4>
+        </div>
+        <div class="modal-body">
 
+<form method="GET">
+
+	<input name="p" value="1" type="hidden">
+
+	<input name="itemcreate" value="2" type="hidden">
+
+	Spielminute<br>
+	
+	<select name="zao_minute">
+
+				<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option><option value="60">60</option><option value="61">61</option><option value="62">62</option><option value="63">63</option><option value="64">64</option><option value="65">65</option><option value="66">66</option><option value="67">67</option><option value="68">68</option><option value="69">69</option><option value="70">70</option><option value="71">71</option><option value="72">72</option><option value="73">73</option><option value="74">74</option><option value="75">75</option><option value="76">76</option><option value="77">77</option><option value="78">78</option><option value="79">79</option><option value="80">80</option><option value="81">81</option><option value="82">82</option><option value="83">83</option><option value="84">84</option><option value="85">85</option><option value="86">86</option><option value="87">87</option><option value="88">88</option><option value="89">89</option><option value="90">90</option>
+
+	</select>
+
+	<br>Abhängigkeit<br>
+	
+	<select name="zao_abhaengigkeit">
+
+				<option value="0">Immer durchführen</option><option value="10">Bei Rückstand ab Minute</option><option value="20">Bei Rückstand in Minute</option><option value="11">Bei Führung ab Minute</option><option value="21">Bei Führung in Minute</option><option value="12">Bei Unentschieden ab Minute</option><option value="22">Bei Unentschieden in Minute</option><option value="13">Bei Mehr-Tore-Rückstand ab Minute</option><option value="23">Bei Mehr-Tore-Rückstand in Minute</option><option value="14">Bei Mehr-Tore-Führung ab Minute</option><option value="24">Bei Mehr-Tore-Führung in Minute</option><option value="15">Bei Unterzahl ab Minute</option><option value="25">Bei Unterzahl in Minute</option><option value="16">Bei Überzahl ab Minute</option><option value="26">Bei Überzahl in Minute</option>
+
+	</select>
+	
+	<br>Einsatz<br>
+
+	<select name="P1">
+
+				<option value="1">50%</option><option value="2">70%</option><option value="3" selected="">100%</option><option value="4">120%</option><option value="5">150%</option>
+
+	</select>
+
+</form>
+        
+        </div>
+        <div class="modal-footer">
+          <button ui-turn-off="action" class="btn btn-default">Schließen</button>
+          <button ui-turn-off="action" class="btn btn-primary">Aktion Speichern</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

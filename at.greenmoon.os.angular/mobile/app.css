@@ -2,8 +2,7 @@
 @media(max-width:767px) {
 	
 	.section {
-		padding-left: 8px;
-		padding-right: 8px;
+		padding: 8px !important;
 	}
 	
 	.player-container {
@@ -16,10 +15,32 @@
 		box-shadow: 0px 0px 6px 0px #000000;
 		z-index: -1;
 	}
+	.player-container-button {
+		display: inline;
+		position: absolute;
+		right: 8px;
+		bottom: 8px;
+		width: 50px;
+		height: 50px;
+		background-color: #FBF9B3; 
+		border-color: #FBF9B3;
+		border-width: 2px;
+	    border-style: solid;
+	    border-radius: 50%;
+		-webkit-box-shadow: 0px 0px 10px 0px #000000;
+		-moz-box-shadow: 0px 0px 10px 0px #000000;
+		box-shadow: 0px 0px 10px 0px #000000;
+	    z-index: 500;
+	    font-size: 20px;
+	    padding-top: 8px;
+	    text-align: center;
+	    color: white;
+	    
+	}
 	.player-container.visible {
 		width: 100%;
 		z-index: 1000;
-		background-color: #111166;
+		background-color: #050555;
 	}
 	.player-container.moving {
 		background-color: transparent;
@@ -64,7 +85,7 @@
 	    max-height: 40px;
 	}
 	.grid-face-name, .grid-face-name > div {
-		font-size: 9px;
+		font-size: 10px;
 	}
 	.subst-container {
 	    height: 28px;
@@ -140,6 +161,9 @@
 	display: inline-block;
 	overflow-y: scroll;
 }
+.player-container-button {
+	display: none;
+}
 .player-container.moving {
 	overflow-y: scroll;
 }
@@ -212,12 +236,12 @@
     z-index: 200;
 }
 .grid-face.moving {
-	left: -50%;
-	top: -50%;
-	width: 200% !important;
-    max-width: 200% !important;
-    height: 200% !important;
-    max-height: 200% !important;
+	left: -40%;
+	top: -40%;
+	width: 180% !important;
+    max-width: 180% !important;
+    height: 180% !important;
+    max-height: 180% !important;
     background-size: 120%;
 	-webkit-box-shadow: 0px 0px 20px 0px #000000;
 	-moz-box-shadow: 0px 0px 20px 0px #000000;
@@ -327,6 +351,7 @@
 	z-index: 0;
 }
 .section {
+	padding: 15px;
 	background-color: transparent;
 	z-index: 0;
 }
@@ -358,9 +383,6 @@
 }
 
 @media (max-width: 768px) {
-	body, .btn, .navbar-brand, .form-control {
-		font-size: 14px;
-	}
 	.sidebar-left .list-group-item {
 		padding-top: 9px;
 		padding-bottom: 10px;
@@ -370,4 +392,10 @@
 		padding-bottom: 7px;
 	}
 }
+
+.modal-content {
+	color: #050555;
+	background-color: #FBF9B3;
+}
+
 	

@@ -68,6 +68,24 @@ osApp.factory('Move', ['Player',function (Player) {
 		this.information.against = {};
 		this.information.against.id = 0;
 		this.information.against.name = '';
+
+		this.options = [];
+
+		this.Option = function () {
+
+			this.page = 0;
+			this.item = 0;
+			this.text = '';
+		};
+
+		this.adjustments = [];
+
+		this.Adjustment = function () {
+
+			this.option = new Option();
+			this.id = 0;
+			this.text = '';
+		};
 	}
 
 	Move.GRID_ROWS = 15;
@@ -97,9 +115,11 @@ osApp.factory('Move', ['Player',function (Player) {
 
 osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',function (Move, Player, HtmlTransformationUtil) {
 
-	return {
+	var transformation = {
 
 		transformSetup : function (html) {
+
+			var move = new Move();
 
 			var doc = new DOMParser().parseFromString(html, "text/html");
 
@@ -109,8 +129,6 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 			var againstInformation = tables[1].rows[0].cells[1];
 			var tableRaster = tables[3];
 			var tableSpieler = tables[4];
-
-			var move = new Move();
 
 			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+, (\w+ )*(\d+)\. (\w+) (\d\d\d\d) (\w+ )*(\d+):(\d+)/gm;
 			var matches = pattern.exec(timeInformation.textContent);
@@ -183,21 +201,99 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 				}
 			}
 			return move;
+		},
+
+		transformActions : function (html) {
+
+			return transformation._transformOptions(html, 1);
+		},
+
+		transformOptions : function (html) {
+
+			return transformation._transformOptions(html, 2);
+		},
+
+		_transformOptions : function (html, page) {
+
+			var move = new Move();
+
+			var doc = new DOMParser().parseFromString(html, "text/html");
+
+			var optionmap = {}, key;
+
+			var select = doc.getElementsByTagName('select')[0];
+			for (var o = 0; o < select.options.length; o++) {
+				var option = new move.Option();
+				option.page = page;
+				option.item = +select.options[o].value;
+				option.text = select.options[o].text;
+				if (option.item > 0) {
+					move.options.push(option);
+					key = option.text.split(' festlegen')[0].replace('schütze', '').replace('Taktik', 'Grundtaktik');
+					optionmap[key] = option;
+				}
+			}
+
+			var table = doc.getElementsByTagName('table')[3];
+			for (var r = 0; r < table.rows.length - 1; r++) {
+				var row = table.rows[r];
+
+				var adjustment = new move.Adjustment();
+
+				adjustment.id = +row.cells[0].firstChild.value;
+				adjustment.text = row.cells[1].textContent;
+
+				for (key in optionmap) {
+					if (optionmap.hasOwnProperty(key)) {
+						if (adjustment.text.search(key) !== -1) {
+							adjustment.option = optionmap[key];
+						}
+					}
+				}
+				move.adjustments.push(adjustment);
+			}
+
+			return move;
 		}
 	};
+	return transformation;
 }]);
 
-osApp.factory('MoveWebClient', ['$http','Move','MoveTransformation',function ($http, Move, MoveTransformation) {
+osApp.factory('MoveWebClient', ['$q','$http','Move','MoveTransformation',function ($q, $http, Move, MoveTransformation) {
 
 	return {
 
 		loadMove : function (num) {
 
-			return $http({
+			var deferred = $q.defer();
+			var promises = [];
+
+			promises.push($http({
 				url : '../zugabgabe.php',
 				method : 'GET',
 				transformResponse : MoveTransformation.transformSetup
-			});
+			}));
+
+			promises.push($http({
+				url : '../zugabgabe.php?p=1',
+				method : 'GET',
+				transformResponse : MoveTransformation.transformActions
+			}));
+
+			promises.push($http({
+				url : '../zugabgabe.php?p=2',
+				method : 'GET',
+				transformResponse : MoveTransformation.transformOptions
+			}));
+
+			$q.all(promises).then(function (moveArray) {
+				var move = moveArray[0].data;
+				move.options = moveArray[1].data.options.concat(moveArray[2].data.options);
+				move.adjustments = moveArray[1].data.adjustments.concat(moveArray[2].data.adjustments);
+				deferred.resolve(move);
+			}, deferred.reject, deferred.notify);
+
+			return deferred.promise;
 		},
 
 		saveMove : function (move) {
@@ -221,6 +317,8 @@ osApp.component('moveComponent', {
 		var ctrl = this;
 
 		ctrl.players = [];
+		ctrl.options = [];
+		ctrl.adjustments = [];
 
 		var SUBSTITUTES = 6;
 
@@ -306,10 +404,12 @@ osApp.component('moveComponent', {
 			console.log('SAVE: ' + JSON.stringify(ctrl.players));
 		};
 
-		MoveWebClient.loadMove().then(function (response) {
+		MoveWebClient.loadMove().then(function (move) {
 
-			ctrl.information = response.data.information;
-			ctrl.players = response.data.sortPlayers();
+			ctrl.information = move.information;
+			ctrl.players = move.sortPlayers();
+			ctrl.options = move.options;
+			ctrl.adjustments = move.adjustments;
 
 			for (var p = 0; p < ctrl.players.length; p++) {
 				var player = ctrl.players[p];

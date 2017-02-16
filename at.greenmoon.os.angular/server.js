@@ -16,12 +16,9 @@ var server = http.createServer(function (req, res) {
 
 	var localUrl = req.url;
 
-	try {
-		var idx = localUrl.indexOf('?');
-		if (idx !== -1) {
-			localUrl = localUrl.substring(0, idx);
-		}
-		if (fs.existsSync(localUrl.substr(1))) {
+	var responseFromLocalhost = function (file) {
+
+		if (fs.existsSync(file)) {
 			if (localUrl.indexOf('.html') !== -1) {
 				res.writeHead(200, {
 					'Content-Type' : 'text/html'
@@ -35,10 +32,25 @@ var server = http.createServer(function (req, res) {
 					'Content-Type' : 'application/javascript; charset=utf-8'
 				});
 			}
-			res.end(fs.readFileSync(localUrl.substr(1)));
+			res.end(fs.readFileSync(file));
 
-			console.log('[local] ' + localUrl);
+			console.log('[local] ' + file);
+			return true;
+		}
+		return false;
+	};
 
+	try {
+		// with query params
+		if (responseFromLocalhost(localUrl.substr(1))) {
+			return;
+		}
+		var idx = localUrl.indexOf('?');
+		if (idx !== -1) {
+			localUrl = localUrl.substring(0, idx);
+		}
+		// without query params
+		if (responseFromLocalhost(localUrl.substr(1))) {
 			return;
 		}
 	} catch (e) {

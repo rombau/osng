@@ -1,0 +1,72 @@
+Initialisierung
+
+- Zugabage initialisieren: 				GET http://os.ongapo.com/zugabgabe.php
+- Aktionen initialisieren: 				GET http://os.ongapo.com/zugabgabe.php?p=1
+- Einstellungen initialisieren: 		GET http://os.ongapo.com/zugabgabe.php?p=2
+- Neue Aktion initialisieren:			GET http://os.ongapo.com/zugabgabe.php?p=1&item=2
+- Neue Einstellungen initialisieren:	GET http://os.ongapo.com/zugabgabe.php?p=2&item=16
+
+Aktionen
+
+- Taktik laden:							GET http://os.ongapo.com/zugabgabe.php?p=&raster1=66657&raster=Laden
+- Zugabgabe laden:						GET http://os.ongapo.com/zugabgabe.php?p=&lauf=48
+- Zugabgabe speichern:					GET http://os.ongapo.com/checkza.php
+- Aufstellung speichern:				GET http://os.ongapo.com/zugabgabe_beta.php
+- Aufstellung löschen:					GET http://os.ongapo.com/zugabgabe.php?p=0&del_za=1
+- Aktion hinzufürgen:					GET http://os.ongapo.com/zugabgabe.php?p=1&itemcreate=2&zao_minute=1&zao_abhaengigkeit=0&P1=3&anlegen=+++Neue+Aktion+anlegen+++
+- Aktion löschen:						GET http://os.ongapo.com/zugabgabe.php?p=1&delzae=12146&delete=++++Gewählte+Aktion+löschen+++
+- Einstellung hinzufürgen:				GET http://os.ongapo.com/zugabgabe.php?p=2&itemcreate=16&zao_minute=1&zao_abhaengigkeit=0&P1=0&anlegen=+++Neue+Aktion+anlegen+++
+- Einstellung löschen:					GET http://os.ongapo.com/zugabgabe.php?p=2&delzae=12167&delete=+++Gewählte+Einstellung+löschen+++
+
+Einwechslung
+
+p=1
+itemcreate=1
+zao_einspieler=<id>
+zao_spieler=<id>
+zao_minute=<minute> ... bis 90 oder 120
+zao_abhaengigkeit=
+	0 (Immer durchf&uuml;hren)
+	10 (Bei R&uuml;ckstand ab Minute)
+	20 (Bei R&uuml;ckstand in Minute)
+	11 (Bei F&uuml;hrung ab Minute)
+	21 (Bei F&uuml;hrung in Minute)
+	12 (Bei Unentschieden ab Minute)
+	22 (Bei Unentschieden in Minute)
+	13 (Bei Mehr-Tore-R&uuml;ckstand ab Minute)
+	23 (Bei Mehr-Tore-R&uuml;ckstand in Minute)
+	14 (Bei Mehr-Tore-F&uuml;hrung ab Minute)
+	24 (Bei Mehr-Tore-F&uuml;hrung in Minute)
+	15 (Bei Unterzahl ab Minute)
+	25 (Bei Unterzahl in Minute)
+	16 (Bei &Uuml;berzahl ab Minute)
+	26 (Bei &Uuml;berzahl in Minute)
+	30 (Bei Gelber Karte)
+	31 (Bei Roter Karte TOR)
+	32 (Bei Roter Karte ABW)
+	33 (Bei Rot)MIT)
+	34 (Bei Roter Karte STU)
+	55 (Bei Fitness < 10)
+	65 (Bei Fitness < 30)
+	75 (Bei Fitness < 50)
+	85 (Bei Fitness < 70)
+
+<option value="2">Einsatz festlegen</option>
+<option value="3">H&auml;rte festlegen</option>
+<option value="4">Spielweise festlegen</option>
+<option value="5">Positionswechsel</option>
+<option value="6">Manndeckung</option>
+
+				
+**Einstellungen** (p=2)
+itemcreate:
+<option value="8">Kapit&auml;n</option>
+<option value="9">Spielmacher</option>
+<option value="10">Elfmetersch&uuml;tze</option>
+<option value="11">Freistoss Direkt</option>
+<option value="12">Freistoss Indirekt</option>
+<option value="13">Ecke</option>
+<option value="14">Libero</option>
+<option value="16">Taktik - Abwehr</option>
+<option value="17">Taktik - Mittelfeld</option>
+<option value="18">Taktik - Angriff</option>
