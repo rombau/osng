@@ -60,6 +60,17 @@ describe('Move transformation service', function () {
 
 	});
 
+	it('should extract alternativ date representation from setup html', function () {
+
+		var fixture = __html__['fixtures/move.setup.alt.html'];
+
+		var move = transformationService.transformSetup(fixture);
+
+		expect(move.information).toBeDefined();
+		expect(move.information.date.toUTCString()).toEqual('Tue, 14 Feb 2017 18:29:59 GMT');
+
+	});
+
 	it('should throw error when actions html is invalid', function () {
 
 		expect(function () {

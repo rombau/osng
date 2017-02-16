@@ -130,16 +130,17 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 			var tableRaster = tables[3];
 			var tableSpieler = tables[4];
 
-			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+, (\w+ )*(\d+)\. (\w+) (\d\d\d\d) (\w+ )*(\d+):(\d+)/gm;
+			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+, (\w+ )*(\d+)\.[ ]*([\d|\w]+)[\.| ]*(\d\d\d\d)[\.| ]*(\d+):(\d+):*(\d+)*/gm;
 			var matches = pattern.exec(timeInformation.textContent);
 			if (matches) {
 				move.information.zat = +matches[1];
 				var day = matches[3];
-				var month = ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"].indexOf(matches[4]);
+				var month = (+matches[4] - 1) || ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"].indexOf(matches[4]);
 				var year = matches[5];
-				var hour = matches[7];
-				var min = matches[8];
-				move.information.date = new Date(year, month, day, hour, min, 0);
+				var hour = matches[6];
+				var min = matches[7];
+				var second = matches[8] || 0;
+				move.information.date = new Date(year, month, day, hour, min, second);
 			}
 			pattern = /(\w+) ([\w|ä]+) : <a href="javascript:teaminfo\((\d+)\)">(.*)<\/a>/gm;
 			matches = pattern.exec(againstInformation.innerHTML);
