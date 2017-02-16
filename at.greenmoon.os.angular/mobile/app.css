@@ -5,7 +5,7 @@
 		padding: 8px !important;
 	}
 	
-	.player-container {
+	.selection-container {
 		width: 0px;
 		-webkit-transition: width 400ms ease;
 		-o-transition: width 400ms ease;
@@ -15,7 +15,7 @@
 		box-shadow: 0px 0px 6px 0px #000000;
 		z-index: -1;
 	}
-	.player-container-button {
+	.selection-container-button {
 		display: inline;
 		position: absolute;
 		right: 8px;
@@ -34,24 +34,22 @@
 	    font-size: 20px;
 	    padding-top: 8px;
 	    text-align: center;
-	    color: white;
-	    
 	}
-	.player-container.visible {
+	.selection-container.visible {
 		width: 100%;
 		z-index: 1000;
 		background-color: #050555;
 	}
-	.player-container.moving {
+	.selection-container.moving {
 		background-color: transparent;
 		-webkit-box-shadow: 0px 0px 0px 0px #000000;
 		-moz-box-shadow: 0px 0px 0px 0px #000000;
 		box-shadow: 0px 0px 0px 0px #000000;
 	}
-	.player-container.moving * {
+	.selection-container.moving * {
 		visibility: hidden;
 	}
-	.player-container.moving .grid-face.moving {
+	.selection-container.moving .grid-face.moving {
 		visibility: visible;
 	}
 	.player-info {
@@ -101,12 +99,12 @@
 
 @media(min-width:768px) {
 	
-	.player-container {
+	.selection-container {
 		width: 301px;
 		width: calc(100vw - 467px);
 		z-index: 300;
 	}
-	.player-container.moving {
+	.selection-container.moving {
 		width: 100%;
 		padding-left: 475px;
 	}
@@ -139,20 +137,20 @@
 }
 @media(min-width:992px) {
 
-	.player-container {
+	.selection-container {
 		width: 305px;
 		width: calc(100vw - 687px);
 	}
 }
 @media(min-width:1200px) {
 
-	.player-container {
+	.selection-container {
 		width: 513px;
 		width: calc(100vw - 687px);
 	}
 }
 
-.player-container {
+.selection-container {
 	position: absolute;
 	padding: 8px;
 	right: 0;
@@ -161,10 +159,10 @@
 	display: inline-block;
 	overflow-y: scroll;
 }
-.player-container-button {
+.selection-container-button {
 	display: none;
 }
-.player-container.moving {
+.selection-container.moving {
 	overflow-y: scroll;
 }
 .player-info > div {

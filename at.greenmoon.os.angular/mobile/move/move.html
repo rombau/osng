@@ -73,11 +73,9 @@
 				</div>
 			</div>
 			
-			<div class="player-container-button visible-xs">
-				<a ui-toggle="leftSwipe"><i class="fa fa-user-plus"></i></a>
-			</div>
+			<a ui-toggle="leftSwipe" class="selection-container-button visible-xs"><i class="fa fa-user-plus"></i></a>
 			
-		    <div class="player-container" ui-class="{'visible': leftSwipe == true}"
+		    <div class="selection-container" ui-class="{'visible': leftSwipe == true}"
 		    	ui-turn-off="leftSwipe">
 		    	
 		    	<div ng-repeat="player in $ctrl.players" style="padding-top: 5px; width: 100%;">
@@ -140,12 +138,9 @@
 				</button>
 			</div>
       
-      		<div class="player-container-button visible-xs">
-				<a ui-toggle="leftSwipe"><i class="fa fa-plus"></i></a>
-
-			</div>
+      		<a ui-toggle="leftSwipe" class="selection-container-button visible-xs"><i class="fa fa-plus"></i></a>
 						
-		    <div class="player-container visible-xs" ui-class="{'visible': leftSwipe == true}"
+		    <div class="selection-container visible-xs" ui-class="{'visible': leftSwipe == true}"
 		    	ui-turn-off="leftSwipe">
 		    	
 				<div class="list-group">

@@ -452,7 +452,7 @@ osApp.component('player', {
 
 			if (!ctrl.player.isSet()) {
 				// hide/show right sidebar (players list) while moving
-				var playerContainer = document.querySelector('.player-container');
+				var playerContainer = document.querySelector('.selection-container');
 				if (playerContainer) {
 					return function () {
 						angular.element(playerContainer).toggleClass('moving');
