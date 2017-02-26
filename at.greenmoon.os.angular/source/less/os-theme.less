@@ -16,8 +16,11 @@
 
 @text-color: #FFFFFF;
 
+
 @link-color: darken(@app-bg, 5%);
 @link-hover-decoration: none;
+
+@btn-primary-color: @link-color;
 
 @navbar-default-bg: @app-bg;
 @navbar-default-border: @brand-primary;
@@ -30,7 +33,7 @@
 @sidebar-background: darken(@app-bg, 5%);
 
 @list-group-bg: @app-bg;
-@list-group-border: darken(@app-bg, 5%);
+@list-group-border: darken(@app-bg, 8%);
 @list-group-hover-bg: @list-group-bg;
 @list-group-link-color: @brand-primary;
 @list-group-link-hover-color: red;
@@ -65,13 +68,34 @@
 	margin-bottom: 0px;
 }
 
-.sidebar {
+.section {
+	padding: @section-padding;
+	background-color: transparent;
+	z-index: 0;
+	@media (max-width: @screen-xs-min) {
+		padding: 8px !important;
+	}
+	.list-group-item {
+		padding: 3px 0px;
+		display: inline-block;
+		a {
+			color: @brand-primary;
+		}
+	}
+	.btn {
+		margin: 15px 4px 10px 0px;
+	}
+}
+
+.sidebar,
+.selection-container {
 	.list-group-item, 
 	.scrollable-content {
+		display: block;
 		background-color: @sidebar-background;
 		border-bottom-color: @app-bg;
-		padding-top: 9px;
-		padding-bottom: 10px;
+		padding-top: 8px;
+		padding-bottom: 9px;
 		@media (min-width: @screen-md-min) {
 			padding-top: 2px;
 			padding-bottom: 3px;
@@ -93,15 +117,6 @@
 .scrollable-content {
 	background-color: @app-bg;
 	z-index: 0;
-}
-
-.section {
-	padding: @section-padding;
-	background-color: transparent;
-	z-index: 0;
-	@media (max-width: @screen-xs-min) {
-		padding: 8px !important;
-	}
 }
 
 
