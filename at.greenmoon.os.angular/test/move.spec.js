@@ -19,7 +19,7 @@ describe('Move transformation service', function () {
 
 	it('should extract information from setup html', function () {
 
-		var fixture = __html__['test/fixtures/move.setup.html'];
+		var fixture = __html__['test/fixtures/move.setup.1.html'];
 
 		var move = transformationService.transformSetup(fixture);
 
@@ -60,14 +60,27 @@ describe('Move transformation service', function () {
 
 	});
 
-	it('should extract alternativ date representation from setup html', function () {
+	it('should extract alternativ date representation #1 from setup html', function () {
 
-		var fixture = __html__['test/fixtures/move.setup.alt.html'];
+		var fixture = __html__['test/fixtures/move.setup.2.html'];
 
 		var move = transformationService.transformSetup(fixture);
 
 		expect(move.information).toBeDefined();
+		expect(move.information.zat).toEqual(11);
 		expect(move.information.date.toUTCString()).toEqual('Tue, 14 Feb 2017 18:29:59 GMT');
+
+	});
+
+	it('should extract alternativ date representation #2 from setup html', function () {
+
+		var fixture = __html__['test/fixtures/move.setup.3.html'];
+
+		var move = transformationService.transformSetup(fixture);
+
+		expect(move.information).toBeDefined();
+		expect(move.information.zat).toEqual(15);
+		expect(move.information.date.toUTCString()).toEqual('Tue, 28 Feb 2017 18:30:00 GMT');
 
 	});
 
@@ -242,7 +255,7 @@ describe('Move web client service', function () {
 
 	it('should load current move from affected web sites', function () {
 
-		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['test/fixtures/move.setup.html']);
+		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['test/fixtures/move.setup.1.html']);
 		$httpBackend.whenGET('../zugabgabe.php?p=1').respond(window.__html__['test/fixtures/move.actions.html']);
 		$httpBackend.whenGET('../zugabgabe.php?p=2').respond(window.__html__['test/fixtures/move.options.html']);
 
@@ -277,7 +290,7 @@ describe('Move controller', function () {
 		Player = $injector.get('Player');
 		$httpBackend = $injector.get('$httpBackend');
 
-		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['test/fixtures/move.setup.html']);
+		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['test/fixtures/move.setup.1.html']);
 		$httpBackend.whenGET('../zugabgabe.php?p=1').respond(window.__html__['test/fixtures/move.actions.html']);
 		$httpBackend.whenGET('../zugabgabe.php?p=2').respond(window.__html__['test/fixtures/move.options.html']);
 
