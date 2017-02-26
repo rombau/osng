@@ -6,7 +6,7 @@ osApp.value('UserData', {
 	teamImage : '00000000.png'
 });
 
-osApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
+osApp.config(['$routeProvider','$locationProvider',function ($routeProvider, $locationProvider) {
 
 	$routeProvider.when('/', {
 		template : "<login-form></login-form>"
@@ -26,11 +26,11 @@ osApp.config(function ($routeProvider, $locationProvider, $httpProvider) {
 
 	// $locationProvider.html5Mode(true);
 
-});
+}]);
 
-osApp.controller('MainController', function ($scope, UserData) {
+osApp.controller('MainController', ['$scope','UserData',function ($scope, UserData) {
 	$scope.userData = UserData;
-});
+}]);
 
 osApp.filter('trustAsResourceUrl', ['$sce',function ($sce) {
 	return function (val) {

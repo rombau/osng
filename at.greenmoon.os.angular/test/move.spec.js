@@ -19,7 +19,7 @@ describe('Move transformation service', function () {
 
 	it('should extract information from setup html', function () {
 
-		var fixture = __html__['fixtures/move.setup.html'];
+		var fixture = __html__['test/fixtures/move.setup.html'];
 
 		var move = transformationService.transformSetup(fixture);
 
@@ -62,7 +62,7 @@ describe('Move transformation service', function () {
 
 	it('should extract alternativ date representation from setup html', function () {
 
-		var fixture = __html__['fixtures/move.setup.alt.html'];
+		var fixture = __html__['test/fixtures/move.setup.alt.html'];
 
 		var move = transformationService.transformSetup(fixture);
 
@@ -81,7 +81,7 @@ describe('Move transformation service', function () {
 
 	it('should extract information from actions html', function () {
 
-		var fixture = __html__['fixtures/move.actions.html'];
+		var fixture = __html__['test/fixtures/move.actions.html'];
 
 		var move = transformationService.transformActions(fixture);
 
@@ -151,7 +151,7 @@ describe('Move transformation service', function () {
 
 	it('should extract information from options html', function () {
 
-		var fixture = __html__['fixtures/move.options.html'];
+		var fixture = __html__['test/fixtures/move.options.html'];
 
 		var move = transformationService.transformOptions(fixture);
 
@@ -242,9 +242,9 @@ describe('Move web client service', function () {
 
 	it('should load current move from affected web sites', function () {
 
-		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['fixtures/move.setup.html']);
-		$httpBackend.whenGET('../zugabgabe.php?p=1').respond(window.__html__['fixtures/move.actions.html']);
-		$httpBackend.whenGET('../zugabgabe.php?p=2').respond(window.__html__['fixtures/move.options.html']);
+		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['test/fixtures/move.setup.html']);
+		$httpBackend.whenGET('../zugabgabe.php?p=1').respond(window.__html__['test/fixtures/move.actions.html']);
+		$httpBackend.whenGET('../zugabgabe.php?p=2').respond(window.__html__['test/fixtures/move.options.html']);
 
 		webClient.loadMove().then(function (move) {
 
@@ -277,9 +277,9 @@ describe('Move controller', function () {
 		Player = $injector.get('Player');
 		$httpBackend = $injector.get('$httpBackend');
 
-		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['fixtures/move.setup.html']);
-		$httpBackend.whenGET('../zugabgabe.php?p=1').respond(window.__html__['fixtures/move.actions.html']);
-		$httpBackend.whenGET('../zugabgabe.php?p=2').respond(window.__html__['fixtures/move.options.html']);
+		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['test/fixtures/move.setup.html']);
+		$httpBackend.whenGET('../zugabgabe.php?p=1').respond(window.__html__['test/fixtures/move.actions.html']);
+		$httpBackend.whenGET('../zugabgabe.php?p=2').respond(window.__html__['test/fixtures/move.options.html']);
 
 		$componentController = $injector.get('$componentController');
 		ctrl = $componentController('moveComponent');

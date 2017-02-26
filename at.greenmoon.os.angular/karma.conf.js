@@ -13,15 +13,16 @@ module.exports = function (config) {
 			'karma-chrome-launcher',
 			'karma-spec-reporter',
 			'karma-coverage',
-			'karma-eclipse-junit-reporter',
-			'karma-html2js-preprocessor'],
+			'karma-html2js-preprocessor',
+			'karma-eclipse-junit-reporter'],
 
 		// frameworks to use
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
 		frameworks : ['jasmine'],
 
 		// list of files / patterns to load in the browser
-		files : ['fixtures/**/*.html',
+		files : ['test/fixtures/**/*.html',
+			'test/polyfill/*.js',
 			'node_modules/angular/angular.js',
 			'node_modules/angular-route/angular-route.min.js',
 			'node_modules/angular-sanitize/angular-sanitize.min.js',
@@ -29,23 +30,24 @@ module.exports = function (config) {
 			'node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.min.js',
 			'node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.min.js',
 			'node_modules/angular-mocks/angular-mocks.js',
-			'mobile/**/*.js'],
+			'source/**/*.js',
+			'test/**/*.spec.js'],
 
 		// list of files to exclude
-		exclude : ['mobile/lib/js/*.js','mobile/js/*.js'],
+		exclude : ['source/_lib/js/*.js'],
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors:
 		// https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors : {
-			'mobile/**/*.js' : 'coverage',
-			'fixtures/**/*.html' : 'html2js'
+			'source/**/*.js' : 'coverage',
+			'test/fixtures/**/*.html' : 'html2js'
 		},
 
 		// test results reporter to use
 		// possible values: 'dots', 'progress'
 		// available reporters: https://npmjs.org/browse/keyword/karma-reporter
-		reporters : ['spec','junit-eclipse','coverage'],
+		reporters : ['spec','coverage','junit-eclipse'],
 
 		coverageReporter : {
 			type : 'lcov',

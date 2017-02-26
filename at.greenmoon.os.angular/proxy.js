@@ -2,7 +2,15 @@ var http = require('http');
 var httpProxy = require('http-proxy');
 var fs = require('fs');
 
-var localUrls = ['mobile/','os_menu_haupt.html','os_menu_haupt_new.html','node_modules'];
+var basedir = process.argv.length > 2 ? process.argv[2] : 'mobile';
+var uselocalcopy = process.argv.length > 3;
+
+if (process.argv.length > 2) {
+	console.log('OS mobile frontend startet with:');
+	console.log(' basedir = ' + basedir);
+	console.log(' uselocalcopy = ' + uselocalcopy);
+	console.log('');
+}
 
 var proxy = httpProxy.createProxyServer({
 	changeOrigin : true
@@ -10,13 +18,20 @@ var proxy = httpProxy.createProxyServer({
 
 var server = http.createServer(function (req, res) {
 
-	if (req.url === '/' || req.url === '/mobile/') {
-		req.url = '/mobile/index.html';
+	if (req.url === '/' || req.url === ('/' + basedir) || req.url === ('/' + basedir + '/')) {
+		req.url = '/' + basedir + '/index.html';
 	}
 
 	var localUrl = req.url;
 
 	var responseFromLocalhost = function (file) {
+
+		if (uselocalcopy) {
+			var localdir = 'local/';
+			if (!file.substr(0, 6).startsWith(localdir) && responseFromLocalhost(localdir + file)) {
+				return true;
+			}
+		}
 
 		if (fs.existsSync(file)) {
 			if (localUrl.indexOf('.html') !== -1) {
@@ -72,5 +87,5 @@ var server = http.createServer(function (req, res) {
 	}
 });
 
-console.log("listening on port 9000");
+console.log("you can now access online soccer via http://localhost:9000/" + basedir);
 server.listen(9000);

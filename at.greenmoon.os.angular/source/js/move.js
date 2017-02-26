@@ -311,9 +311,9 @@ osApp.factory('MoveWebClient', ['$q','$http','Move','MoveTransformation',functio
 
 osApp.component('moveComponent', {
 
-	templateUrl : 'move/move.html',
+	templateUrl : 'templates/move.html',
 
-	controller : function ($scope, $location, SharedState, MoveWebClient, Move) {
+	controller : ['$location','SharedState','MoveWebClient','Move',function ($location, SharedState, MoveWebClient, Move) {
 
 		var ctrl = this;
 
@@ -424,12 +424,12 @@ osApp.component('moveComponent', {
 			console.error(response);
 			$location.path('#/error');
 		});
-	}
+	}]
 });
 
 osApp.component('player', {
 
-	templateUrl : 'move/gridplayer.html',
+	templateUrl : 'templates/gridplayer.html',
 
 	bindings : {
 		player : '<object',
@@ -437,7 +437,7 @@ osApp.component('player', {
 		onRemove : '&'
 	},
 
-	controller : function ($scope, $element, $document, $drag, $timeout, SharedState) {
+	controller : ['$scope','$element','$document','$drag','$timeout','SharedState',function ($scope, $element, $document, $drag, $timeout, SharedState) {
 
 		var ctrl = this;
 
@@ -546,5 +546,5 @@ osApp.component('player', {
 		};
 
 		$drag.bind(playerElement, dragHandler, { /* drag options */});
-	}
+	}]
 });

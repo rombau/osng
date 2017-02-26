@@ -1,8 +1,10 @@
 var osApp = osApp || angular.module('OnlineSoccer');
 
 osApp.component('loginForm', {
-	templateUrl : 'login/login.html',
-	controller : function ($http, $location, UserData) {
+
+	templateUrl : 'templates/login.html',
+
+	controller : ['$http','$location','UserData',function ($http, $location, UserData) {
 
 		var self = this;
 
@@ -53,5 +55,5 @@ osApp.component('loginForm', {
 			// TODO
 			});
 		};
-	}
+	}]
 });
