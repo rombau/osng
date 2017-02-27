@@ -26,6 +26,8 @@ var server = http.createServer(function (req, res) {
 
 	var responseFromLocalhost = function (file) {
 
+		file = file.replace('?', '_');
+
 		if (uselocalcopy) {
 			var localdir = 'local/';
 			if (!file.substr(0, 6).startsWith(localdir) && responseFromLocalhost(localdir + file)) {
