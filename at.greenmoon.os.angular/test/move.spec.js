@@ -239,6 +239,72 @@ describe('Move transformation service', function () {
 
 	});
 
+	it('should throw error when adjustment html is invalid', function () {
+
+		expect(function () {
+			transformationService.transformAdjustmentForm('invalid')
+		}).toThrow();
+
+	});
+
+	it('should extract information from adjustment html', function () {
+
+		var fixture = __html__['test/fixtures/move.actions.subst.html'];
+
+		var form = transformationService.transformAdjustmentForm(fixture);
+
+		expect(form).toBeDefined();
+		expect(form.method).toEqual('GET');
+		expect(form.lines.length).toEqual(5);
+		expect(form.lines[0].label).toEqual('Einwechselspieler');
+		expect(form.lines[0].combos.length).toEqual(1);
+		expect(form.lines[0].combos[0].name).toEqual('zao_einspieler');
+		expect(form.lines[0].combos[0].width).toEqual(12);
+		expect(form.lines[0].combos[0].options[0].label).toEqual('Anthony Downes (E)');
+		expect(form.lines[0].combos[0].options[0].value).toEqual('75108');
+		expect(form.lines[1].label).toEqual('Auswechselspieler');
+		expect(form.lines[1].combos.length).toEqual(1);
+		expect(form.lines[1].combos[0].name).toEqual('zao_spieler');
+		expect(form.lines[1].combos[0].width).toEqual(12);
+		expect(form.lines[2].label).toEqual('Spielminute');
+		expect(form.lines[2].combos.length).toEqual(1);
+		expect(form.lines[2].combos[0].name).toEqual('zao_minute');
+		expect(form.lines[2].combos[0].width).toEqual(3);
+		expect(form.lines[3].label).toEqual('Abhängigkeit');
+		expect(form.lines[3].combos[0].width).toEqual(12);
+		expect(form.lines[3].combos.length).toEqual(1);
+		expect(form.lines[3].combos[0].name).toEqual('zao_abhaengigkeit');
+		expect(form.lines[3].combos[0].width).toEqual(12);
+		expect(form.lines[4].label).toEqual('Auf Position');
+		expect(form.lines[4].combos.length).toEqual(3);
+		expect(form.lines[4].combos[0].name).toEqual('P1');
+		expect(form.lines[4].combos[0].width).toEqual(2);
+		expect(form.lines[4].combos[1].name).toEqual('P2');
+		expect(form.lines[4].combos[1].width).toEqual(2);
+		expect(form.lines[4].combos[2].name).toEqual('P3');
+		expect(form.lines[4].combos[2].width).toEqual(8);
+
+	});
+
+	it('should extract information from option adjustment html', function () {
+
+		var fixture = __html__['test/fixtures/move.options.capt.html'];
+
+		var form = transformationService.transformAdjustmentForm(fixture);
+
+		expect(form).toBeDefined();
+		expect(form.method).toEqual('GET');
+		expect(form.lines.length).toEqual(1);
+
+		expect(form.lines[0].label).toEqual('');
+		expect(form.lines[0].combos.length).toEqual(1);
+		expect(form.lines[0].combos[0].name).toEqual('spieler_id');
+		expect(form.lines[0].combos[0].width).toEqual(12);
+		expect(form.lines[0].combos[0].options[0].label).toEqual('Anthony Downes');
+		expect(form.lines[0].combos[0].options[0].value).toEqual('75108');
+
+	});
+
 });
 
 //

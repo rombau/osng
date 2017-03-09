@@ -9370,6 +9370,36 @@ ui-switch {
   background-color: #111166;
   z-index: 0;
 }
+.modal-content {
+  background-color: #111166;
+}
+.modal-footer {
+  text-align: left;
+}
+label {
+  font-weight: normal;
+  display: block;
+}
+select {
+  margin-bottom: 6px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+select::-ms-expand {
+  display: none;
+  /* remove default arrow in IE 10 and 11 */
+}
+.combo {
+  padding-left: 0px;
+  padding-right: 5px;
+}
+.combo:last-child {
+  padding-right: 0px;
+}
+.form-control {
+  padding: 6px;
+}
 .noselect {
   transform: translate(0, 0);
   -webkit-user-drag: none;
@@ -9447,7 +9477,7 @@ ui-switch {
     visibility: visible;
   }
   .player-info {
-    padding-left: calc(94vw / 11 + 4px);
+    padding-left: calc(94vw / 11 + 6px);
     height: calc(94vw / 11);
     max-height: 40px;
     font-size: smaller;
@@ -9493,10 +9523,10 @@ ui-switch {
   }
   .selection-container.moving {
     width: 100%;
-    padding-left: 482px;
+    padding-left: 484px;
   }
   .player-info {
-    padding-left: 45px;
+    padding-left: 48px;
     height: 40px;
   }
   .player-info a,
@@ -9525,9 +9555,21 @@ ui-switch {
     width: calc(100vw - 694px);
   }
 }
+@media (max-width: 767px) {
+  .changes-container {
+    display: inline-block;
+  }
+}
+@media (min-width: 768px) {
+  .changes-container {
+    margin-left: 464px;
+    margin-right: 25px;
+    position: absolute;
+  }
+}
 .selection-container {
   position: absolute;
-  padding: 8px;
+  padding: 8px 10px;
   right: 0;
   top: 0;
   bottom: 0;
@@ -9547,6 +9589,7 @@ ui-switch {
 .subst-border {
   border: 2px solid white;
   box-shadow: 0 0 6px 0 #000000;
+  margin-bottom: 15px;
 }
 .subst-container {
   width: 100%;
@@ -9597,6 +9640,7 @@ ui-switch {
   position: absolute;
   z-index: 200;
   box-shadow: 0 0 6px 0 #000000;
+  touch-action: none;
 }
 .grid-face.moving {
   left: -40%;

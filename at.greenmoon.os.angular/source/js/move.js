@@ -258,6 +258,57 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 			}
 
 			return move;
+		},
+
+		transformAdjustmentForm : function (html) {
+
+			var form = {
+				method : 'GET',
+				lines : []
+			};
+
+			var doc = new DOMParser().parseFromString(html, "text/html");
+
+			var table = doc.getElementsByTagName('table')[3];
+			for (var r = 0; r < table.rows.length - 1; r++) {
+				var row = table.rows[r];
+				var noLabel = row.cells[0].getElementsByTagName('select').length > 0;
+
+				var line = {
+					label : noLabel ? '' : row.cells[0].textContent,
+					combos : []
+				};
+
+				var selects = row.cells[noLabel ? 0 : 1].getElementsByTagName('select');
+				var maxWidth = 12;
+				for (var s = 0; s < selects.length; s++) {
+					var select = selects[s];
+
+					var combo = {
+						name : select.name,
+						options : []
+					};
+
+					var maxOptionLength = 0;
+					for (var o = 0; o < select.options.length; o++) {
+						var option = select.options[o];
+						maxOptionLength = Math.max(maxOptionLength, option.textContent.length);
+						combo.options.push({
+							label : option.textContent,
+							value : option.value
+						});
+					}
+
+					combo.width = maxOptionLength > 2 ? maxOptionLength > 5 ? maxWidth : 3 : 2;
+					combo.value = combo.options[0].value;
+					line.combos.push(combo);
+
+					maxWidth -= combo.width;
+				}
+
+				form.lines.push(line);
+			}
+			return form;
 		}
 	};
 	return transformation;
@@ -307,6 +358,15 @@ osApp.factory('MoveWebClient', ['$q','$http','Move','MoveTransformation',functio
 			return $http({
 				url : '../zugabgabe-beta.php',
 				method : 'POST'
+			});
+		},
+
+		loadAdjustmentForm : function (option) {
+
+			return $http({
+				url : '../zugabgabe.php?p=' + option.page + '&item=' + option.item,
+				method : 'GET',
+				transformResponse : MoveTransformation.transformAdjustmentForm
 			});
 		}
 	};
@@ -402,6 +462,21 @@ osApp.component('moveComponent', {
 				}
 			}
 			return subst;
+		};
+
+		ctrl.addAdjustment = function (option) {
+
+			MoveWebClient.loadAdjustmentForm(option).then(function (response) {
+				ctrl.option = option;
+				ctrl.adjustmentForm = response.data;
+				SharedState.turnOn('action');
+			}, function (response) {
+				console.error(response);
+			});
+		};
+
+		ctrl.saveAdjustment = function () {
+
 		};
 
 		ctrl.save = function () {

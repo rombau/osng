@@ -119,6 +119,39 @@
 	z-index: 0;
 }
 
+.modal-content {
+	background-color: @app-bg;
+}
+.modal-footer {
+	text-align: left;
+}
+
+label {
+	font-weight: normal;
+	display: block;
+}
+
+select {
+	margin-bottom: 6px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+select::-ms-expand { 
+    display: none; /* remove default arrow in IE 10 and 11 */
+}
+
+.combo {
+	padding-left: 0px; 
+	padding-right: 5px;
+	&:last-child {
+		padding-right: 0px;
+	}	
+}
+.form-control {
+	padding: 6px;
+}
 
 // styles ---------------------------------------------
 
@@ -209,7 +242,7 @@
 		visibility: visible;
 	}
 	.player-info {
-		padding-left: calc(@grid-view-width ~"/" @grid-cell-cols ~"+ 4px"); 
+		padding-left: calc(@grid-view-width ~"/" @grid-cell-cols ~"+ 6px"); 
 	    height: calc(@grid-view-width ~"/" @grid-cell-cols); 
 	    max-height: @grid-cell-max;
 		font-size: smaller;
@@ -253,10 +286,10 @@
 	}
 	.selection-container.moving {
 		width: 100%;
-		padding-left: @section-padding * 2 + (@grid-cell-max * @grid-cell-cols + @grid-border-width * 2) + 8px;
+		padding-left: @section-padding * 2 + (@grid-cell-max * @grid-cell-cols + @grid-border-width * 2) + 10px;
 	}
 	.player-info {
-		padding-left: @grid-cell-max + 5px;
+		padding-left: @grid-cell-max + 8px;
 	    height: @grid-cell-max;
 	}
 	.player-info a, .player-info a:hover {
@@ -280,7 +313,7 @@
 	.subst-border {
 		width: @grid-cell-max * @grid-subst-cols + @grid-border-width * 2;
 	}
-	
+
 }
 @media (min-width: @screen-md-min) {
 
@@ -289,9 +322,20 @@
 	}
 }
 
+.changes-container {
+	@media (max-width: @screen-xs-max) {
+		display: inline-block;	
+	}
+	@media (min-width: @screen-sm-min) {
+		margin-left: @section-padding * 2 + (@grid-cell-max * @grid-cell-cols + @grid-border-width * 2) - 10px;
+		margin-right: 25px;
+		position: absolute;
+	}
+}
+
 .selection-container {
 	position: absolute;
-	padding: 8px;
+	padding: 8px 10px;
 	right: 0;
 	top: 0;
 	bottom: 0;
@@ -312,6 +356,7 @@
 .subst-border {
 	border: @grid-border-width solid white;
 	box-shadow: 0 0 6px 0 #000000;
+	margin-bottom: @section-padding;
 }
 .subst-container {
 	width: 100%;
@@ -363,6 +408,7 @@
     position: absolute;
     z-index: 200;
 	box-shadow: 0 0 6px 0 #000000;
+	touch-action: none; // prevent browser default action and problems with https://developers.google.com/web/updates/2017/01/scrolling-intervention#breakage_and_guidance
 }
 .grid-face.moving {
 	left: -40%;
