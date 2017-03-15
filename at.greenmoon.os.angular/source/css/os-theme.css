@@ -6533,7 +6533,7 @@ a.thumbnail.active {
   padding: 10px 15px;
   margin-bottom: -1px;
   background-color: #111166;
-  border: 1px solid #0b0b43;
+  border: 1px solid #0d0d50;
 }
 .list-group-item:first-child {
   border-top-right-radius: 4px;
@@ -8151,7 +8151,7 @@ input[type="url"] {
 a.list-group-item {
   margin-bottom: 0;
   border: 0 none;
-  border-bottom: 1px solid #0b0b43;
+  border-bottom: 1px solid #0d0d50;
 }
 .list-group-item:first-child,
 a.list-group-item:first-child {
@@ -9325,7 +9325,7 @@ ui-switch {
   }
 }
 .section .list-group-item {
-  padding: 3px 0px;
+  padding: 3px 2px;
   display: inline-block;
 }
 .section .list-group-item a {
@@ -9391,11 +9391,26 @@ select::-ms-expand {
   /* remove default arrow in IE 10 and 11 */
 }
 .combo {
+  position: relative;
   padding-left: 0px;
   padding-right: 5px;
 }
+.combo:after {
+  content: "\f0d7";
+  font-family: FontAwesome;
+  color: #0d0d50;
+  font-size: 14px;
+  position: absolute;
+  display: inline-block;
+  top: 5px;
+  right: 10px;
+  pointer-events: none;
+}
 .combo:last-child {
   padding-right: 0px;
+}
+.combo:last-child:after {
+  right: 5px;
 }
 .form-control {
   padding: 6px;
@@ -9604,7 +9619,7 @@ select::-ms-expand {
 }
 .grid-container {
   width: 100%;
-  background-image: url('../images/gridbg.png');
+  background-image: url('../images/gridbgwithindex.png');
   background-size: 100%;
   background-repeat: no-repeat;
   z-index: 100;

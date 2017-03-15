@@ -19,11 +19,6 @@ osApp.factory('Player', [function () {
 
 	Player.prototype = {
 
-		// XXX row and col aren't properties of player model
-		isSet : function () {
-			return this.row != null && this.col != null; // jshint ignore:line
-		},
-
 		getShortName : function () {
 			var names = this.name.split(' ');
 			return names[names.length - 1];
@@ -130,10 +125,8 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 			var tableRaster = tables[3];
 			var tableSpieler = tables[4];
 
-			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+, ([A-z]+ )*(\d+)\.[ ]*(\w+)[\.| ]*(\d\d\d\d) ([A-z]+ )*(\d+):(\d+):*(\d+)*/gm;
+			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+, ([A-z]+ )*(\d+)\.[ ]*([\w|ä]+)[\.| ]*(\d\d\d\d) ([A-z]+ )*(\d+):(\d+):*(\d+)*/gm;
 			var matches = pattern.exec(timeInformation.textContent);
-
-			console.log(JSON.stringify(matches));
 
 			if (matches) {
 				move.information.zat = +matches[1];
@@ -182,6 +175,9 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 					player.skill = +row.cells[6].textContent;
 					player.opti = +row.cells[7].textContent;
 					player.sonder = row.cells[8].textContent;
+
+					player.col = null;
+					player.row = null;
 
 					var gridChar = row.cells[0].firstChild.value;
 					if (gridChar === 'T') {
@@ -398,6 +394,20 @@ osApp.component('moveComponent', {
 			return rows;
 		})();
 
+		ctrl.isPlayerSet = function (player) {
+
+			if (player) {
+				return player.row !== null && player.col !== null && player.row !== undefined && player.col !== undefined;
+			}
+
+			for (var p = 0; p < ctrl.players.length; p++) {
+				if (ctrl.isPlayerSet(ctrl.players[p])) {
+					return true;
+				}
+			}
+			return false;
+		};
+
 		/**
 		 * move (or add) player to grid
 		 */
@@ -407,14 +417,67 @@ osApp.component('moveComponent', {
 
 			if (y > 0) {
 				playerToReplace = ctrl.grid[y - 1][x - 1];
-				ctrl.grid[y - 1][x - 1] = player;
 			} else if (x === 0 && y === 0) {
 				playerToReplace = ctrl.getKeeper();
 			} else {
 				playerToReplace = ctrl.getSubst()[-x];
 			}
 
-			if (player.isSet() && player.row > 0) {
+			// Changes
+
+			if (SharedState.get('activeTab') === 2) {
+
+				if (y > 0) {
+					if (player.row === -1) {
+						ctrl.addAdjustment(ctrl.options[0], function (form) {
+							ctrl.adjustmentForm.lines[0].combos[0].value = '' + player.id;
+							if (playerToReplace) {
+								form.lines[1].combos[0].value = '' + playerToReplace.id;
+								form.lines[4].combos[2].value = 'K';
+							} else {
+								form.lines[4].combos[0].value = String.fromCharCode(65 + (Move.GRID_ROWS - y));
+								form.lines[4].combos[1].value = '' + x;
+							}
+						});
+					} else if (!playerToReplace) {
+						ctrl.addAdjustment(ctrl.options[4], function (form) {
+							form.lines[0].combos[0].value = '' + player.id;
+							form.lines[1].combos[0].value = String.fromCharCode(65 + (Move.GRID_ROWS - y));
+							form.lines[1].combos[1].value = '' + x;
+						});
+					}
+				} else if (x === 0 && y === 0) {
+					if (player.row === -1) {
+						ctrl.addAdjustment(ctrl.options[0], function (form) {
+							form.lines[0].combos[0].value = '' + player.id;
+							if (playerToReplace) {
+								form.lines[1].combos[0].value = '' + playerToReplace.id;
+							}
+							form.lines[4].combos[2].value = 'T';
+						});
+					}
+				} else {
+					if (player.row !== -1) {
+						ctrl.addAdjustment(ctrl.options[0], function (form) {
+							form.lines[1].combos[0].value = '' + player.id;
+							if (playerToReplace) {
+								form.lines[0].combos[0].value = '' + playerToReplace.id;
+							}
+							form.lines[4].combos[2].value = 'K';
+						});
+					}
+				}
+
+				return true;
+			}
+
+			// Setup
+
+			if (y > 0) {
+				ctrl.grid[y - 1][x - 1] = player;
+			}
+
+			if (ctrl.isPlayerSet(player) && player.row > 0) {
 				ctrl.grid[player.row - 1][player.col - 1] = playerToReplace;
 			}
 
@@ -434,7 +497,7 @@ osApp.component('moveComponent', {
 		 */
 		ctrl.grid.removePlayer = function (player) {
 
-			if (player.isSet() && player.row > 0) {
+			if (ctrl.isPlayerSet(player) && player.row > 0) {
 				ctrl.grid[player.row - 1][player.col - 1] = null;
 			}
 			player.row = null;
@@ -464,11 +527,14 @@ osApp.component('moveComponent', {
 			return subst;
 		};
 
-		ctrl.addAdjustment = function (option) {
+		ctrl.addAdjustment = function (option, callback) {
 
 			MoveWebClient.loadAdjustmentForm(option).then(function (response) {
 				ctrl.option = option;
 				ctrl.adjustmentForm = response.data;
+				if (callback) {
+					callback(ctrl.adjustmentForm);
+				}
 				SharedState.turnOn('action');
 			}, function (response) {
 				console.error(response);
@@ -529,7 +595,7 @@ osApp.component('player', {
 
 		var toggleMoving = (function () {
 
-			if (!ctrl.player.isSet()) {
+			if (ctrl.player.row === null && ctrl.player.col === null) {
 				// hide/show right sidebar (players list) while moving
 				var playerContainer = document.querySelector('.selection-container');
 				if (playerContainer) {
@@ -607,7 +673,7 @@ osApp.component('player', {
 					}
 				}
 				if (!inArea) {
-					if (ctrl.player.isSet()) {
+					if (ctrl.player.row !== null && ctrl.player.col !== null) {
 						ctrl.onRemove({
 							player : ctrl.player
 						});

@@ -55,8 +55,8 @@ describe('Move transformation service', function () {
 		expect(move.players[36].skill).toEqual(33);
 		expect(move.players[36].opti).toEqual(37.96);
 		expect(move.players[36].sonder).toEqual('');
-		expect(move.players[36].row).toBeUndefined();
-		expect(move.players[36].col).toBeUndefined();
+		expect(move.players[36].row).toBeNull();
+		expect(move.players[36].col).toBeNull();
 
 	});
 
@@ -347,23 +347,61 @@ describe('Move web client service', function () {
 // 
 describe('Move controller', function () {
 
-	var ctrl, Player, $httpBackend;
+	var rootScope, ctrl, SharedState, Player;
 
-	beforeEach(module('OnlineSoccer'));
+	beforeEach(module('OnlineSoccer', function ($provide) {
+		$provide.service('MoveWebClient', function ($q, Move) {
+			return {
+				loadMove : function () {
+					var move = new Move();
+					move.options[0] = {
+						page : 1,
+						item : 1,
+						text : 'Einwechslung'
+					};
+					move.options[4] = {
+						page : 1,
+						item : 5,
+						text : 'Positionswechsel'
+					};
+					return $q.when(move);
+				},
+				loadAdjustmentForm : function () {
+					return $q.when({
+						data : {
+							method : 'GET',
+							lines : [{
+								combos : [{},{},{}]
+							},{
+								combos : [{},{},{}]
+							},{
+								combos : [{},{},{}]
+							},{
+								combos : [{},{},{}]
+							},{
+								combos : [{},{},{}]
+							}]
+						}
+					});
+				}
+			};
+		});
+	}));
 
 	beforeEach(inject(function ($injector) {
 
 		Player = $injector.get('Player');
-		$httpBackend = $injector.get('$httpBackend');
+		SharedState = $injector.get('SharedState');
 
-		$httpBackend.whenGET('../zugabgabe.php').respond(window.__html__['test/fixtures/move.setup.1.html']);
-		$httpBackend.whenGET('../zugabgabe.php?p=1').respond(window.__html__['test/fixtures/move.actions.html']);
-		$httpBackend.whenGET('../zugabgabe.php?p=2').respond(window.__html__['test/fixtures/move.options.html']);
+		rootScope = $injector.get('$rootScope').$new();
+
+		SharedState.initialize(rootScope, 'activeTab');
+		SharedState.initialize(rootScope, 'action');
 
 		$componentController = $injector.get('$componentController');
 		ctrl = $componentController('moveComponent');
 
-		$httpBackend.flush();
+		rootScope.$digest();
 
 	}));
 
@@ -383,11 +421,25 @@ describe('Move controller', function () {
 
 	});
 
-	it('should initialize players in correct sort order', function () {
+	it('should know if player is not set', function () {
 
-		expect(ctrl.players.length).toEqual(37);
-		expect(ctrl.players[0].pos).toEqual('STU');
-		expect(ctrl.players[36].pos).toEqual('TOR');
+		var player = new Player();
+		ctrl.players.push(player);
+
+		expect(ctrl.isPlayerSet(player)).toBeFalsy();
+		expect(ctrl.isPlayerSet()).toBeFalsy();
+
+	});
+
+	it('should know if player is set', function () {
+
+		var player = new Player();
+		ctrl.players.push(player);
+
+		ctrl.grid.setPlayer(player, 1, 1);
+
+		expect(ctrl.isPlayerSet(player)).toBeTruthy();
+		expect(ctrl.isPlayerSet()).toBeTruthy();
 
 	});
 
@@ -399,7 +451,7 @@ describe('Move controller', function () {
 		expect(ctrl.grid[0][0]).not.toBeNull();
 		expect(ctrl.grid[0][0].row).toEqual(1);
 		expect(ctrl.grid[0][0].col).toEqual(1);
-		expect(ctrl.grid[0][0].isSet()).toBeTruthy();
+		expect(ctrl.isPlayerSet(ctrl.grid[0][0])).toBeTruthy();
 
 	});
 
@@ -455,7 +507,6 @@ describe('Move controller', function () {
 	it('should set player to keeper position', function () {
 
 		var player = new Player();
-		ctrl.grid.removePlayer(ctrl.getKeeper());
 
 		ctrl.players.push(player);
 		ctrl.grid.setPlayer(player, 0, 0);
@@ -463,7 +514,7 @@ describe('Move controller', function () {
 		expect(ctrl.getKeeper()).toEqual(player);
 		expect(player.row).toEqual(0);
 		expect(player.col).toEqual(0);
-		expect(player.isSet()).toBeTruthy();
+		expect(ctrl.isPlayerSet(player)).toBeTruthy();
 
 	});
 
@@ -479,8 +530,225 @@ describe('Move controller', function () {
 		expect(ctrl.getSubst()[1]).toEqual(player);
 		expect(player.row).toEqual(-1);
 		expect(player.col).toEqual(-1);
-		expect(player.isSet()).toBeTruthy();
+		expect(ctrl.isPlayerSet(player)).toBeTruthy();
 
 	});
 
+	it('should remove player from grid', function () {
+		ctrl.options[4]
+
+		var player = new Player();
+		ctrl.grid.setPlayer(player, 1, 1);
+
+		ctrl.grid.removePlayer(player);
+
+		expect(ctrl.grid[0][0]).toBeNull();
+		expect(player.row).toBeNull();
+		expect(player.col).toBeNull();
+
+	});
+
+	it('should show adjustment form for any option', function () {
+
+		ctrl.addAdjustment({
+			page : 1,
+			item : 1,
+			text : ''
+		});
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(1);
+		expect(ctrl.option.text).toEqual('');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+
+	});
+
+	it('should reset any player move in change mode', function () {
+
+		var player = new Player();
+		player.id = 4711;
+		ctrl.grid.setPlayer(player, 1, 1);
+
+		SharedState.setOne('activeTab', 2);
+		var resetUi = ctrl.grid.setPlayer(player, 2, 2);
+
+		rootScope.$digest();
+
+		expect(resetUi).toBeTruthy();
+		expect(player.row).toEqual(1);
+		expect(player.col).toEqual(1);
+
+	});
+
+	it('should move player to new grid position in change mode', function () {
+
+		var player = new Player();
+		player.id = 4711;
+		ctrl.grid.setPlayer(player, 1, 1);
+
+		SharedState.setOne('activeTab', 2);
+		ctrl.grid.setPlayer(player, 2, 2);
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(5);
+		expect(ctrl.option.text).toEqual('Positionswechsel');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+		expect(ctrl.adjustmentForm.lines[0].combos[0].value).toEqual('4711');
+		expect(ctrl.adjustmentForm.lines[1].combos[0].value).toEqual('N');
+		expect(ctrl.adjustmentForm.lines[1].combos[1].value).toEqual('2');
+
+	});
+
+	it('should move substitute to new grid position in change mode', function () {
+
+		var substitute = new Player();
+		substitute.id = 4711;
+		ctrl.grid.setPlayer(substitute, -1, -1);
+
+		SharedState.setOne('activeTab', 2);
+		ctrl.grid.setPlayer(substitute, 2, 2);
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(1);
+		expect(ctrl.option.text).toEqual('Einwechslung');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+		expect(ctrl.adjustmentForm.lines[0].combos[0].value).toEqual('4711');
+		expect(ctrl.adjustmentForm.lines[4].combos[0].value).toEqual('N');
+		expect(ctrl.adjustmentForm.lines[4].combos[1].value).toEqual('2');
+
+	});
+
+	it('should move substitute to occupied grid position in change mode', function () {
+
+		var substitute = new Player(), player = new Player();
+		substitute.id = 4711;
+		ctrl.grid.setPlayer(substitute, -1, -1);
+		player.id = 666;
+		ctrl.grid.setPlayer(player, 2, 2);
+
+		SharedState.setOne('activeTab', 2);
+		ctrl.grid.setPlayer(substitute, 2, 2);
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(1);
+		expect(ctrl.option.text).toEqual('Einwechslung');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+		expect(ctrl.adjustmentForm.lines[0].combos[0].value).toEqual('4711');
+		expect(ctrl.adjustmentForm.lines[1].combos[0].value).toEqual('666');
+		expect(ctrl.adjustmentForm.lines[4].combos[2].value).toEqual('K');
+
+	});
+
+	it('should move substitute to keeper position in change mode', function () {
+
+		var substitute = new Player();
+		substitute.id = 4711;
+		ctrl.grid.setPlayer(substitute, -1, -1);
+
+		SharedState.setOne('activeTab', 2);
+		ctrl.grid.setPlayer(substitute, 0, 0);
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(1);
+		expect(ctrl.option.text).toEqual('Einwechslung');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+		expect(ctrl.adjustmentForm.lines[0].combos[0].value).toEqual('4711');
+		expect(ctrl.adjustmentForm.lines[4].combos[2].value).toEqual('T');
+
+	});
+
+	it('should move substitute to occupied keeper position in change mode', function () {
+
+		var substitute = new Player(), player = new Player();
+		substitute.id = 4711;
+		ctrl.grid.setPlayer(substitute, -1, -1);
+		player.id = 666;
+		ctrl.grid.setPlayer(player, 0, 0);
+		ctrl.players.push(player);
+
+		SharedState.setOne('activeTab', 2);
+		ctrl.grid.setPlayer(substitute, 0, 0);
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(1);
+		expect(ctrl.option.text).toEqual('Einwechslung');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+		expect(ctrl.adjustmentForm.lines[0].combos[0].value).toEqual('4711');
+		expect(ctrl.adjustmentForm.lines[1].combos[0].value).toEqual('666');
+		expect(ctrl.adjustmentForm.lines[4].combos[2].value).toEqual('T');
+
+	});
+
+	it('should move grid player to substitute position in change mode', function () {
+
+		var player = new Player();
+		player.id = 4711;
+		ctrl.grid.setPlayer(player, 2, 2);
+
+		SharedState.setOne('activeTab', 2);
+		ctrl.grid.setPlayer(player, -1, -1);
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(1);
+		expect(ctrl.option.text).toEqual('Einwechslung');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+		expect(ctrl.adjustmentForm.lines[1].combos[0].value).toEqual('4711');
+		expect(ctrl.adjustmentForm.lines[4].combos[2].value).toEqual('K');
+
+	});
+
+	it('should move grid player to occupied substitute position in change mode', function () {
+
+		var player = new Player(), substitute = new Player();
+		player.id = 666;
+		ctrl.grid.setPlayer(player, 2, 2);
+		substitute.id = 4711;
+		ctrl.grid.setPlayer(substitute, -1, -1);
+		ctrl.players.push(substitute);
+		ctrl.players.push(substitute);
+
+		SharedState.setOne('activeTab', 2);
+		ctrl.grid.setPlayer(player, -1, -1);
+
+		rootScope.$digest();
+
+		expect(SharedState.isActive('action')).toBeTruthy();
+		expect(ctrl.option.page).toEqual(1);
+		expect(ctrl.option.item).toEqual(1);
+		expect(ctrl.option.text).toEqual('Einwechslung');
+		expect(ctrl.adjustmentForm).toBeDefined();
+		expect(ctrl.adjustmentForm.method).toEqual('GET');
+		expect(ctrl.adjustmentForm.lines[0].combos[0].value).toEqual('4711');
+		expect(ctrl.adjustmentForm.lines[1].combos[0].value).toEqual('666');
+		expect(ctrl.adjustmentForm.lines[4].combos[2].value).toEqual('K');
+
+	});
 });

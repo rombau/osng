@@ -33,7 +33,7 @@
 @sidebar-background: darken(@app-bg, 5%);
 
 @list-group-bg: @app-bg;
-@list-group-border: darken(@app-bg, 8%);
+@list-group-border: @sidebar-background;
 @list-group-hover-bg: @list-group-bg;
 @list-group-link-color: @brand-primary;
 @list-group-link-hover-color: red;
@@ -76,7 +76,7 @@
 		padding: 8px !important;
 	}
 	.list-group-item {
-		padding: 3px 0px;
+		padding: 3px 2px;
 		display: inline-block;
 		a {
 			color: @brand-primary;
@@ -136,19 +136,34 @@ select {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-}
-
-select::-ms-expand { 
-    display: none; /* remove default arrow in IE 10 and 11 */
+	&::-ms-expand { 
+	    display: none; /* remove default arrow in IE 10 and 11 */
+	}
 }
 
 .combo {
+	position: relative;
 	padding-left: 0px; 
 	padding-right: 5px;
+	&:after {
+		content: "\f0d7";
+		font-family: FontAwesome;
+		color: @sidebar-background;
+		font-size: 14px;
+	    position: absolute;
+	    display: inline-block;
+	    top: 5px;
+	    right: 10px;
+	    pointer-events: none;
+	}
 	&:last-child {
 		padding-right: 0px;
+		&:after {
+			right: 5px;
+		}
 	}	
 }
+
 .form-control {
 	padding: 6px;
 }
@@ -372,7 +387,7 @@ select::-ms-expand {
 }
 .grid-container {
 	width: 100%;
-	background-image: url('../images/gridbg.png');
+	background-image: url('../images/gridbgwithindex.png');
 	background-size: 100%;
 	background-repeat: no-repeat;
 	z-index: 100;

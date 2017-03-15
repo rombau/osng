@@ -4,7 +4,7 @@
 	<div style="position: relative; ">
 		<div style="position: absolute; top: -6px;">
 		    <span style="white-space: nowrap;">
-		    	<span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.information.zat}} <span class="hidden-xs hidden-sm">am {{$ctrl.information.date | date : "dd.MM.yyyy HH:mm"}} Uhr</span> <i class="fa fa-caret-down"></i>
+		    	<span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.information.zat}} <span class="hidden-xs hidden-sm hidden-md">am {{$ctrl.information.date | date : "dd.MM.yyyy HH:mm"}} Uhr</span> <i class="fa fa-caret-down"></i>
 		    </span>
 		    <br>
 		    <span style="font-size: 10px; line-height: 1.2; white-space: nowrap;">
@@ -24,7 +24,7 @@
 	    ui-class="{'active': activeTab == 1}" class="btn btn-navbar">
 	    <i class="fa fa-th"></i><span class="hidden-xs"> Aufstellung</span>
 	</a>
-	<a ui-set="{'activeTab': 2}" 
+	<a ng-if="$ctrl.isPlayerSet()" ui-set="{'activeTab': 2}" 
 	    ui-class="{'active': activeTab == 2}" class="btn btn-navbar">
 	    <i class="fa fa-random"></i><span class="hidden-xs"> Wechsel</span>
 	</a>
@@ -105,7 +105,7 @@
 			    		<div class="grid-cell">
 		    				<div class="grid-face grid-face-{{player.pos}} noselect btn-group pull-right"
 		    					style="background-image: url('/faceprev.php?sid={{player.id}}'); opacity: 0.5; cursor: inherit;"></div>
-		    				<player ng-if="!player.isSet()"
+		    				<player ng-if="!$ctrl.isPlayerSet(player)"
 		    					object="player" on-move="$ctrl.grid.setPlayer(player, x, y)"></player>
 			    		</div>
 			    		<div class="noselect player-info">
@@ -127,7 +127,7 @@
 
 			<div ui-if="activeTab == 2" class="changes-container">
 			
-				<h5 style="margin-bottom: 4px;"><b>Einwechslungen</b></h5>
+				<div class="visible-xs" style="margin-top: 15px;"></div>
 				<div class="list-group">
 					<div ng-repeat="adjustment in $ctrl.adjustments">
 						<div ng-if="adjustment.option.item==1" class="list-group-item">
@@ -136,8 +136,7 @@
 					</div> 
 				</div>
 
-				<h5 style="margin-top: 15px; margin-bottom: 4px;"><b>Positionswechsel</b></h5>
-				<div class="list-group">
+				<div class="list-group" style="margin-top: 15px;">
 					<div ng-repeat="adjustment in $ctrl.adjustments">
 						<div ng-if="adjustment.option.item==5" class="list-group-item">
 							<span ng-bind-html="adjustment.text"></span> <a style="margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
@@ -149,8 +148,7 @@
 	
 			<div ui-if="activeTab == 3">
 	      
-				<h5><b>Aktionen</b></h5>	
-				<div class="list-group">
+				<div class="list-group noselect">
 					<div ng-repeat="adjustment in $ctrl.adjustments">
 						<div ng-if="adjustment.option.page==1 && adjustment.option.item!=1 && adjustment.option.item!=5" class="list-group-item">
 							<span ng-bind-html="adjustment.text"></span> <a style="margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
@@ -158,13 +156,12 @@
 					</div> 
 				</div>
 				<div ng-repeat="option in $ctrl.options" class="hidden-xs btn-group">
-					<button ng-if="option.page==1 && option.item!=1 && option.item!=5" class="btn btn-primary" ng-click="$ctrl.addAdjustment(option)">
+					<button ng-if="option.page==1 && option.item!=1 && option.item!=5" class="btn btn-primary btn-sm" ng-click="$ctrl.addAdjustment(option)">
 						<span ng-bind-html="option.text"></span> 
 					</button>
 				</div>
 	      		
-	      		<h5 style="margin-top: 15px;"><b>Einstellungen</b></h5>
-	      		<div class="list-group">
+	      		<div class="list-group noselect" style="margin-top: 15px;">
 					<div ng-repeat="adjustment in $ctrl.adjustments">
 						<div ng-if="adjustment.option.page==2 && adjustment.option.item<16" class="list-group-item">
 							<span ng-bind-html="adjustment.text"></span> <a style="margin-left: 5px;"><i class="fa fa-trash"></i></a>
@@ -172,13 +169,12 @@
 					</div> 
 				</div>
 				<div ng-repeat="option in $ctrl.options" class="hidden-xs btn-group">
-					<button ng-if="option.page==2 && option.item<16" class="btn btn-primary" ng-click="$ctrl.addAdjustment(option)">
+					<button ng-if="option.page==2 && option.item<16" class="btn btn-primary btn-sm" ng-click="$ctrl.addAdjustment(option)">
 						<span ng-bind-html="option.text"></span> 
 					</button>
 				</div>
 
-	      		<h5 style="margin-top: 15px;"><b>Taktiken</b></h5>
-	      		<div class="list-group">
+	      		<div class="list-group noselect" style="margin-top: 15px;">
 					<div ng-repeat="adjustment in $ctrl.adjustments">
 						<div ng-if="adjustment.option.page==2 && adjustment.option.item>=16" class="list-group-item">
 							<span ng-bind-html="adjustment.text"></span> <a style="margin-left: 5px;"><i class="fa fa-trash"></i></a>
@@ -186,7 +182,7 @@
 					</div> 
 				</div>
 				<div ng-repeat="option in $ctrl.options" class="hidden-xs btn-group">
-					<button ng-if="option.page==2 && option.item>=16" class="btn btn-primary" ng-click="$ctrl.addAdjustment(option)">
+					<button ng-if="option.page==2 && option.item>=16" class="btn btn-primary btn-sm" ng-click="$ctrl.addAdjustment(option)">
 						<span ng-bind-html="option.text"></span> 
 					</button>
 				</div>
@@ -198,7 +194,7 @@
 			    	
 					<div class="list-group">
 						<div ng-repeat="option in $ctrl.options">
-							<a ng-if="option.item!=1" class="list-group-item" ng-click="$ctrl.addAdjustment(option)">
+							<a ng-if="option.item!=1 && option.item!=5" class="list-group-item" ng-click="$ctrl.addAdjustment(option)">
 								<i class="fa fa-caret-square-o-right"></i> 
 								<span ng-bind-html="option.text"></span> 
 							</a>
