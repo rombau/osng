@@ -51,6 +51,20 @@
 
 // overrides ---------------------------------------------
 
+.app-progress-indicator {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	z-index: -1;
+	&.loading {
+		background-color: @sidebar-background;
+		opacity: 0.5;
+		z-index: 9999; 
+	}
+}
+
 .navbar {
 	.btn-group {
 		.btn-navbar {

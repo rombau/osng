@@ -9303,6 +9303,19 @@ ui-switch {
     transform: translate3d(-220px, 0, 0);
   }
 }
+.app-progress-indicator {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  z-index: -1;
+}
+.app-progress-indicator.loading {
+  background-color: #0d0d50;
+  opacity: 0.5;
+  z-index: 9999;
+}
 .navbar .btn-group .btn-navbar {
   border-radius: 0px;
   text-transform: none;

@@ -44,6 +44,15 @@ osApp.factory('HtmlTransformationUtil', [function () {
 				}
 			}
 			return null;
+		},
+
+		getEnsuredDocument : function (html) {
+
+			var doc = new DOMParser().parseFromString(html, "text/html");
+
+			// TODO check zat and login and throw error message for interceptor
+
+			return doc;
 		}
 	};
 }]);
@@ -116,7 +125,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 
 			var move = new Move();
 
-			var doc = new DOMParser().parseFromString(html, "text/html");
+			var doc = HtmlTransformationUtil.getEnsuredDocument(html);
 
 			var tables = doc.getElementsByTagName('table');
 
@@ -217,7 +226,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 
 			var move = new Move();
 
-			var doc = new DOMParser().parseFromString(html, "text/html");
+			var doc = HtmlTransformationUtil.getEnsuredDocument(html);
 
 			var optionmap = {}, key;
 
@@ -263,7 +272,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 				lines : []
 			};
 
-			var doc = new DOMParser().parseFromString(html, "text/html");
+			var doc = HtmlTransformationUtil.getEnsuredDocument(html);
 
 			var table = doc.getElementsByTagName('table')[3];
 			for (var r = 0; r < table.rows.length - 1; r++) {
@@ -530,14 +539,16 @@ osApp.component('moveComponent', {
 		ctrl.addAdjustment = function (option, callback) {
 
 			MoveWebClient.loadAdjustmentForm(option).then(function (response) {
-				ctrl.option = option;
-				ctrl.adjustmentForm = response.data;
-				if (callback) {
-					callback(ctrl.adjustmentForm);
+				if (response.data && response.data.lines) {
+					ctrl.option = option;
+					ctrl.adjustmentForm = response.data;
+					if (callback) {
+						callback(ctrl.adjustmentForm);
+					}
+					SharedState.turnOn('action');
 				}
-				SharedState.turnOn('action');
 			}, function (response) {
-				console.error(response);
+				console.error("errorCallback " + response);
 			});
 		};
 
