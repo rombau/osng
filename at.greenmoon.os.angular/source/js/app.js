@@ -16,7 +16,7 @@ osApp.config(['$routeProvider','$locationProvider','$httpProvider',function ($ro
 	}).when('/index.php', {
 		template : "<login-form></login-form>"
 	}).when('/error', {
-		template : '<div class="scrollable"><div class="scrollable-content"><div class="section">{{error}}</div></div></div>'
+		template : '<div class="scrollable"><div class="scrollable-content"><div class="section"><span ng-bind-html="error"></span></div></div></div>'
 	}).when('/zugabgabe.php', {
 		template : "<move-component></move-component>"
 	}).when('/:site', {

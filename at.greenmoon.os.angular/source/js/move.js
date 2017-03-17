@@ -48,11 +48,21 @@ osApp.factory('HtmlTransformationUtil', [function () {
 
 		getEnsuredDocument : function (html) {
 
-			var doc = new DOMParser().parseFromString(html, "text/html");
+			var pattern, matches;
 
-			// TODO check zat and login and throw error message for interceptor
+			pattern = /F.+r die Dauer von ZAT (\d+) sind die Seiten von OS 2\.0 gesperrt!/gm;
+			matches = pattern.exec(html);
+			if (matches) {
+				throw matches[0];
+			}
 
-			return doc;
+			pattern = /Diese Seite ist ohne Team nicht verf.+gbar!/gm;
+			matches = pattern.exec(html);
+			if (matches) {
+				throw matches[0];
+			}
+
+			return new DOMParser().parseFromString(html, "text/html");
 		}
 	};
 }]);
