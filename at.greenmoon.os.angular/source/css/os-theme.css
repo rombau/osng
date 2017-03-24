@@ -9596,8 +9596,6 @@ select::-ms-expand {
 @media (min-width: 768px) {
   .changes-container {
     margin-left: 464px;
-    margin-right: 25px;
-    position: absolute;
   }
 }
 .selection-container {
