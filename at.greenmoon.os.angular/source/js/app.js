@@ -35,7 +35,7 @@ osApp.config(['$routeProvider','$locationProvider','$httpProvider',function ($ro
 		return {
 			request : function (config) {
 				if (requestCount === 0) {
-					angular.element(content).toggleClass('loading');
+					angular.element(content).addClass('loading');
 				}
 				requestCount++;
 				return config;
@@ -48,14 +48,14 @@ osApp.config(['$routeProvider','$locationProvider','$httpProvider',function ($ro
 			response : function (response) {
 				requestCount--;
 				if (requestCount === 0) {
-					angular.element(content).toggleClass('loading');
+					angular.element(content).removeClass('loading');
 				}
 				return response;
 			},
 
 			responseError : function (response) {
 				requestCount--;
-				angular.element(content).toggleClass('loading');
+				angular.element(content).removeClass('loading');
 				$rootScope.error = '' + response;
 				$location.path('error');
 				return response;

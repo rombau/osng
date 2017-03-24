@@ -45,7 +45,7 @@
 				</div>
 			</div>
 			<div class="navbar-brand" ui-yield-to="title">
-				<span>Online Soccer</span> {{error}}
+				<span>Online Soccer</span>
 			</div>
 			<div class="btn-group pull-right" ui-yield-to="navbarAction">
 				<div ng-hide="userData.loggedIn" class="btn btn-navbar">
@@ -56,7 +56,7 @@
 
 
 		<div class="app-body">
-			<div class="app-progress-indicator"><h3>{{error}}</h3></div>
+			<div class="app-progress-indicator"></div>
 			<ng-view class="app-content"></ng-view>
 		</div>
 

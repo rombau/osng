@@ -309,7 +309,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 						var option = select.options[o];
 						maxOptionLength = Math.max(maxOptionLength, option.textContent.length);
 						combo.options.push({
-							label : option.textContent,
+							label : option.textContent.replace(/ \([A-T]\)/, ' *').replace(/ \([U-Z]\)/, ' -'),
 							value : option.value
 						});
 					}
@@ -333,16 +333,18 @@ osApp.factory('MoveWebClient', ['$q','$http','Move','MoveTransformation',functio
 
 	return {
 
-		loadMove : function (num) {
+		loadMove : function (zat) {
 
 			var deferred = $q.defer();
 			var promises = [];
 
 			promises.push($http({
-				url : '../zugabgabe.php',
+				url : '../zugabgabe.php' + (zat ? '?lauf=' + zat : ''),
 				method : 'GET',
 				transformResponse : MoveTransformation.transformSetup
 			}));
+
+			// beim laden muss die erst anfrage fertig sein !!!
 
 			promises.push($http({
 				url : '../zugabgabe.php?p=1',
@@ -516,11 +518,17 @@ osApp.component('moveComponent', {
 		 */
 		ctrl.grid.removePlayer = function (player) {
 
+			if (SharedState.get('activeTab') === 2) {
+				return true;
+			}
+
 			if (ctrl.isPlayerSet(player) && player.row > 0) {
 				ctrl.grid[player.row - 1][player.col - 1] = null;
 			}
 			player.row = null;
 			player.col = null;
+
+			return false;
 		};
 
 		ctrl.getKeeper = function () {
@@ -568,9 +576,11 @@ osApp.component('moveComponent', {
 
 		ctrl.save = function () {
 			console.log('SAVE: ' + JSON.stringify(ctrl.players));
+
+			// $window.open("../za_result.php", "popup", "width=300,height=200,left=10,top=150");
 		};
 
-		MoveWebClient.loadMove().then(function (move) {
+		var loadSuccessHandler = function (move) {
 
 			ctrl.information = move.information;
 			ctrl.players = move.sortPlayers();
@@ -584,11 +594,19 @@ osApp.component('moveComponent', {
 				}
 			}
 
-		}, function (response) {
+		};
 
-			console.error(response);
-			$location.path('#/error');
-		});
+		ctrl.load = function (approved) {
+			if (approved) {
+				MoveWebClient.loadMove(ctrl.zat).then(loadSuccessHandler);
+				ctrl.zat = null;
+				return;
+			}
+			ctrl.zat = '1';
+			SharedState.turnOn('load');
+		};
+
+		MoveWebClient.loadMove().then(loadSuccessHandler);
 	}]
 });
 
@@ -695,9 +713,11 @@ osApp.component('player', {
 				}
 				if (!inArea) {
 					if (ctrl.player.row !== null && ctrl.player.col !== null) {
-						ctrl.onRemove({
+						if (ctrl.onRemove({
 							player : ctrl.player
-						});
+						})) {
+							drag.reset();
+						}
 					} else {
 						drag.reset();
 					}
