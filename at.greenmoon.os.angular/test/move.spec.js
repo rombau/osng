@@ -260,7 +260,7 @@ describe('Move transformation service', function () {
 		expect(form.lines[0].combos.length).toEqual(1);
 		expect(form.lines[0].combos[0].name).toEqual('zao_einspieler');
 		expect(form.lines[0].combos[0].width).toEqual(12);
-		expect(form.lines[0].combos[0].options[0].label).toEqual('Anthony Downes (E)');
+		expect(form.lines[0].combos[0].options[0].label).toEqual('Anthony Downes *');
 		expect(form.lines[0].combos[0].options[0].value).toEqual('75108');
 		expect(form.lines[1].label).toEqual('Auswechselspieler');
 		expect(form.lines[1].combos.length).toEqual(1);
