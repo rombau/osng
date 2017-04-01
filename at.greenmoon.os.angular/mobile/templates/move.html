@@ -31,7 +31,7 @@
 		<i class="fa fa-folder-open-o"></i> <span class="hidden-xs">Laden</span>
     </a>
     <a class="btn btn-navbar" ng-click="$ctrl.save()">
-    	<span style="color:red;">
+    	<span ng-class="$ctrl.valid ? 'ABW' : 'STU'">
         	<i class="fa fa-save"></i> <span class="hidden-xs">Speichern</span>
         </span>
     </a>
@@ -102,18 +102,20 @@
 							
 				<div class="visible-xs" style="margin-top: 15px;"></div>
 				<div class="list-group">
-			  		<div ng-repeat="adjustment in $ctrl.adjustments">
+			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.item==1">
-							<span ng-bind-html="adjustment.text"></span> 
-							<a style="margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
+							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
+							<a ng-click="$ctrl.removeAdjustment(adjustment)"
+								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
 						</div> 
 					</div> 
 				</div>
 				<div class="list-group" style="margin-bottom: 15px;">
-			  		<div ng-repeat="adjustment in $ctrl.adjustments">
+			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.item==5">
-							<span ng-bind-html="adjustment.text"></span> 
-							<a style="margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
+							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
+							<a ng-click="$ctrl.removeAdjustment(adjustment)"
+								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
 						</div> 
 					</div> 
 				</div>
@@ -125,10 +127,11 @@
 					</button>
 				</div>
 			  	<div class="list-group" style="margin-bottom: 15px;">
-			  		<div ng-repeat="adjustment in $ctrl.adjustments">
+			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.page==1 && adjustment.option.item!=1 && adjustment.option.item!=5">
-							<span ng-bind-html="adjustment.text"></span> 
-							<a style="margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
+							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
+							<a ng-click="$ctrl.removeAdjustment(adjustment)"
+								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
 						</div> 
 					</div> 
 				</div>
@@ -140,10 +143,11 @@
 					</button>
 				</div>
 			  	<div class="list-group" style="margin-bottom: 15px;">
-			  		<div ng-repeat="adjustment in $ctrl.adjustments">
+			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.page==2 && adjustment.option.item<16">
-							<span ng-bind-html="adjustment.text"></span> 
-							<a style="margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
+							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
+							<a ng-click="$ctrl.removeAdjustment(adjustment)"
+								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
 						</div> 
 					</div> 
 				</div>
@@ -155,10 +159,11 @@
 					</button>
 				</div>
 			  	<div class="list-group" style="margin-bottom: 15px;">
-			  		<div ng-repeat="adjustment in $ctrl.adjustments">
+			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.page==2 && adjustment.option.item>=16">
-							<span ng-bind-html="adjustment.text"></span> 
-							<a style="margin-left: 5px;"><b><i class="fa fa-trash"></i></b></a>
+							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
+							<a ng-click="$ctrl.removeAdjustment(adjustment)"
+								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
 						</div> 
 					</div>
 				</div>
@@ -176,15 +181,14 @@
 		    	
 		    	<div ui-if="activeTab == 1" class="player-container" ng-repeat="player in $ctrl.players">
 		    		<div class="grid-cell">
-	    				<div class="grid-face grid-face-{{player.pos}} noselect btn-group pull-right"
-	    					style="background-image: url('/faceprev.php?sid={{player.id}}'); opacity: 0.5; cursor: inherit;"></div>
+	    				<div class="grid-face grid-face-{{player.pos}} noselect btn-group pull-right unavailable"
+	    					style="background-image: url('/faceprev.php?sid={{player.id}}'); cursor: inherit;"></div>
 	    				<player ng-if="!$ctrl.isPlayerSet(player)"
 	    					object="player" on-move="$ctrl.grid.setPlayer(player, x, y)"></player>
 		    		</div>
-		    		<div class="noselect player-info">
-						<div class="noselect"><a href="javascript:spielerinfo({{player.id}})" 
-							class="{{player.pos}}" >{{player.name}}</a></div>
-						<div class="noselect">
+		    		<div class="noselect player-info" ng-class="{unavailable: ($ctrl.isPlayerSet(player))}">
+						<div><player-link object="player"></player-link></div>
+						<div>
 							Moral {{player.moral}} / 
 							Fitness {{player.fitness}} - 
 							Skill {{player.skill | number : 2}} / 

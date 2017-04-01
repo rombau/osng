@@ -19,6 +19,10 @@ osApp.config(['$routeProvider','$locationProvider','$httpProvider',function ($ro
 		template : '<div class="scrollable"><div class="scrollable-content"><div class="section"><span ng-bind-html="error"></span></div></div></div>'
 	}).when('/zugabgabe.php', {
 		template : "<move-component></move-component>"
+	}).when('/player/:id', {
+		template : function ($routeProvider) {
+			return '<embedded-site site="../sp.php?s=' + $routeProvider.id + '"></embedded-site>';
+		}
 	}).when('/:site', {
 		template : function ($routeProvider) {
 			return '<embedded-site site="../' + $routeProvider.site + '"></embedded-site>';
@@ -74,3 +78,23 @@ osApp.filter('trustAsResourceUrl', ['$sce',function ($sce) {
 		return $sce.trustAsResourceUrl(val);
 	};
 }]);
+
+osApp.component('playerLink', {
+
+	template : '<a ng-click="$ctrl.openWindow()" class="{{$ctrl.player.pos}} noselect">{{$ctrl.player.name}}</a>',
+
+	bindings : {
+		player : '<object'
+	},
+
+	controller : ['$window',function ($window) {
+
+		var ctrl = this;
+
+		ctrl.openWindow = function () {
+			$window.open("../sp.php?s=" + ctrl.player.id, "os_spieler", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=800,height=550");
+			return false;
+		};
+
+	}]
+});

@@ -71,6 +71,8 @@ osApp.factory('Move', ['Player',function (Player) {
 
 	function Move () {
 
+		this.valid = false;
+
 		this.players = [];
 
 		this.information = {};
@@ -99,11 +101,25 @@ osApp.factory('Move', ['Player',function (Player) {
 			this.option = new Option();
 			this.id = 0;
 			this.text = '';
+
+			this.params = {
+				zao_einspieler : {},
+				zao_spieler : {},
+				zao_minute : {},
+				zao_abhaengigkeit : {},
+				P1 : {},
+				P2 : {},
+				P3 : {},
+				spieler_id : {}
+			};
 		};
 	}
 
 	Move.GRID_ROWS = 15;
 	Move.GRID_COLUMNS = 11;
+
+	Move.SET_PLAYER_INDICATOR = ' ◉';
+	Move.SUBSTITUTE_INDICATOR = ' ⇄';
 
 	Move.prototype = {
 
@@ -120,6 +136,100 @@ osApp.factory('Move', ['Player',function (Player) {
 				});
 			}
 			return this.players;
+		},
+
+		generateAdjustmentText : function (adjustment) {
+
+			var idx, text = '';
+
+			var dependence = adjustment.params.zao_abhaengigkeit.text, dependenceTime;
+
+			if (dependence) {
+				dependenceTime = 'in der ' + adjustment.params.zao_minute.text + '. Minute';
+				if (dependence === 'Immer durchführen') {
+					dependence = 'Immer';
+				} else if (-1 !== (idx = dependence.search(/ in/))) {
+					dependence = dependence.substring(0, idx);
+				} else if (-1 !== (idx = dependence.search(/ ab/))) {
+					dependence = dependence.substring(0, idx);
+					dependenceTime = 'ab der ' + adjustment.params.zao_minute.text + '. Minute';
+				}
+			}
+
+			switch (adjustment.option.item) {
+			case 1:
+				text += dependence;
+				text += ' : ';
+				text += adjustment.option.text;
+				text += ' von ';
+				text += adjustment.params.zao_einspieler.text;
+				text += ' für ';
+				text += adjustment.params.zao_spieler.text;
+				text += ' ';
+				text += dependenceTime;
+				text += ' ';
+				text += adjustment.params.P3.text || ('auf Position ' + adjustment.params.P1.text + adjustment.params.P2.text);
+				break;
+			case 5:
+				text += dependence;
+				text += ' : ';
+				text += adjustment.option.text;
+				text += ' von ';
+				text += adjustment.params.zao_spieler.text;
+				text += ' auf Position ';
+				text += adjustment.params.P1.text + adjustment.params.P2.text;
+				text += ' ';
+				text += dependenceTime;
+				break;
+			case 6:
+				text += dependence;
+				text += ' : ';
+				if (adjustment.params.P1.text === 'Positionsbezogen') {
+					text += 'Positionsbezogene Manndeckung';
+				} else if (adjustment.params.P1.text === 'Manndeckung aufheben') {
+					text += 'Manndeckung aufheben';
+				} else {
+					text += ('Manndeckung von ' + adjustment.params.P1.text);
+				}
+				text += ' durch ';
+				text += adjustment.params.zao_spieler.text;
+				text += ' ';
+				text += dependenceTime;
+				break;
+			case 2:
+			case 3:
+			case 4:
+				text += dependence;
+				text += ' : ';
+				text += adjustment.option.text;
+				text += ' einstellen auf ';
+				text += adjustment.params.P1.text;
+				text += ' ';
+				text += dependenceTime;
+				break;
+			case 8:
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
+				text = adjustment.option.text + ' : ' + adjustment.params.spieler_id.text;
+				break;
+			case 16:
+			case 17:
+			case 18:
+				text += dependence;
+				text += ' : ';
+				text += dependenceTime;
+				text += ' ';
+				text += adjustment.option.text.replace('Taktik', '- Grundtaktik');
+				text += ' : ';
+				text += adjustment.params.P1.text;
+				break;
+			}
+
+			return text;
 		}
 	};
 
@@ -141,6 +251,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 
 			var timeInformation = tables[1].rows[0].cells[0];
 			var againstInformation = tables[1].rows[0].cells[1];
+			var validInformation = tables[1].rows[0].cells[2];
 			var tableRaster = tables[3];
 			var tableSpieler = tables[4];
 
@@ -166,6 +277,8 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 				move.information.against.id = +matches[3];
 				move.information.against.name = matches[4];
 			}
+
+			move.valid = /Zugabgabe: G.+ltig/.test(validInformation.textContent);
 
 			var row, r, cell, c;
 
@@ -260,7 +373,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 				var adjustment = new move.Adjustment();
 
 				adjustment.id = +row.cells[0].firstChild.value;
-				adjustment.text = row.cells[1].textContent;
+				adjustment.text = row.cells[1].textContent.replace(/ *: /g, ' : ');
 
 				for (key in optionmap) {
 					if (optionmap.hasOwnProperty(key)) {
@@ -309,13 +422,13 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 						var option = select.options[o];
 						maxOptionLength = Math.max(maxOptionLength, option.textContent.length);
 						combo.options.push({
-							label : option.textContent.replace(/ \([A-T]\)/, ' *').replace(/ \([U-Z]\)/, ' -'),
+							label : option.textContent.replace(/ \([A-T]\)/, Move.SET_PLAYER_INDICATOR).replace(/ \([U-Z]\)/, Move.SUBSTITUTE_INDICATOR),
 							value : option.value
 						});
 					}
 
 					combo.width = maxOptionLength > 2 ? maxOptionLength > 5 ? maxWidth : 3 : 2;
-					combo.value = combo.options[0].value;
+					combo.value = select.value || combo.options[0].value;
 					line.combos.push(combo);
 
 					maxWidth -= combo.width;
@@ -335,37 +448,38 @@ osApp.factory('MoveWebClient', ['$q','$http','Move','MoveTransformation',functio
 
 		loadMove : function (zat) {
 
-			var deferred = $q.defer();
-			var promises = [];
+			var move;
 
-			promises.push($http({
+			return $http({
 				url : '../zugabgabe.php' + (zat ? '?lauf=' + zat : ''),
 				method : 'GET',
 				transformResponse : MoveTransformation.transformSetup
-			}));
+			}).then(function (response) {
 
-			// beim laden muss die erst anfrage fertig sein !!!
+				move = response.data;
 
-			promises.push($http({
-				url : '../zugabgabe.php?p=1',
-				method : 'GET',
-				transformResponse : MoveTransformation.transformActions
-			}));
+				var deferred = $q.defer();
+				var promises = [];
 
-			promises.push($http({
-				url : '../zugabgabe.php?p=2',
-				method : 'GET',
-				transformResponse : MoveTransformation.transformOptions
-			}));
+				promises.push($http({
+					url : '../zugabgabe.php?p=1',
+					method : 'GET',
+					transformResponse : MoveTransformation.transformActions
+				}));
+				promises.push($http({
+					url : '../zugabgabe.php?p=2',
+					method : 'GET',
+					transformResponse : MoveTransformation.transformOptions
+				}));
 
-			$q.all(promises).then(function (moveArray) {
-				var move = moveArray[0].data;
-				move.options = moveArray[1].data.options.concat(moveArray[2].data.options);
-				move.adjustments = moveArray[1].data.adjustments.concat(moveArray[2].data.adjustments);
-				deferred.resolve(move);
-			}, deferred.reject, deferred.notify);
+				$q.all(promises).then(function (moveArray) {
+					move.options = moveArray[0].data.options.concat(moveArray[1].data.options);
+					move.adjustments = moveArray[0].data.adjustments.concat(moveArray[1].data.adjustments);
+					deferred.resolve(move);
+				}, deferred.reject, deferred.notify);
 
-			return deferred.promise;
+				return deferred.promise;
+			});
 		},
 
 		saveMove : function (move) {
@@ -393,7 +507,7 @@ osApp.component('moveComponent', {
 
 	templateUrl : 'templates/move.html',
 
-	controller : ['$location','SharedState','MoveWebClient','Move',function ($location, SharedState, MoveWebClient, Move) {
+	controller : ['$location','$window','SharedState','MoveWebClient','Move',function ($location, $window, SharedState, MoveWebClient, Move) {
 
 		var ctrl = this;
 
@@ -554,34 +668,88 @@ osApp.component('moveComponent', {
 			return subst;
 		};
 
+		ctrl.getAdjustments = function () {
+
+			var adjustments = [];
+			for (var a = 0; a < ctrl.adjustments.length; a++) {
+				var adjustment = ctrl.adjustments[a];
+				if (adjustment.id || !adjustment.markDeleted) {
+					adjustments.push(adjustment);
+				}
+			}
+			if (adjustments.length > 0) {
+				adjustments.sort(function (a, b) {
+					return a.option.item - b.option.item;
+				});
+			}
+			return adjustments;
+		};
+
 		ctrl.addAdjustment = function (option, callback) {
 
 			MoveWebClient.loadAdjustmentForm(option).then(function (response) {
 				if (response.data && response.data.lines) {
 					ctrl.option = option;
 					ctrl.adjustmentForm = response.data;
+
+					console.log("ctrl.adjustmentForm = " + JSON.stringify(ctrl.adjustmentForm));
+
 					if (callback) {
 						callback(ctrl.adjustmentForm);
 					}
 					SharedState.turnOn('action');
 				}
-			}, function (response) {
-				console.error("errorCallback " + response);
 			});
+		};
+
+		ctrl.removeAdjustment = function (adjustment) {
+			adjustment.markDeleted = !adjustment.markDeleted;
 		};
 
 		ctrl.saveAdjustment = function () {
 
+			var move = new Move();
+			var adjustment = new move.Adjustment();
+
+			adjustment.option.item = ctrl.option.item;
+			adjustment.option.page = ctrl.option.page;
+			adjustment.option.text = ctrl.option.text;
+
+			for (var l = 0; l < ctrl.adjustmentForm.lines.length; l++) {
+				var line = ctrl.adjustmentForm.lines[l];
+				for (var c = 0; c < line.combos.length; c++) {
+					var combo = line.combos[c], optionText;
+					for (var o = 0; o < combo.options.length; o++) {
+						var option = combo.options[o];
+						if (option.value === combo.value) {
+							optionText = option.label.replace(Move.SET_PLAYER_INDICATOR, '').replace(Move.SUBSTITUTE_INDICATOR, '');
+							break;
+						}
+					}
+					adjustment.params[combo.name] = {
+						value : combo.value,
+						text : optionText
+					};
+				}
+			}
+
+			adjustment.text = move.generateAdjustmentText(adjustment);
+
+			ctrl.adjustments.push(adjustment);
 		};
 
 		ctrl.save = function () {
+
 			console.log('SAVE: ' + JSON.stringify(ctrl.players));
 
-			// $window.open("../za_result.php", "popup", "width=300,height=200,left=10,top=150");
+			// TODO
+
+			$window.open("../checkza.php", "checkza", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,height=600,width=400");
 		};
 
 		var loadSuccessHandler = function (move) {
 
+			ctrl.valid = move.valid;
 			ctrl.information = move.information;
 			ctrl.players = move.sortPlayers();
 			ctrl.options = move.options;

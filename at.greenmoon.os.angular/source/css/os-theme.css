@@ -9389,6 +9389,13 @@ ui-switch {
 .modal-footer {
   text-align: left;
 }
+span.markdeleted {
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+span.marknew {
+  color: #FBF9B3;
+}
 label {
   font-weight: normal;
   display: block;
@@ -9615,8 +9622,11 @@ select::-ms-expand {
 }
 .player-container {
   padding-top: 5px;
-  width: 400px;
+  width: 420px;
   float: left;
+}
+.player-container .unavailable {
+  opacity: 0.6;
 }
 .player-info > div {
   overflow: hidden;

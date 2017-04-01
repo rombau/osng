@@ -140,6 +140,16 @@
 	text-align: left;
 }
 
+span {
+	&.markdeleted {
+	    text-decoration: line-through;
+	    opacity: 0.8;
+	}
+	&.marknew {
+		color: @brand-primary;
+	}
+}
+
 label {
 	font-weight: normal;
 	display: block;
@@ -381,10 +391,14 @@ select {
 .selection-container.moving {
 	overflow-y: scroll;
 }
+
 .player-container {
 	padding-top: 5px; 
-	width: 400px;
+	width: 420px;
 	float: left;
+	.unavailable {
+		opacity: 0.6;
+	}
 }
 .player-info > div {
 	overflow: hidden; 
