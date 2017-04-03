@@ -692,7 +692,32 @@ osApp.component('moveComponent', {
 					ctrl.option = option;
 					ctrl.adjustmentForm = response.data;
 
-					console.log("ctrl.adjustmentForm = " + JSON.stringify(ctrl.adjustmentForm));
+					var playerNames = [];
+					playerNames[Move.SET_PLAYER_INDICATOR] = [];
+					playerNames[Move.SUBSTITUTE_INDICATOR] = [];
+					for (var p = 0; p < ctrl.players.length; p++) {
+						var player = ctrl.players[p];
+						if (player.row === -1) {
+							playerNames[Move.SUBSTITUTE_INDICATOR].push(player.name);
+						} else if (ctrl.isPlayerSet(player)) {
+							playerNames[Move.SET_PLAYER_INDICATOR].push(player.name);
+						}
+					}
+
+					for (var l = 0; l < ctrl.adjustmentForm.lines.length; l++) {
+						var line = ctrl.adjustmentForm.lines[l];
+						for (var c = 0; c < line.combos.length; c++) {
+							var combo = line.combos[c], optionText;
+							for (var o = 0; o < combo.options.length; o++) {
+								var opt = combo.options[o];
+								if (playerNames[Move.SET_PLAYER_INDICATOR].indexOf(opt.label) >= 0) {
+									opt.label += Move.SET_PLAYER_INDICATOR;
+								} else if (playerNames[Move.SUBSTITUTE_INDICATOR].indexOf(opt.label) >= 0) {
+									opt.label += Move.SUBSTITUTE_INDICATOR;
+								}
+							}
+						}
+					}
 
 					if (callback) {
 						callback(ctrl.adjustmentForm);
