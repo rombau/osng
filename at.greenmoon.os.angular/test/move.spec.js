@@ -580,20 +580,19 @@ describe('Move controller', function () {
 					return $q.when(move);
 				},
 				loadAdjustmentForm : function () {
+					var lineMock = function () {
+						this.combos = [{
+							options : []
+						},{
+							options : []
+						},{
+							options : []
+						}]
+					}
 					return $q.when({
 						data : {
 							method : 'GET',
-							lines : [{
-								combos : [{},{},{}]
-							},{
-								combos : [{},{},{}]
-							},{
-								combos : [{},{},{}]
-							},{
-								combos : [{},{},{}]
-							},{
-								combos : [{},{},{}]
-							}]
+							lines : [new lineMock(),new lineMock(),new lineMock(),new lineMock(),new lineMock()]
 						}
 					});
 				}

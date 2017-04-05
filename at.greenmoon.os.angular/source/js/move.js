@@ -813,7 +813,7 @@ osApp.component('player', {
 		onRemove : '&'
 	},
 
-	controller : ['$scope','$element','$document','$drag','$timeout','SharedState',function ($scope, $element, $document, $drag, $timeout, SharedState) {
+	controller : ['$scope','$element','$document','$drag','$touch','$timeout','SharedState',function ($scope, $element, $document, $drag, $touch, $timeout, SharedState) {
 
 		var ctrl = this;
 
@@ -825,25 +825,36 @@ osApp.component('player', {
 		var playerElement = $element[0].firstChild;
 		var playerRect = playerElement.getBoundingClientRect();
 
-		var toggleMoving = (function () {
+		var setMovingStyle = (function () {
 
 			if (ctrl.player.row === null && ctrl.player.col === null) {
 				// hide/show right sidebar (players list) while moving
 				var playerContainer = document.querySelector('.selection-container');
 				if (playerContainer) {
-					return function () {
-						angular.element(playerContainer).toggleClass('moving');
-						angular.element(playerElement).toggleClass('moving');
+					return function (moving) {
+						if (moving) {
+							angular.element(playerContainer).addClass('moving');
+							angular.element(playerElement).addClass('moving');
+						} else {
+							angular.element(playerContainer).removeClass('moving');
+							angular.element(playerElement).removeClass('moving');
+						}
 					};
 				}
 			}
-			return function () {
-				angular.element(playerElement).toggleClass('moving');
-				angular.element(playerElement.nextElementSibling).toggleClass('moving');
+			return function (moving) {
+				if (moving) {
+					angular.element(playerElement).addClass('moving');
+					angular.element(playerElement.nextElementSibling).addClass('moving');
+				} else {
+					angular.element(playerElement).removeClass('moving');
+					angular.element(playerElement.nextElementSibling).removeClass('moving');
+				}
 			};
 
 		})();
 
+		var dragMove = false;
 		var dragHandler = {
 
 			transform : function (element, transform, touch) {
@@ -865,16 +876,16 @@ osApp.component('player', {
 			},
 
 			start : function (drag, event) {
-
-				playerRect = drag.startRect;
-				toggleMoving();
+				dragMove = true;
+				setMovingStyle(true);
 				SharedState.turnOff('leftSwipe');
 			},
 
 			move : function (drag, event) {},
 
 			cancel : function (drag, event) {
-				toggleMoving();
+				setMovingStyle(false);
+				dragMove = false;
 			},
 
 			end : function (drag, event) {
@@ -916,7 +927,8 @@ osApp.component('player', {
 					}
 				}
 				$timeout(function () {
-					toggleMoving();
+					setMovingStyle(false);
+					dragMove = false;
 					$scope.$apply();
 				}, 100);
 			}
@@ -924,5 +936,26 @@ osApp.component('player', {
 		};
 
 		$drag.bind(playerElement, dragHandler, { /* drag options */});
+
+		// needed to set moving style on tap/click
+		$touch.bind(playerElement, {
+			start : function (touch) {
+				if (!dragMove) {
+					playerRect = playerElement.getBoundingClientRect();
+					setMovingStyle(true);
+				}
+			},
+			cancel : function (touch) {
+				if (!dragMove) {
+					setMovingStyle(false);
+				}
+			},
+			end : function (touch) {
+				if (!dragMove) {
+					setMovingStyle(false);
+				}
+			}
+		}, { /* touch options */});
+
 	}]
 });
