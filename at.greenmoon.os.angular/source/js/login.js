@@ -47,7 +47,7 @@ osApp.component('loginForm', {
 					self.failureMsg = ps[ps.length - 1].textContent;
 				} else {
 					UserData.loggedIn = true;
-					UserData.teamImage = '00000019.png';
+					// UserData.teamImage = '00000019.png';
 					$location.path("/haupt.php");
 				}
 				self.inProgress = false;

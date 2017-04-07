@@ -138,6 +138,22 @@ osApp.factory('Move', ['Player',function (Player) {
 			return this.players;
 		},
 
+		getStartPlayersAverage : function (attr) {
+			
+			console.log('getStartPlayersAverage ' + attr);
+			var sum = 0, count = 0;
+			for (var p = 0; p < this.players.length; p++) {
+				var player = this.players[p];
+				if (player.row !== null && player.col !== null && player.row !== undefined && player.col !== undefined && player.row >= 0 && player[attr]) {
+					console.log('add player ' + player.row + ' ' + player.col + ' ' + player[attr]);
+					sum += player[attr];
+					count++;
+				}
+			}
+			var result = (Math.round(sum / count * 100)/100).toFixed(2);
+			return isNaN(result) ? '' : result;
+		},
+
 		generateAdjustmentText : function (adjustment) {
 
 			var idx, text = '';
@@ -437,6 +453,21 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 				form.lines.push(line);
 			}
 			return form;
+		},
+
+		transformPlayers : function (players) {
+
+			var playerSetup = [];
+
+			for (var p = 0; p < players.length; p++) {
+				var player = players[p];
+				if (player.row !== null && player.col !== null && player.row !== undefined && player.col !== undefined) {
+					playerSetup.push(['player_' + player.id,player.col,player.row]);
+				}
+			}
+
+			return 'aufstellung=' + JSON.stringify(playerSetup);
+
 		}
 	};
 	return transformation;
@@ -484,11 +515,66 @@ osApp.factory('MoveWebClient', ['$q','$http','Move','MoveTransformation',functio
 
 		saveMove : function (move) {
 
-			// TODO transform parameters
-
 			return $http({
-				url : '../zugabgabe-beta.php',
-				method : 'POST'
+				url : '../zugabgabe_beta.php',
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : move.players,
+				transformRequest : MoveTransformation.transformPlayers
+			}).then(function (response) {
+
+				var deferred = $q.defer();
+
+				if (response.data === 'Count mismatch') {
+					deferred.reject(response.data);
+				}
+
+				var promises = [];
+
+				for (var a = 0; a < move.adjustments.length; a++) {
+					var adjustment = move.adjustments[a];
+
+					if (!adjustment.id || adjustment.markDeleted) {
+
+						var params;
+						if (adjustment.markDeleted) {
+							params = {
+								p : adjustment.option.page,
+								delzae : adjustment.id,
+								'delete' : '++++Gewählte+Aktion+löschen+++'
+							};
+						} else {
+							params = {
+								p : adjustment.option.page,
+								itemcreate : adjustment.option.item,
+								anlegen : '+++Neue+Aktion+anlegen+++'
+							};
+							for ( var p in adjustment.params) {
+								if (adjustment.params.hasOwnProperty(p)) {
+									params[p] = adjustment.params[p].value;
+								}
+							}
+						}
+						promises.push($http({
+							url : '../zugabgabe.php',
+							params : params,
+							method : 'GET'
+						}));
+					}
+				}
+
+				$q.all(promises).then(function (responseArray) {
+
+					$http({
+						url : '../checkza.php',
+						method : 'GET'
+					}).then(deferred.resolve, deferred.reject, deferred.notify);
+
+				}, deferred.reject, deferred.notify);
+
+				return deferred.promise;
 			});
 		},
 
@@ -511,9 +597,8 @@ osApp.component('moveComponent', {
 
 		var ctrl = this;
 
-		ctrl.players = [];
-		ctrl.options = [];
-		ctrl.adjustments = [];
+		ctrl.move = new Move();
+		ctrl.adjustmentForm = {};
 
 		var SUBSTITUTES = 6;
 
@@ -535,8 +620,8 @@ osApp.component('moveComponent', {
 				return player.row !== null && player.col !== null && player.row !== undefined && player.col !== undefined;
 			}
 
-			for (var p = 0; p < ctrl.players.length; p++) {
-				if (ctrl.isPlayerSet(ctrl.players[p])) {
+			for (var p = 0; p < ctrl.move.players.length; p++) {
+				if (ctrl.isPlayerSet(ctrl.move.players[p])) {
 					return true;
 				}
 			}
@@ -564,7 +649,7 @@ osApp.component('moveComponent', {
 
 				if (y > 0) {
 					if (player.row === -1) {
-						ctrl.addAdjustment(ctrl.options[0], function (form) {
+						ctrl.addAdjustment(ctrl.move.options[0], function (form) {
 							ctrl.adjustmentForm.lines[0].combos[0].value = '' + player.id;
 							if (playerToReplace) {
 								form.lines[1].combos[0].value = '' + playerToReplace.id;
@@ -575,7 +660,7 @@ osApp.component('moveComponent', {
 							}
 						});
 					} else if (!playerToReplace) {
-						ctrl.addAdjustment(ctrl.options[4], function (form) {
+						ctrl.addAdjustment(ctrl.move.options[4], function (form) {
 							form.lines[0].combos[0].value = '' + player.id;
 							form.lines[1].combos[0].value = String.fromCharCode(65 + (Move.GRID_ROWS - y));
 							form.lines[1].combos[1].value = '' + x;
@@ -583,7 +668,7 @@ osApp.component('moveComponent', {
 					}
 				} else if (x === 0 && y === 0) {
 					if (player.row === -1) {
-						ctrl.addAdjustment(ctrl.options[0], function (form) {
+						ctrl.addAdjustment(ctrl.move.options[0], function (form) {
 							form.lines[0].combos[0].value = '' + player.id;
 							if (playerToReplace) {
 								form.lines[1].combos[0].value = '' + playerToReplace.id;
@@ -593,7 +678,7 @@ osApp.component('moveComponent', {
 					}
 				} else {
 					if (player.row !== -1) {
-						ctrl.addAdjustment(ctrl.options[0], function (form) {
+						ctrl.addAdjustment(ctrl.move.options[0], function (form) {
 							form.lines[1].combos[0].value = '' + player.id;
 							if (playerToReplace) {
 								form.lines[0].combos[0].value = '' + playerToReplace.id;
@@ -647,8 +732,8 @@ osApp.component('moveComponent', {
 
 		ctrl.getKeeper = function () {
 
-			for (var p = 0; p < ctrl.players.length; p++) {
-				var player = ctrl.players[p];
+			for (var p = 0; p < ctrl.move.players.length; p++) {
+				var player = ctrl.move.players[p];
 				if (player.row === 0 && player.col === 0) {
 					return player;
 				}
@@ -659,8 +744,8 @@ osApp.component('moveComponent', {
 		ctrl.getSubst = function () {
 
 			var subst = new Array(SUBSTITUTES);
-			for (var p = 0; p < ctrl.players.length; p++) {
-				var player = ctrl.players[p];
+			for (var p = 0; p < ctrl.move.players.length; p++) {
+				var player = ctrl.move.players[p];
 				if (player.row === -1) {
 					subst[-player.col] = player;
 				}
@@ -671,8 +756,8 @@ osApp.component('moveComponent', {
 		ctrl.getAdjustments = function () {
 
 			var adjustments = [];
-			for (var a = 0; a < ctrl.adjustments.length; a++) {
-				var adjustment = ctrl.adjustments[a];
+			for (var a = 0; a < ctrl.move.adjustments.length; a++) {
+				var adjustment = ctrl.move.adjustments[a];
 				if (adjustment.id || !adjustment.markDeleted) {
 					adjustments.push(adjustment);
 				}
@@ -695,8 +780,8 @@ osApp.component('moveComponent', {
 					var playerNames = [];
 					playerNames[Move.SET_PLAYER_INDICATOR] = [];
 					playerNames[Move.SUBSTITUTE_INDICATOR] = [];
-					for (var p = 0; p < ctrl.players.length; p++) {
-						var player = ctrl.players[p];
+					for (var p = 0; p < ctrl.move.players.length; p++) {
+						var player = ctrl.move.players[p];
 						if (player.row === -1) {
 							playerNames[Move.SUBSTITUTE_INDICATOR].push(player.name);
 						} else if (ctrl.isPlayerSet(player)) {
@@ -760,33 +845,40 @@ osApp.component('moveComponent', {
 
 			adjustment.text = move.generateAdjustmentText(adjustment);
 
-			ctrl.adjustments.push(adjustment);
-		};
-
-		ctrl.save = function () {
-
-			console.log('SAVE: ' + JSON.stringify(ctrl.players));
-
-			// TODO
-
-			$window.open("../checkza.php", "checkza", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,height=600,width=400");
+			ctrl.move.adjustments.push(adjustment);
 		};
 
 		var loadSuccessHandler = function (move) {
 
-			ctrl.valid = move.valid;
-			ctrl.information = move.information;
-			ctrl.players = move.sortPlayers();
-			ctrl.options = move.options;
-			ctrl.adjustments = move.adjustments;
+			ctrl.move = move;
+			ctrl.move.players = move.sortPlayers();
 
-			for (var p = 0; p < ctrl.players.length; p++) {
-				var player = ctrl.players[p];
+			for (var p = 0; p < ctrl.move.players.length; p++) {
+				var player = ctrl.move.players[p];
 				if (player.row > 0 && player.col > 0) {
 					ctrl.grid[player.row - 1][player.col - 1] = player;
 				}
 			}
+		};
 
+		ctrl.save = function () {
+
+			var count = 0;
+			for (var p = 0; p < ctrl.move.players.length; p++) {
+				var player = ctrl.move.players[p];
+				if (ctrl.isPlayerSet(player)) {
+					count++;
+				}
+			}
+
+			if (count < 17) {
+				$window.alert('Vorläufig ist es nicht möglich die Zugabgabe zu speichern, solange nicht 11 Spieler und 6 Ersatz aufgestellt sind!');
+			} else {
+				MoveWebClient.saveMove(ctrl.move).then(function () {
+					MoveWebClient.loadMove().then(loadSuccessHandler);
+					$window.open("../checkza.php", "checkza", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,height=600,width=400");
+				});
+			}
 		};
 
 		ctrl.load = function (approved) {

@@ -4,7 +4,7 @@
 	<div style="position: relative; ">
 		<div style="position: absolute; top: -6px;">
 		    <span style="white-space: nowrap;">
-		    	<span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.information.zat}} <span class="hidden-xs hidden-sm hidden-md">am {{$ctrl.information.date | date : "dd.MM.yyyy HH:mm"}} Uhr</span> <i class="fa fa-caret-down"></i>
+		    	<span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.move.information.zat}} <span class="hidden-xs hidden-sm hidden-md">am {{$ctrl.move.information.date | date : "dd.MM.yyyy HH:mm"}} Uhr</span> <i class="fa fa-caret-down"></i>
 		    </span>
 		    <br>
 		    <span style="font-size: 10px; line-height: 1.2; white-space: nowrap;">
@@ -12,7 +12,7 @@
 		    		<span ui-if="activeTab == 1">Aufstellung</span>
 		    		<span ui-if="activeTab == 2">Wechsel & Einstellungen</span>
 		    	</span>
-		    	<span class="hidden-xs">{{$ctrl.information.type}}<span class="hidden-sm"> {{$ctrl.information.home ? 'Heim' : 'Auswärts'}}</span> gegen {{$ctrl.information.against.name}}</span>
+		    	<span class="hidden-xs">{{$ctrl.move.information.type}}<span class="hidden-sm"> {{$ctrl.move.information.home ? 'Heim' : 'Auswärts'}}</span> gegen {{$ctrl.move.information.against.name}}</span>
 		    </span>
 	    </div>
     </div>
@@ -31,7 +31,7 @@
 		<i class="fa fa-folder-open-o"></i> <span class="hidden-xs">Laden</span>
     </a>
     <a class="btn btn-navbar" ng-click="$ctrl.save()">
-    	<span ng-class="$ctrl.valid ? 'ABW' : 'STU'">
+    	<span ng-class="$ctrl.move.valid ? 'ABW' : 'STU'">
         	<i class="fa fa-save"></i> <span class="hidden-xs">Speichern</span>
         </span>
     </a>
@@ -82,11 +82,13 @@
 				</div>
 
 				<div ui-if="activeTab == 1">
-					<h5><b>Statistik</b></h5>
+					<h5><b>Statistik Startaufstellung</b></h5>
 					<div style="margin-bottom: 10px;">
-						Ø Alter: 26.40<br>
-						Ø Skill: 51.34<br>
-						Ø Opti: 84.66</div>
+						Ø Alter: {{$ctrl.move.getStartPlayersAverage('alter')}}<br>
+						Ø Skill: {{$ctrl.move.getStartPlayersAverage('skill')}}<br>
+						Ø Opti: {{$ctrl.move.getStartPlayersAverage('opti')}}<br>
+						Ø Moral: {{$ctrl.move.getStartPlayersAverage('moral')}}<br>
+						Ø Fitness: {{$ctrl.move.getStartPlayersAverage('fitness')}}</div>
 				</div>
 				
 			</div>
@@ -94,7 +96,7 @@
 			<div ui-if="activeTab == 2" class="changes-container noselect">
 
 				<div class="hidden-xs btn-group" role="group">
-					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.options"
+					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.move.options"
 						ng-if="option.page==1 && (option.item==1 || option.item==5)" ng-click="$ctrl.addAdjustment(option)">
 						<span ng-bind-html="option.text"></span> 
 					</button>
@@ -121,7 +123,7 @@
 				</div>
 			  	
 			  	<div class="hidden-xs btn-group" role="group">
-					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.options"
+					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.move.options"
 						ng-if="option.page==1 && option.item!=1 && option.item!=5" ng-click="$ctrl.addAdjustment(option)">
 						<span ng-bind-html="option.text"></span> 
 					</button>
@@ -137,7 +139,7 @@
 				</div>
 			  	
 			  	<div class="hidden-xs btn-group" role="group">
-					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.options"
+					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.move.options"
 						ng-if="option.page==2 && option.item<16" ng-click="$ctrl.addAdjustment(option)">
 						<span ng-bind-html="option.text"></span> 
 					</button>
@@ -153,7 +155,7 @@
 				</div>
 			  	
 			  	<div class="hidden-xs btn-group" role="group">
-					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.options"
+					<button type="button" class="btn btn-primary btn-xs" ng-repeat="option in $ctrl.move.options"
 						ng-if="option.page==2 && option.item>=16" ng-click="$ctrl.addAdjustment(option)">
 						<span ng-bind-html="option.text"></span> 
 					</button>
@@ -179,7 +181,7 @@
 		    	ui-class="{'visible': leftSwipe == true, 'visible-xs': activeTab == 2}"
 		    	ui-turn-off="leftSwipe">
 		    	
-		    	<div ui-if="activeTab == 1" class="player-container" ng-repeat="player in $ctrl.players">
+		    	<div ui-if="activeTab == 1" class="player-container" ng-repeat="player in $ctrl.move.players">
 		    		<div class="grid-cell">
 	    				<div class="grid-face grid-face-{{player.pos}} noselect btn-group pull-right unavailable"
 	    					style="background-image: url('/faceprev.php?sid={{player.id}}'); cursor: inherit;"></div>
@@ -189,17 +191,18 @@
 		    		<div class="noselect player-info" ng-class="{unavailable: ($ctrl.isPlayerSet(player))}">
 						<div><player-link object="player"></player-link></div>
 						<div>
+							{{player.alter}} J<span class="hidden-xs">ahre</span> - 
 							Moral {{player.moral}} / 
 							Fitness {{player.fitness}} - 
 							Skill {{player.skill | number : 2}} / 
 							Opti <b>{{player.opti | number : 2}}</b>
-							<span class="hidden-xs" ng-if="player.sonder">/ {{player.sonder}}</span>
+							<!-- <span class="hidden-xs" ng-if="player.sonder">/ {{player.sonder}}</span>  -->
 						</div>
 					</div>
 		    	</div>
 		    	
 	    		<div ui-if="activeTab == 2" class="list-group">
-					<div ng-repeat="option in $ctrl.options">
+					<div ng-repeat="option in $ctrl.move.options">
 						<a class="list-group-item" ng-click="$ctrl.addAdjustment(option)">
 							<i class="fa fa-caret-square-o-right"></i> 
 							<span ng-bind-html="option.text"></span> 
