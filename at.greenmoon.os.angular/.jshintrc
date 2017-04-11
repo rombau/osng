@@ -117,8 +117,7 @@
 	 
 	"predef" : [ // Extra globals.
 		"DOMParser",
-		//"anotherCoolGlobal",
-		//"iLoveDouglas"
+		"osApp",
 		"angular", "Java", "JavaFX", "$ARG" //no effect
 	]
 	//,	"indent" : 2 // Specify indentation spacing

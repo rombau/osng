@@ -8,6 +8,7 @@ var path = require('path');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var uglify = require('gulp-uglify');
+var templatecache = require('gulp-angular-templatecache');
 
 var SRC_DIR = 'source';
 var DIST_DIR = 'mobile';
@@ -18,53 +19,66 @@ gulp.on('error', function (e) {
 
 gulp.task('css', function () {
 	
-	gulp.src(path.join(SRC_DIR, 'less', 'os-theme.less'))
+	gulp.src('source/less/os-theme.less')
 		.pipe(less({paths : [
-			path.resolve(__dirname, path.join(SRC_DIR, 'less')),
+			path.resolve(__dirname, 'source/less'),
 			path.resolve(__dirname, 'node_modules')]}))
-		.pipe(gulp.dest(path.join(SRC_DIR, 'css')))
+		.pipe(gulp.dest('source/assets/css'))
 		.pipe(autoprefixer({
             cascade: false
         }))
 		.pipe(csso())
 		.pipe(rename({suffix : '.min'}))
-		.pipe(gulp.dest(path.join(DIST_DIR, 'css')));
+		.pipe(gulp.dest('mobile/assets/css'));
 });
 
 gulp.task('images', function() {
 	
-	gulp.src(path.join(SRC_DIR, 'images', '*'))
-		.pipe(gulp.dest(path.join(DIST_DIR, 'images')));
+	gulp.src('source/assets/images/*')
+		.pipe(gulp.dest('mobile/assets/images'));
 });
 
 gulp.task('fonts', function() {
 	
-	gulp.src(path.join('node_modules', 'mobile-angular-ui', 'dist', 'fonts', '*'))
-		.pipe(gulp.dest(path.join(SRC_DIR, 'fonts')))
-		.pipe(gulp.dest(path.join(DIST_DIR, 'fonts')));
+	gulp.src('node_modules/mobile-angular-ui/dist/fonts/*')
+		.pipe(gulp.dest('source/assets/fonts'))
+		.pipe(gulp.dest('mobile/assets/fonts'));
 });
 
 gulp.task('js', function () {
 
-	gulp.src(path.join(SRC_DIR, 'js', '*.js'))
+	gulp.src(['source/app.js',
+			  'source/common/model/player.js',
+			  'source/common/model/move.js',
+			  'source/common/services/*.js',
+			  'source/components/embedded/*.js',
+			  'source/components/login/*.js',
+			  'source/components/menu/*.js',
+			  'source/components/move/move.transformation.js',
+			  'source/components/move/move.webclient.js',
+			  'source/components/move/*.js'])
         .pipe(concat('os-app.min.js'))
         .pipe(uglify())
-        .pipe(gulp.dest(DIST_DIR));
+        .pipe(gulp.dest('mobile'));
 });
 
 gulp.task('html', function () {
 
-    gulp.src(path.join(SRC_DIR, 'index.html'))
-		.pipe(replace('<base href="/' + SRC_DIR + '/" />', '<base href="/' + DIST_DIR + '/" />'))
+    gulp.src('source/index.html')
+		.pipe(replace('<base href="/source/" />', '<base href="/mobile/" />'))
 		.pipe(replace('os-theme.css', 'os-theme.min.css'))
 		.pipe(replace(/\.\.\/node_modules\/angular.*\/angular/g, 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular'))
 		.pipe(replace('\.\.\/node_modules/mobile-angular-ui/dist/js/mobile-angular-ui', 'https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.4/js/mobile-angular-ui'))
-		.pipe(replace('js/app.js', 'os-app.min.js'))
-		.pipe(replace(/.*src="js\/.+\.js".*\r?\n|\r/g, ''))
+		.pipe(replace('app.js', 'os-app.min.js'))
+		.pipe(replace('templates.js', 'os-app.templates.js'))
+		.pipe(replace(/.*src="(common|components)(\/.+)+\.js".*\r?\n|\r/g, ''))
 		.pipe(gulp.dest(DIST_DIR));
       
-	gulp.src(path.join(SRC_DIR, 'templates', '*.html'))
-		.pipe(gulp.dest(path.join(DIST_DIR, 'templates')));
+	gulp.src(['source/**/*.html',
+			  '!source/index.html'])
+	 	.pipe(templatecache('os-app.templates.js',{
+	 		'module': 'OnlineSoccer'}))
+		.pipe(gulp.dest('mobile'));
 });
 
 gulp.task('default', ['css', 'images','fonts','js','html']);

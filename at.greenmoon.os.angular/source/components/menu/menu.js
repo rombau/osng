@@ -1,5 +1,6 @@
-var osApp = osApp || angular.module('OnlineSoccer');
-
+/**
+ * Menu item.
+ */
 var MenuItem = function (label, path, external) {
 	this.id = label.replace(/\W/g, "");
 	this.label = label;
@@ -11,9 +12,12 @@ var MenuItem = function (label, path, external) {
 	};
 };
 
+/**
+ * Menu component.
+ */
 osApp.component('mainMenu', {
 
-	templateUrl : 'templates/menu.html',
+	templateUrl : 'components/menu/menu.html',
 
 	controller : ['$http','UserData','SharedState',function ($http, UserData, SharedState) {
 		var self = this;

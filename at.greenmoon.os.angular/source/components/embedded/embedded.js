@@ -1,7 +1,8 @@
-var osApp = osApp || angular.module('OnlineSoccer');
-
+/**
+ * Embedded site component.
+ */
 osApp.component('embeddedSite', {
-	templateUrl : 'templates/embedded.html',
+	templateUrl : 'components/embedded/embedded.html',
 	controller : ['$sce',function ($sce) {
 		var content = document.querySelector('.app-progress-indicator');
 		angular.element(content).addClass('loading');

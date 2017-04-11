@@ -30,7 +30,17 @@ module.exports = function (config) {
 			'node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.min.js',
 			'node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.min.js',
 			'node_modules/angular-mocks/angular-mocks.js',
-			'source/**/*.js',
+			'source/app.js',
+			'source/common/model/*.js',
+			'source/common/services/*.js',
+			'source/components/emedded/*.js',
+			'source/components/login/*.js',
+			'source/components/menu/*.js',
+			'source/components/move/move.model.js',
+			'source/components/move/move.transformation.js',
+			'source/components/move/move.webclient.js',
+			'source/components/move/move.player.js',
+			'source/components/move/move.js',
 			'test/**/*.spec.js'],
 
 		// list of files to exclude

@@ -1,8 +1,9 @@
-var osApp = osApp || angular.module('OnlineSoccer');
-
+/**
+ * Login Form component.
+ */
 osApp.component('loginForm', {
 
-	templateUrl : 'templates/login.html',
+	templateUrl : 'components/login/login.html',
 
 	controller : ['$http','$location','UserData',function ($http, $location, UserData) {
 
