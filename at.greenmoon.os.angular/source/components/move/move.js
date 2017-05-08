@@ -283,8 +283,8 @@ osApp.component('moveComponent', {
 				}
 			}
 
-			if (count < 17) {
-				$window.alert('Vorläufig ist es nicht möglich die Zugabgabe zu speichern, solange nicht 11 Spieler und 6 Ersatz aufgestellt sind!');
+			if (count < 11) {
+				$window.alert('Vorläufig ist es nicht möglich die Zugabgabe zu speichern, solange nicht 11 Spieler aufgestellt sind!');
 			} else {
 				MoveWebClient.saveMove(ctrl.move).then(function () {
 					MoveWebClient.loadMove().then(loadSuccessHandler);

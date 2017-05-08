@@ -205,12 +205,24 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 
 		transformPlayers : function (players) {
 
-			var playerSetup = [];
+			var p, playerSetup = [], substArr = [];
 
-			for (var p = 0; p < players.length; p++) {
+			for (p = 0; p < players.length; p++) {
 				var player = players[p];
 				if (player.row !== null && player.col !== null && player.row !== undefined && player.col !== undefined) {
 					playerSetup.push(['player_' + player.id,player.col,player.row]);
+					if (player.row === -1) { // substitute
+						substArr[-player.col] = player;
+					}
+				}
+			}
+
+			if (playerSetup.length < 17) {
+				// amatuer as substitute
+				for (p = 0; p < 6; p++) {
+					if (!substArr[p]) {
+						playerSetup.push(['player_0',-p,-1]);
+					}
 				}
 			}
 
