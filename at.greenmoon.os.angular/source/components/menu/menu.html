@@ -1,6 +1,19 @@
 <div class="sidebar sidebar-left">
 	<div class="scrollable">
-		<div class="scrollable-header" style="padding:15px;"><img ng-src="../images/wappen/{{$ctrl.user.teamImage}}"></img></div>
+		<div class="scrollable-header" style="padding:15px; float: left;">
+			<div style="float: left;">
+				<a ng-click="$ctrl.toOffice($ctrl.user.team1.current)">
+					<img title="{{$ctrl.user.team1.name}}" ng-src="../images/wappen/{{$ctrl.user.team1.image}}"
+						ng-class="{changeto: ($ctrl.user.team1.current==false)}"></img>
+				</a>
+			</div>
+			<div style="float: left;" ng-if="$ctrl.user.team2">
+				<a ng-click="$ctrl.toOffice($ctrl.user.team2.current)">
+					<img title="{{$ctrl.user.team2.name}}" style="padding-left: 15px;" ng-src="../images/wappen/{{$ctrl.user.team2.image}}"
+						ng-class="{changeto: ($ctrl.user.team2.current==false)}"></img>
+				</a>
+			</div>
+		</div>
 		<div class="scrollable-content" ui-shared-state="submenu">
 			<div class="list-group">
 				<div ng-repeat="item in $ctrl.menuItems">

@@ -19,10 +19,10 @@ osApp.component('mainMenu', {
 
 	templateUrl : 'components/menu/menu.html',
 
-	controller : ['$http','UserData','SharedState',function ($http, UserData, SharedState) {
-		var self = this;
+	controller : ['$http','$location','$route','Account','SharedState',function ($http, $location, $route, Account, SharedState) {
+		var ctrl = this;
 		this.menuItems = [];
-		this.user = UserData;
+		this.user = Account;
 
 		$http({
 			url : '../os_menu_haupt.html',
@@ -47,12 +47,12 @@ osApp.component('mainMenu', {
 				return menuItems;
 			}
 		}).then(function success (response) {
-			self.menuItems = response.data;
+			ctrl.menuItems = response.data;
 		}, function error (response) {
 		// TODO error handling
 		});
 
-		this.handleItemClick = function (item) {
+		ctrl.handleItemClick = function (item) {
 			if (item.items.length > 0) {
 				if (SharedState.get('submenu') === item.id && SharedState.isActive(item.id)) {
 					SharedState.turnOff(item.id);
@@ -65,7 +65,7 @@ osApp.component('mainMenu', {
 			}
 		};
 
-		this.getIconClass = function (item) {
+		ctrl.getIconClass = function (item) {
 			if (item.items.length > 0) {
 				if (SharedState.get('submenu') === item.id && SharedState.isActive(item.id)) {
 					return 'fa-chevron-circle-down';
@@ -76,5 +76,26 @@ osApp.component('mainMenu', {
 				return 'fa-caret-square-o-right';
 			}
 		};
+
+		ctrl.toOffice = function (current) {
+			if (current) {
+				if ($location.path() !== '/haupt.php') {
+					$location.path('/haupt.php');
+				} else {
+					$route.reload();
+				}
+			} else {
+				Account.loadTeamData(true).then(function () {
+					Account.team1.current = !Account.team1.current;
+					Account.team2.current = !Account.team2.current;
+					if ($location.path() !== '/haupt.php') {
+						$location.path('/haupt.php');
+					} else {
+						$route.reload();
+					}
+				});
+			}
+		};
+
 	}]
 });

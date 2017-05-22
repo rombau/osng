@@ -1,13 +1,6 @@
 /* globals osApp: true */
 var osApp = angular.module('OnlineSoccer', ['ngRoute','ngSanitize','ngCookies','mobile-angular-ui','mobile-angular-ui.gestures']);
 
-osApp.value('UserData', {
-	loggedIn : false,
-	teamName : 'Demoteam',
-	teamImage : '00000000.png',
-	error : ''
-});
-
 osApp.config(['$routeProvider','$locationProvider','$httpProvider',function ($routeProvider, $locationProvider, $httpProvider) {
 
 	$routeProvider.when('/', {
@@ -68,10 +61,6 @@ osApp.config(['$routeProvider','$locationProvider','$httpProvider',function ($ro
 		};
 	}]);
 
-}]);
-
-osApp.controller('MainController', ['$scope','UserData',function ($scope, UserData) {
-	$scope.userData = UserData;
 }]);
 
 osApp.filter('trustAsResourceUrl', ['$sce',function ($sce) {

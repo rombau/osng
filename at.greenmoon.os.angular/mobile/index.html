@@ -29,7 +29,7 @@
 </head>
 
 
-<body ng-app="OnlineSoccer" ng-controller="MainController"
+<body ng-app="OnlineSoccer"
 	class="ng-scope has-navbar-top has-sidebar-left">
 
 	<main-menu></main-menu>
@@ -49,9 +49,6 @@
 				<span>Online Soccer</span>
 			</div>
 			<div class="btn-group pull-right" ui-yield-to="navbarAction">
-				<div ng-hide="userData.loggedIn" class="btn btn-navbar">
-					<i class="fa fa-user-plus"></i> <a ng-href="#/os_anmeldung.html" class="btn-navbar hidden-xs">Registrieren</a>
-				</div>
 			</div>
 		</div>
 
