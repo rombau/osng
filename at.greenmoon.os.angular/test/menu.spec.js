@@ -2,32 +2,42 @@ describe('Menu controller', function () {
 
 	var sharedState, $httpBackend, ctrl;
 
-	beforeEach(module('OnlineSoccer'));
+	beforeEach(function () {
 
-	beforeEach(inject(function ($injector) {
+		module('OnlineSoccer');
 
-		var scope = $injector.get('$rootScope');
+		module(function ($provide) {
+			$provide.factory('Account', function () {
+				return jasmine.createSpyObj('AccountMock', ['initialize','login']);
+			});
+		});
 
-		sharedState = $injector.get('SharedState');
-		sharedState.initialize(scope, 'submenu');
-		sharedState.initialize(scope, 'TeamWiki');
-		sharedState.initialize(scope, 'uiSidebarLeft');
-		sharedState.turnOn('uiSidebarLeft');
+		inject(function ($injector) {
 
-		$httpBackend = $injector.get('$httpBackend');
+			var scope = $injector.get('$rootScope');
 
-		$httpBackend.whenGET('../os_menu_haupt.html').respond( //
-		'm(1,"Büro","buero.html","os_main","","images/extra_geschlossen.gif")\n\n' + //
-		'm(1,"Team/Wiki")\n\n' + //
-		'm(2,"Mannschaft","kader.html","os_main")\n\n' + //
-		'm(2,"Wiki","wiki.html")');
+			sharedState = $injector.get('SharedState');
+			sharedState.initialize(scope, 'submenu');
+			sharedState.initialize(scope, 'TeamWiki');
+			sharedState.initialize(scope, 'uiSidebarLeft');
+			sharedState.turnOn('uiSidebarLeft');
 
-		$componentController = $injector.get('$componentController');
-		ctrl = $componentController('mainMenu');
+			$httpBackend = $injector.get('$httpBackend');
 
-		$httpBackend.flush();
+			$httpBackend.whenGET('../os_menu_haupt.html').respond( //
+			'm(1,"Büro","buero.html","os_main","","images/extra_geschlossen.gif")\n\n' + //
+			'm(1,"Team/Wiki")\n\n' + //
+			'm(2,"Mannschaft","kader.html","os_main")\n\n' + //
+			'm(2,"Wiki","wiki.html")');
 
-	}));
+			$componentController = $injector.get('$componentController');
+			ctrl = $componentController('mainMenu');
+
+			$httpBackend.flush();
+
+		});
+
+	});
 
 	it('should initialize menu items based on os_menu_haupt.html', function () {
 

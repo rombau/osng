@@ -1,60 +1,47 @@
 describe('Login controller', function () {
 
-	var $httpBackend, $cookies, ctrl, user;
+	var ctrl, $rootScope;
 
-	beforeEach(module('OnlineSoccer'));
+	beforeEach(function () {
 
-	beforeEach(inject(function ($injector) {
+		module('OnlineSoccer');
 
-		$httpBackend = $injector.get('$httpBackend');
-		$cookies = $injector.get('$cookies');
+		module(function ($provide) {
+			$provide.factory('Account', function () {
+				return jasmine.createSpyObj('AccountMock', ['initialize','login']);
+			});
+		});
 
-		$componentController = $injector.get('$componentController');
-		ctrl = $componentController('loginForm');
+		inject(function ($injector, $q) {
 
-		user = $injector.get('UserData');
-		user.os = undefined;
-		user.lc = undefined;
+			ctrl = $injector.get('$componentController')('loginForm');
 
-	}));
+			ctrl.account.initialize.and.returnValue($q.when({}));
+			ctrl.account.login.and.returnValue($q.when({
+				data : true
+			}));
 
-	afterEach(function () {
-
-		$httpBackend.verifyNoOutstandingExpectation();
-		$httpBackend.verifyNoOutstandingRequest();
-
+			$rootScope = $injector.get('$rootScope').$new();
+		});
 	});
 
-	it('should initialize as logged out', function () {
+	it('should login with email and password and initialize account', function () {
 
-		expect(ctrl.email).toBeNull();
-		expect(ctrl.password).toBeNull();
+		ctrl.account.email = 'email@domain.com';
+		ctrl.account.password = 'secret';
 
-		expect(user.loggedIn).toBeFalsy();
-		expect(user.teamName).toEqual('Demoteam');
-		expect(user.teamImage).toEqual('00000000.png');
-
-		expect($cookies.get('lc')).toBeUndefined();
-
-	});
-
-	it('should not login with wrong email or password', function () {
-
-		$httpBackend.expectPOST('../validate.php', 'action=os_login&sdauer=0&loginemail=&passwort=') //
-		.respond(200, '<html><body><div><p id="TopThema"></p><p>Der Username oder das Passwort ist falsch.</p></div></body></html>');
-
-		expect(ctrl.inProgress).toBeFalsy();
+		expect(ctrl.account.loggedIn).toBeFalsy();
 
 		ctrl.login();
 
-		expect(ctrl.inProgress).toBeTruthy();
+		$rootScope.$digest(); // resolve login promise
 
-		$httpBackend.flush();
+		expect(ctrl.account.loggedIn).toBeTruthy();
+		expect(ctrl.account.login).toHaveBeenCalledWith('email@domain.com', 'secret');
 
-		expect(ctrl.inProgress).toBeFalsy();
-		expect(ctrl.failureMsg).toEqual('Der Username oder das Passwort ist falsch.');
-		expect(user.loggedIn).toBeFalsy();
-		expect($cookies.get('lc')).toBeUndefined();
+		$rootScope.$digest(); // resolve initialize promise
+
+		expect(ctrl.account.initialize).toHaveBeenCalled();
 
 	});
 

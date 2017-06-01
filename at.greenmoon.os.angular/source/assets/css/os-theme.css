@@ -9435,9 +9435,6 @@ select::-ms-expand {
 .form-control {
   padding: 6px;
 }
-.changeto {
-  opacity: 0.4;
-}
 #embedFrame {
   border: none;
   width: 100%;

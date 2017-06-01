@@ -20,9 +20,11 @@ osApp.component('mainMenu', {
 	templateUrl : 'components/menu/menu.html',
 
 	controller : ['$http','$location','$route','Account','SharedState',function ($http, $location, $route, Account, SharedState) {
+
 		var ctrl = this;
-		this.menuItems = [];
-		this.user = Account;
+
+		ctrl.menuItems = [];
+		ctrl.account = Account;
 
 		$http({
 			url : '../os_menu_haupt.html',
@@ -77,24 +79,15 @@ osApp.component('mainMenu', {
 			}
 		};
 
-		ctrl.toOffice = function (current) {
-			if (current) {
+		ctrl.changeToOtherTeam = function () {
+			Account.loadTeamData(true).then(function () {
+				Account.toggleCurrentTeam();
 				if ($location.path() !== '/haupt.php') {
 					$location.path('/haupt.php');
 				} else {
 					$route.reload();
 				}
-			} else {
-				Account.loadTeamData(true).then(function () {
-					Account.team1.current = !Account.team1.current;
-					Account.team2.current = !Account.team2.current;
-					if ($location.path() !== '/haupt.php') {
-						$location.path('/haupt.php');
-					} else {
-						$route.reload();
-					}
-				});
-			}
+			});
 		};
 
 	}]

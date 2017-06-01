@@ -1,16 +1,18 @@
 osApp.factory('Account', ['$http','$q','HtmlTransformationUtil',function ($http, $q, HtmlTransformationUtil) {
 
 	var Demoteam = function () {
+		this.id = 0;
 		this.name = 'Demoteam';
 		this.image = '00000000.png';
-		this.current = true;
 	};
 
 	var account = {
 
 		loggedIn : false,
 
-		team1 : new Demoteam(),
+		currentTeam : 0,
+
+		teams : [new Demoteam()],
 
 		loadTeamData : function (changetosecond) {
 
@@ -86,18 +88,32 @@ osApp.factory('Account', ['$http','$q','HtmlTransformationUtil',function ($http,
 				account.loadTeamData(2).then(function (team) {
 					var team2 = team.data;
 					account.loadTeamData(1).then(function (team) {
-						account.team1 = team.data;
-						account.team1.current = true;
-						if (account.team1.id === team2.id) {
-							account.team2 = null;
-						} else {
-							account.team2 = team2;
-							account.team2.current = false;
+						account.teams = [team.data];
+						if (account.teams[0].id !== team2.id) {
+							account.teams.push(team2);
 						}
 						resolve();
 					});
 				});
 			});
+		},
+
+		getCurrentTeam : function () {
+			return account.teams[account.currentTeam];
+		},
+		getOtherTeam : function () {
+			for (var t = 0; t < account.teams.length; t++) {
+				if (t !== account.currentTeam) {
+					return account.teams[t];
+				}
+			}
+			return null;
+		},
+
+		toggleCurrentTeam : function () {
+			if (account.teams.length > 1) {
+				account.currentTeam = (account.currentTeam === 0) ? 1 : 0;
+			}
 		}
 	};
 

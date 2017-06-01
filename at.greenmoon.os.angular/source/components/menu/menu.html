@@ -2,15 +2,17 @@
 	<div class="scrollable">
 		<div class="scrollable-header" style="padding:15px; float: left;">
 			<div style="float: left;">
-				<a ng-click="$ctrl.toOffice($ctrl.user.team1.current)">
-					<img title="{{$ctrl.user.team1.name}}" ng-src="../images/wappen/{{$ctrl.user.team1.image}}"
-						ng-class="{changeto: ($ctrl.user.team1.current==false)}"></img>
+				<a ng-href="#/haupt.php">
+					<img title="{{$ctrl.account.getCurrentTeam().name}}"
+						ng-src="../images/wappen/{{$ctrl.account.getCurrentTeam().image}}">
+					</img>
 				</a>
 			</div>
-			<div style="float: left;" ng-if="$ctrl.user.team2">
-				<a ng-click="$ctrl.toOffice($ctrl.user.team2.current)">
-					<img title="{{$ctrl.user.team2.name}}" style="padding-left: 15px;" ng-src="../images/wappen/{{$ctrl.user.team2.image}}"
-						ng-class="{changeto: ($ctrl.user.team2.current==false)}"></img>
+			<div style="float: left;" ng-if="$ctrl.account.teams.length > 1">
+				<a ng-click="$ctrl.changeToOtherTeam()">
+					<img title="{{$ctrl.account.getOtherTeam().name}}" style="padding-left: 15px; opacity: 0.3;"
+						ng-src="../images/wappen/{{$ctrl.account.getOtherTeam().image}}">
+					</img>
 				</a>
 			</div>
 		</div>
