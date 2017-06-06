@@ -21,8 +21,12 @@ osApp.factory('Player', [function () {
 	Player.prototype = {
 
 		getShortName : function () {
-			var names = this.name.split(' ');
-			return names[names.length - 1];
+			var space = this.name.indexOf(' ');
+			if (space !== -1) {
+				return this.name.substr(space);
+			} else {
+				return this.name;
+			}
 		}
 	};
 

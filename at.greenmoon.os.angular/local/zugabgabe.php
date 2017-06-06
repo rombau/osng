@@ -1372,7 +1372,7 @@ function confirmdelete() {
 
 			</td>
 
-			<td class="MIT" align="left"><a href="javascript:spielerinfo(113417)">Shay Masterson</a></td>
+			<td class="MIT" align="left"><a href="javascript:spielerinfo(113417)">Shay Gardiner Van Mastersson</a></td>
 
 			<td class="MIT">16</td>
 
