@@ -299,7 +299,7 @@ osApp.component('moveComponent', {
 				ctrl.zat = null;
 				return;
 			}
-			ctrl.zat = '1';
+			ctrl.zat = ctrl.move.zats[0].value;
 			SharedState.turnOn('load');
 		};
 

@@ -37,6 +37,11 @@ describe(
 			expect(move.players).toBeDefined();
 			expect(move.players.length).toEqual(37);
 
+			expect(move.zats).toBeDefined();
+			expect(move.zats.length).toEqual(71);
+			expect(move.zats[0].value).toEqual(2);
+			expect(move.zats[0].label).toEqual('ZAT 2');
+
 			expect(move.players[0].id).toEqual(41930);
 			expect(move.players[0].name).toEqual('Steve Stapleton');
 			expect(move.players[0].pos).toEqual('TOR');

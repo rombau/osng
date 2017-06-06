@@ -96,6 +96,17 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 					move.players.push(player);
 				}
 			}
+
+			var select = doc.getElementsByName('lauf')[0];
+			for (var o = 0; o < select.options.length; o++) {
+				var zat = {};
+				zat.value = +select.options[o].value;
+				zat.label = select.options[o].text;
+				if (zat.value > 0) {
+					move.zats.push(zat);
+				}
+			}
+
 			return move;
 		},
 

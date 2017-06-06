@@ -19,6 +19,8 @@ osApp.factory('Move', ['Player',function (Player) {
 		this.information.against.id = 0;
 		this.information.against.name = '';
 
+		this.zats = [];
+		
 		this.options = [];
 
 		this.Option = function () {
