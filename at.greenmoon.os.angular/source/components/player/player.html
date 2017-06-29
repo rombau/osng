@@ -1,0 +1,20 @@
+<img src="/faceprev.php?sid={{$ctrl.player.id}}" style="width: 110px; float: left; border-radius: 7px;"/>
+<div style="margin-left: 125px; height: 110px;">
+	<div class="row">
+		<div class="col-xs-5 col-sm-3">Alter:</div>
+			<div class="col-xs-7 col-sm-2 text-right">{{$ctrl.player.alter | number}}</div>
+		<div class="col-xs-5 col-sm-3">Geburtstag:</div>
+			<div class="col-xs-7 col-sm-4 text-right">ZAT {{$ctrl.player.geburtstag | number}}</div>
+		<div class="col-xs-12"></div>
+		<div class="col-xs-5 col-sm-3">Skill<span class="hidden-xs">schnitt:</span></div>
+			<div class="col-xs-7 col-sm-2 text-right">{{$ctrl.player.skill | number:2}}</div>
+		<div class="col-xs-5 col-sm-3">Marktwert:</div>
+			<div class="col-xs-7 col-sm-4 text-right">{{$ctrl.player.marktwert | currency:"EUR":0}}</div>
+		<div class="col-xs-5 col-sm-3">Opti<span class="hidden-xs">. Skill</span>:</div>
+			<div class="col-xs-7 col-sm-2 text-right">{{$ctrl.player.opti | number:2}}</div>
+		<div class="col-xs-5 col-sm-3">Gehalt:</div>
+			<div class="col-xs-7 col-sm-4 text-right">{{$ctrl.player.gehalt | currency:"EUR":0}}</div>
+		<div class="col-xs-5 col-sm-offset-5 col-sm-3">Vertrag<span class="hidden-xs">slaufzeit</span>:</div>
+			<div class="col-xs-7 col-sm-4 text-right">{{$ctrl.player.vertrag | number}}</div>
+	</div>
+</div>

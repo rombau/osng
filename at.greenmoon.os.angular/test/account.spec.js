@@ -62,6 +62,35 @@ describe('Account service', function () {
 
 	});
 
+	it('should initialize with session and two teams already initialized', function () {
+
+		account.teams = JSON.parse('[{"id":19,"name":"FC Cork","image":"00000019.png"},{"id":57,"name":"FC Nivellois","image":"00000057.png"}]');
+		account.currentTeam = 1;
+
+		var first = true;
+		$httpBackend.whenGET('../haupt.php?changetosecond=true').respond(function (method, url, data, headers, params) {
+			if (first) {
+				first = false;
+				return [200,'<img src="images/wappen/00000019.png" height="75" width="75"><b>Willkommen im Managerb&uuml;ro von FC Cork</b>'];
+			} else {
+				first = true;
+				return [200,'<img src="images/wappen/00000057.gif" height="75" width="75"><b>Willkommen im Managerb&uuml;ro von FC Nivellois</b>'];
+			}
+		});
+
+		$httpBackend.flush();
+
+		expect(account.teams.length).toEqual(2);
+		expect(account.currentTeam).toEqual(1);
+		expect(account.teams[0].id).toEqual(19);
+		expect(account.teams[0].name).toEqual('FC Cork');
+		expect(account.teams[0].image).toEqual('00000019.png');
+		expect(account.teams[1].id).toEqual(57);
+		expect(account.teams[1].name).toEqual('FC Nivellois');
+		expect(account.teams[1].image).toEqual('00000057.gif');
+
+	});
+
 	it('should login', function () {
 
 		$httpBackend.whenGET('../haupt.php?changetosecond=true').respond( //

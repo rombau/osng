@@ -60,31 +60,57 @@ osApp.config(['$routeProvider','$locationProvider','$httpProvider',function ($ro
 			}
 		};
 	}]);
-
 }]);
 
 osApp.filter('trustAsResourceUrl', ['$sce',function ($sce) {
+
 	return function (val) {
 		return $sce.trustAsResourceUrl(val);
 	};
 }]);
 
-osApp.component('playerLink', {
+osApp.factory('Popup', ['SharedState',function (SharedState) {
 
-	template : '<a ng-click="$ctrl.openWindow()" class="{{$ctrl.player.pos}} noselect">{{$ctrl.player.name}}</a>',
+	var lastState = null;
 
-	bindings : {
-		player : '<object'
-	},
-
-	controller : ['$window',function ($window) {
-
-		var ctrl = this;
-
-		ctrl.openWindow = function () {
-			$window.open("../sp.php?s=" + ctrl.player.id, "os_spieler", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=yes,width=800,height=550");
+	return {
+		open : function (popupState, value) {
+			if (popupState) {
+				if (value) {
+					SharedState.setOne(popupState, value);
+				} else {
+					SharedState.turnOn(popupState);
+				}
+				lastState = popupState;
+			}
+		},
+		hide : function () {
+			if (lastState) {
+				SharedState.turnOff(lastState);
+				lastState = null;
+				return true;
+			}
 			return false;
-		};
+		},
+		sidebar : function (popupState) {
+			if (popupState) {
+				lastState = popupState;
+			}
+		}
+	};
+}]);
 
-	}]
-});
+osApp.run(['$rootScope','Popup',function ($rootScope, Popup) {
+
+	$rootScope.$on('$locationChangeStart', function (evt, next, current) {
+		if (!$rootScope.error && Popup.hide()) {
+			evt.preventDefault();
+		}
+	});
+
+	$rootScope.$on('mobile-angular-ui.state.changed.leftSwipe', function (evt, newVal, oldVal) {
+		if (newVal) {
+			Popup.sidebar('leftSwipe');
+		}
+	});
+}]);

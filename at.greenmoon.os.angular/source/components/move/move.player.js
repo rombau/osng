@@ -1,7 +1,4 @@
-/**
- * Move Player Component.
- */
-osApp.component('player', {
+osApp.component('movePlayer', {
 
 	templateUrl : 'components/move/move.player.html',
 

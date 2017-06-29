@@ -19,6 +19,7 @@
 	<script src="../node_modules/angular-route/angular-route.min.js"></script>
 	<script src="../node_modules/angular-sanitize/angular-sanitize.min.js"></script>
 	<script src="../node_modules/angular-cookies/angular-cookies.min.js"></script>
+	<script src="../node_modules/angular-i18n/angular-locale_de-de.js"></script>
 	
 	<script src="../node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.min.js"></script>
 	<script	src="../node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.js"></script>
@@ -30,6 +31,10 @@
 	<script src="common/services/account.js"></script>
 	<script src="common/services/html.util.js"></script>
 	<script src="components/embedded/embedded.js"></script>
+	<script src="components/player/player.transformation.js"></script>
+	<script src="components/player/player.webclient.js"></script>
+	<script src="components/player/player.js"></script>
+	<script src="components/player/player.link.js"></script>
 	<script src="components/login/login.js"></script>
 	<script src="components/menu/menu.js"></script>
 	<script src="components/move/move.transformation.js"></script>
@@ -72,6 +77,24 @@
 	</div>
 	
 	<div ui-yield-to="modals"></div>
+
+	<div class="modal" ui-state="modalPlayer" ui-if="modalPlayer">
+		<div class="modal-backdrop in"></div>
+	   	<div class="modal-dialog">
+	     	<div class="modal-content">
+	       		<div class="modal-header">
+         			<button class="close" ui-turn-off="modalPlayer">&times;</button>
+         			<h4 class="modal-title">{{Ui.get('modalPlayer').name}}</h4>
+	       		</div>
+	       		<div class="modal-body">
+	       			<player object="Ui.get('modalPlayer')"></player>
+	       		</div>
+				<div class="modal-footer">
+					<button ui-turn-off="modalPlayer" class="btn btn-primary">Schließen</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 

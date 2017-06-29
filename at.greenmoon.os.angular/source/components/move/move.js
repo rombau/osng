@@ -5,7 +5,7 @@ osApp.component('moveComponent', {
 
 	templateUrl : 'components/move/move.html',
 
-	controller : ['$location','$window','SharedState','MoveWebClient','Move',function ($location, $window, SharedState, MoveWebClient, Move) {
+	controller : ['$location','$window','SharedState','Popup','MoveWebClient','Move',function ($location, $window, SharedState, Popup, MoveWebClient, Move) {
 
 		var ctrl = this;
 
@@ -219,7 +219,7 @@ osApp.component('moveComponent', {
 					if (callback) {
 						callback(ctrl.adjustmentForm);
 					}
-					SharedState.turnOn('action');
+					Popup.open('moveAction');
 				}
 			});
 		};
@@ -278,17 +278,17 @@ osApp.component('moveComponent', {
 			var count = 0;
 			for (var p = 0; p < ctrl.move.players.length; p++) {
 				var player = ctrl.move.players[p];
-				if (ctrl.isPlayerSet(player)) {
+				if (ctrl.isPlayerSet(player) && player.row >= 0) {
 					count++;
 				}
 			}
 
 			if (count < 11) {
-				$window.alert('Vorläufig ist es nicht möglich die Zugabgabe zu speichern, solange nicht 11 Spieler aufgestellt sind!');
+				$window.alert('Es ist (vorläufig) nicht möglich die Zugabgabe zu speichern, solange nicht 11 Spieler aufgestellt sind!');
 			} else {
 				MoveWebClient.saveMove(ctrl.move).then(function () {
 					MoveWebClient.loadMove().then(loadSuccessHandler);
-					$window.open("../checkza.php", "checkza", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=yes,height=600,width=400");
+					Popup.open('moveCheck');
 				});
 			}
 		};
@@ -300,7 +300,7 @@ osApp.component('moveComponent', {
 				return;
 			}
 			ctrl.zat = ctrl.move.zats[0].value;
-			SharedState.turnOn('load');
+			Popup.open('moveLoad');
 		};
 
 		MoveWebClient.loadMove().then(loadSuccessHandler);

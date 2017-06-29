@@ -84,8 +84,8 @@ osApp.factory('Move', ['Player',function (Player) {
 					count++;
 				}
 			}
-			var result = (Math.round(sum / 11 * 100)/100).toFixed(2);
-			return isNaN(result) ? '' : result;
+			var result = Math.round(sum / 11 * 100)/100;
+			return isNaN(result) ? 0 : result;
 		},
 
 		generateAdjustmentText : function (adjustment) {

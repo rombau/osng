@@ -52,6 +52,9 @@ gulp.task('js', function () {
 			  'source/common/model/move.js',
 			  'source/common/services/*.js',
 			  'source/components/embedded/*.js',
+			  'source/components/player/player.transformation.js',
+			  'source/components/player/player.webclient.js',
+			  'source/components/player/*.js',
 			  'source/components/login/*.js',
 			  'source/components/menu/*.js',
 			  'source/components/move/move.transformation.js',
@@ -67,6 +70,7 @@ gulp.task('html', function () {
     gulp.src('source/index.html')
 		.pipe(replace('<base href="/source/" />', '<base href="/mobile/" />'))
 		.pipe(replace('os-theme.css', 'os-theme.min.css'))
+		.pipe(replace('\.\.\/node_modules/angular-i18n/', 'https://cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.6.4/'))
 		.pipe(replace(/\.\.\/node_modules\/angular.*\/angular/g, 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular'))
 		.pipe(replace('\.\.\/node_modules/mobile-angular-ui/dist/js/mobile-angular-ui', 'https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.4/js/mobile-angular-ui'))
 		.pipe(replace('app.js', 'os-app.min.js'))

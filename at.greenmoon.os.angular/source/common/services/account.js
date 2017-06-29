@@ -26,12 +26,12 @@ osApp.factory('Account', ['$http','$q','HtmlTransformationUtil',function ($http,
 					var images = doc.getElementsByTagName('img');
 					var bolds = doc.getElementsByTagName("b");
 
-					var pattern, matches, teamId;
+					var pattern, matches, img = images[images.length - 1];
 
 					var team = new Demoteam();
 
 					pattern = /images\/wappen\/((\d+)\.(png|gif))/gm;
-					matches = pattern.exec(images[images.length - 1].src);
+					matches = pattern.exec(img.src || img.outerHTML); // empty src in chrome
 					if (matches) {
 						team.id = +matches[2];
 						team.image = matches[1];
@@ -88,9 +88,13 @@ osApp.factory('Account', ['$http','$q','HtmlTransformationUtil',function ($http,
 				account.loadTeamData(2).then(function (team) {
 					var team2 = team.data;
 					account.loadTeamData(1).then(function (team) {
-						account.teams = [team.data];
+						angular.copy([team.data], account.teams);
 						if (account.teams[0].id !== team2.id) {
-							account.teams.push(team2);
+							if (account.currentTeam > 0) {
+								account.teams.splice(0, 0, team2);
+							} else {
+								account.teams.push(team2);
+							}
 						}
 						resolve();
 					});

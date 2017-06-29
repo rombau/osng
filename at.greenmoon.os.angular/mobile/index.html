@@ -19,6 +19,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-sanitize.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-cookies.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-i18n/1.6.4/angular-locale_de-de.js"></script>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.4/js/mobile-angular-ui.min.js"></script>
 	<script	src="https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.4/js/mobile-angular-ui.gestures.js"></script>
@@ -61,6 +62,24 @@
 	</div>
 	
 	<div ui-yield-to="modals"></div>
+
+	<div class="modal" ui-state="modalPlayer" ui-if="modalPlayer">
+		<div class="modal-backdrop in"></div>
+	   	<div class="modal-dialog">
+	     	<div class="modal-content">
+	       		<div class="modal-header">
+         			<button class="close" ui-turn-off="modalPlayer">&times;</button>
+         			<h4 class="modal-title">{{Ui.get('modalPlayer').name}}</h4>
+	       		</div>
+	       		<div class="modal-body">
+	       			<player object="Ui.get('modalPlayer')"></player>
+	       		</div>
+				<div class="modal-footer">
+					<button ui-turn-off="modalPlayer" class="btn btn-primary">Schließen</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 

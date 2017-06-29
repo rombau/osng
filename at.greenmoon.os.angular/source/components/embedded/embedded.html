@@ -1,1 +1,1 @@
-<iframe id="embedFrame" onload="embeddedLoaded()" ng-src="{{$ctrl.site}}"></iframe>
+<iframe id="embedFrame" onload="this.style.height = this.contentWindow.document.body.scrollHeight + 'px'; embeddedLoaded()" ng-src="{{$ctrl.site}}"></iframe>

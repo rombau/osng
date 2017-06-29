@@ -57,6 +57,8 @@ osApp.factory('MoveWebClient', ['$q','$http','Move','MoveTransformation',functio
 
 				if (response.data === 'Count mismatch') {
 					deferred.reject(response.data);
+					return deferred.promise;
+
 				}
 
 				var promises = [];

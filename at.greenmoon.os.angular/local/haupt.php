@@ -241,11 +241,11 @@ table.caltable td.currentday {
 
 				<tr>
 
-					<td><img src="images/wappen/00000057.png" height="75" width="75"></td>
+					<td><img src="images/wappen/00000019.png" height="75" width="75"></td>
 
-					<td valign="bottom" align="center"><b>Willkommen im Managerb&uuml;ro von FC Nivellois</b><br>2. Liga A Belgien<a href="?changetosecond=true"><br />Zu FC Cork wechseln</a><br><br><a href="http://os.ongapo.com/forum/index.php?page=Board&boardID=41" target="_blank">Zum L&auml;nderforum</a><br /></td>
+					<td valign="bottom" align="center"><b>Willkommen im Managerb&uuml;ro von FC Cork</b><br>2. Liga A Belgien<a href="?changetosecond=true"><br />Zu FC Nivelois wechseln</a><br><br><a href="http://os.ongapo.com/forum/index.php?page=Board&boardID=41" target="_blank">Zum L&auml;nderforum</a><br /></td>
 
-					<td><img src="images/wappen/00000057.png" height="75" width="75"></td>
+					<td><img src="images/wappen/00000019.png" height="75" width="75"></td>
 
 			</table>
 

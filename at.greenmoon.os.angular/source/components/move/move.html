@@ -4,7 +4,7 @@
 	<div style="position: relative; ">
 		<div style="position: absolute; top: -6px;">
 		    <span style="white-space: nowrap;">
-		    	<span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.move.information.zat}} <span class="hidden-xs hidden-sm hidden-md">am {{$ctrl.move.information.date | date : "dd.MM.yyyy HH:mm"}} Uhr</span> <i class="fa fa-caret-down"></i>
+		    	<span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.move.information.zat}} <span class="hidden-xs hidden-sm hidden-md">am {{$ctrl.move.information.date | date : "EEEE, d. LLLL yyyy 'um' HH:mm 'Uhr'"}}</span>
 		    </span>
 		    <br>
 		    <span style="font-size: 10px; line-height: 1.2; white-space: nowrap;">
@@ -47,7 +47,7 @@
 			    	<div class="grid-container">
 						<div ng-repeat="row in $ctrl.grid">
 							<div ng-repeat="cell in row track by $index" class="grid-cell">
-								<player ng-if="cell.id" 
+								<move-player ng-if="cell.id" 
 									object="cell" 
 									on-move="$ctrl.grid.setPlayer(player, x, y)"
 									on-remove="$ctrl.grid.removePlayer(player)"/>
@@ -63,7 +63,7 @@
 				<div class="grid-cell"></div>
 				<div class="grid-cell keeper-container">
 					<div></div>
-					<player ng-if="$ctrl.getKeeper()" 
+					<move-player ng-if="$ctrl.getKeeper()" 
 						object="$ctrl.getKeeper()" 
 						on-move="$ctrl.grid.setPlayer(player, x, y)"
 						on-remove="$ctrl.grid.removePlayer(player)"></player>
@@ -73,7 +73,7 @@
 				<div class="subst-border">
 					<div class="subst-container">
 						<div ng-repeat="cell in $ctrl.getSubst() track by $index" class="grid-cell">
-							<player ng-if="cell.id" 
+							<move-player ng-if="cell.id" 
 								object="cell" 
 								on-move="$ctrl.grid.setPlayer(player, x, y)"
 								on-remove="$ctrl.grid.removePlayer(player)"/>
@@ -84,11 +84,11 @@
 				<div ui-if="activeTab == 1">
 					<h5><b>Statistik Startaufstellung</b></h5>
 					<div style="margin-bottom: 10px;">
-						Ø Alter: {{$ctrl.move.getStartPlayersAverage('alter')}}<br>
-						Ø Skill: {{$ctrl.move.getStartPlayersAverage('skill')}}<br>
-						Ø Opti: {{$ctrl.move.getStartPlayersAverage('opti')}}<br>
-						Ø Moral: {{$ctrl.move.getStartPlayersAverage('moral')}}<br>
-						Ø Fitness: {{$ctrl.move.getStartPlayersAverage('fitness')}}</div>
+						Ø Alter: {{$ctrl.move.getStartPlayersAverage('alter') | number}}<br>
+						Ø Skill: {{$ctrl.move.getStartPlayersAverage('skill') | number}}<br>
+						Ø Opti: {{$ctrl.move.getStartPlayersAverage('opti') | number}}<br>
+						Ø Moral: {{$ctrl.move.getStartPlayersAverage('moral') | number}}<br>
+						Ø Fitness: {{$ctrl.move.getStartPlayersAverage('fitness') | number}}</div>
 				</div>
 				
 			</div>
@@ -185,15 +185,15 @@
 		    		<div class="grid-cell">
 	    				<div class="grid-face grid-face-{{player.pos}} noselect btn-group pull-right unavailable"
 	    					style="background-image: url('/faceprev.php?sid={{player.id}}'); cursor: inherit;"></div>
-	    				<player ng-if="!$ctrl.isPlayerSet(player)"
+	    				<move-player ng-if="!$ctrl.isPlayerSet(player)"
 	    					object="player" on-move="$ctrl.grid.setPlayer(player, x, y)"></player>
 		    		</div>
 		    		<div class="noselect player-info" ng-class="{unavailable: ($ctrl.isPlayerSet(player))}">
 						<div><player-link object="player"></player-link></div>
 						<div>
 							{{player.alter}} J<span class="hidden-xs">ahre</span> - 
-							Moral {{player.moral}} / 
-							Fitness {{player.fitness}} - 
+							Mor<span class="hidden-xs">al</span> {{player.moral}} / 
+							Fit<span class="hidden-xs">ness</span> {{player.fitness}} - 
 							Skill {{player.skill | number : 2}} / 
 							Opti <b>{{player.opti | number : 2}}</b>
 							<!-- <span class="hidden-xs" ng-if="player.sonder">/ {{player.sonder}}</span>  -->
@@ -217,12 +217,12 @@
 </div>
 
 <div ui-content-for="modals">
-	<div class="modal" ui-if="action" ui-state='action'>
+	<div class="modal" ui-if="moveAction" ui-state="moveAction">
 		<div class="modal-backdrop in"></div>
     	<div class="modal-dialog">
       		<div class="modal-content">
         		<div class="modal-header">
-          			<button class="close" ui-turn-off="action">&times;</button>
+          			<button class="close" ui-turn-off="moveAction">&times;</button>
           			<h4 class="modal-title" >{{$ctrl.option.text}}</h4>
         		</div>
         		<div class="modal-body">
@@ -236,18 +236,18 @@
 					</div>
         		</div>
 				<div class="modal-footer">
-					<button ui-turn-off="action" class="btn btn-success" ng-click="$ctrl.saveAdjustment()">Speichern</button>
-					<button ui-turn-off="action" class="btn btn-primary">Schließen</button>
+					<button ui-turn-off="moveAction" class="btn btn-success" ng-click="$ctrl.saveAdjustment()">Speichern</button>
+					<button ui-turn-off="moveAction" class="btn btn-primary">Schließen</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal" ui-if="load" ui-state='load'>
+	<div class="modal" ui-if="moveLoad" ui-state="moveLoad">
 		<div class="modal-backdrop in"></div>
     	<div class="modal-dialog">
       		<div class="modal-content">
         		<div class="modal-header">
-          			<button class="close" ui-turn-off="load">&times;</button>
+          			<button class="close" ui-turn-off="moveLoad">&times;</button>
           			<h4 class="modal-title" >Zugabgabe laden</h4>
         		</div>
         		<div class="modal-body">
@@ -259,10 +259,28 @@
 					</div>
         		</div>
 				<div class="modal-footer">
-					<button ui-turn-off="load" class="btn btn-success" ng-click="$ctrl.load(true)">Laden</button>
-					<button ui-turn-off="load" class="btn btn-primary">Schließen</button>
+					<button ui-turn-off="moveLoad" class="btn btn-success" ng-click="$ctrl.load(true)">Laden</button>
+					<button ui-turn-off="moveLoad" class="btn btn-primary">Schließen</button>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="modal" ui-state="moveCheck" ui-if="moveCheck">
+		<div class="modal-backdrop in"></div>
+	   	<div class="modal-dialog">
+	     	<div class="modal-content">
+	       		<div class="modal-header">
+         			<button class="close" ui-turn-off="moveCheck">&times;</button>
+         			<h4 class="modal-title">Zugabgabe</h4>
+	       		</div>
+	       		<div class="modal-body">
+	       			<embedded-site site="../checkza.php"></embedded-site>
+	       		</div>
+				<div class="modal-footer">
+					<button ui-turn-off="moveCheck" class="btn btn-primary">Schließen</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 </div>
