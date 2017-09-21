@@ -63,7 +63,13 @@ osApp.factory('Move', ['Player',function (Player) {
 
 			if (this.players.length > 0) {
 				this.players.sort(function (a, b) {
-					var pdiff = Player.Positions.indexOf(b.pos) - Player.Positions.indexOf(a.pos);
+					var positions = [Player.Position.TOR,
+						Player.Position.ABW,
+						Player.Position.DMI,
+						Player.Position.MIT,
+						Player.Position.OMI,
+						Player.Position.STU ];
+					var pdiff = positions.indexOf(b.pos) - positions.indexOf(a.pos);
 					if (pdiff === 0) {
 						return b.opti - a.opti;
 					} else {

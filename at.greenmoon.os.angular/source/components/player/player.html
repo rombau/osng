@@ -1,20 +1,54 @@
 <img src="/faceprev.php?sid={{$ctrl.player.id}}" style="width: 110px; float: left; border-radius: 7px;"/>
-<div style="margin-left: 125px; height: 110px;">
-	<div class="row">
-		<div class="col-xs-5 col-sm-3">Alter:</div>
-			<div class="col-xs-7 col-sm-2 text-right">{{$ctrl.player.alter | number}}</div>
-		<div class="col-xs-5 col-sm-3">Geburtstag:</div>
-			<div class="col-xs-7 col-sm-4 text-right">ZAT {{$ctrl.player.geburtstag | number}}</div>
-		<div class="col-xs-12"></div>
-		<div class="col-xs-5 col-sm-3">Skill<span class="hidden-xs">schnitt:</span></div>
-			<div class="col-xs-7 col-sm-2 text-right">{{$ctrl.player.skill | number:2}}</div>
-		<div class="col-xs-5 col-sm-3">Marktwert:</div>
-			<div class="col-xs-7 col-sm-4 text-right">{{$ctrl.player.marktwert | currency:"EUR":0}}</div>
-		<div class="col-xs-5 col-sm-3">Opti<span class="hidden-xs">. Skill</span>:</div>
-			<div class="col-xs-7 col-sm-2 text-right">{{$ctrl.player.opti | number:2}}</div>
-		<div class="col-xs-5 col-sm-3">Gehalt:</div>
-			<div class="col-xs-7 col-sm-4 text-right">{{$ctrl.player.gehalt | currency:"EUR":0}}</div>
-		<div class="col-xs-5 col-sm-offset-5 col-sm-3">Vertrag<span class="hidden-xs">slaufzeit</span>:</div>
-			<div class="col-xs-7 col-sm-4 text-right">{{$ctrl.player.vertrag | number}}</div>
+<div style="margin-left: 125px;">
+	<div class="row" style="margin: 0">
+		<div class="col-xs-12 col-sm-5" style="padding: 0; margin-bottom: 10px;">
+			<div class="row">
+				<div class="col-xs-6">Alter:</div>
+					<div class="col-xs-6 text-right">{{$ctrl.player.alter | number}} Jahre</div>
+				<div class="col-xs-6">Geburtstag:</div>
+					<div class="col-xs-6 text-right">ZAT {{$ctrl.player.geburtstag | number}}</div>
+				<div class="col-xs-6">Verletzt:</div>
+					<div class="col-xs-6 text-right">{{$ctrl.player.verletzt | number}}</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-offset-1 col-sm-6" style="padding: 0; margin-bottom: 10px;">
+			<div class="row">
+				<div class="col-xs-5">Marktwert:</div>
+					<div class="col-xs-7 text-right">{{$ctrl.player.marktwert | currency:"EUR":0}}</div>
+				<div class="col-xs-5">Gehalt:</div>
+					<div class="col-xs-7 text-right">{{$ctrl.player.gehalt | currency:"EUR":0}}</div>
+				<div class="col-xs-5">Vertrag<span class="hidden-xs">slaufzeit</span>:</div>
+					<div class="col-xs-7 text-right">{{$ctrl.player.vertrag | number}} Monate</div>
+			</div>
+		</div>
+		<div class="hidden-xs col-xs-12" style="padding: 0; margin-bottom: 10px;">
+			<div class="row" style="margin-bottom: 10px;">
+				<div class="col-xs-3">Nation<span class="hidden-xs">alität</span>:</div>
+					<div class="col-xs-9 text-right">{{$ctrl.player.land}} 
+						<img src="/{{$ctrl.player.flagge}}" style="vertical-align: top;"/></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-3">Team:</div>
+					<div class="col-xs-9 text-right">{{$ctrl.player.team.name}} ({{$ctrl.player.team.liganame}} {{$ctrl.player.team.land}})</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin-top: 5px; margin-bottom: 15px;">
+	<div class="col-xs-12 col-sm-4">
+		Skillschnitt: {{$ctrl.player.skill | number : 2}}
+		<div class="progress skill"><div class="progress-bar" style="width: 36%"></div><div class="rest" style="width: 64%"></div></div>
+	</div>
+	<div class="col-xs-12 col-sm-4">
+		Opt.Skill: {{$ctrl.player.opti | number : 2}}
+		<div class="progress skill"><div class="progress-bar" style="width: 65%"></div><div class="rest" style="width: 35%"></div></div>
+	</div>
+</div>
+
+<div class="row" style="margin-bottom: 10px;">
+	<div ng-repeat="skill in $ctrl.player.skills track by $index" class="col-xs-12 col-sm-4">
+		<span ng-class="{ 'bold': $ctrl.player.isPrimarySkill($index) }">{{$ctrl.player.getSkillCaption($index, $ctrl.player)}}: {{skill | number}}</span>
+		<div class="progress skill"><div class="progress-bar" style="width: {{skill | number}}%"></div><div class="rest" style="width: {{100-skill | number}}%"></div></div>
 	</div>
 </div>
