@@ -48,15 +48,19 @@ gulp.task('fonts', function() {
 gulp.task('js', function () {
 
 	gulp.src(['source/app.js',
+			  'source/app.*.js',
 			  'source/common/model/player.js',
+			  'source/common/model/team.js',
 			  'source/common/model/move.js',
 			  'source/common/services/*.js',
+			  'source/common/util/*.js',
+			  'source/components/login/*.js',
+			  'source/components/menu/*.js',
 			  'source/components/embedded/*.js',
+			  'source/components/office/*.js',
 			  'source/components/player/player.transformation.js',
 			  'source/components/player/player.webclient.js',
 			  'source/components/player/*.js',
-			  'source/components/login/*.js',
-			  'source/components/menu/*.js',
 			  'source/components/move/move.transformation.js',
 			  'source/components/move/move.webclient.js',
 			  'source/components/move/*.js'])
@@ -74,6 +78,7 @@ gulp.task('html', function () {
 		.pipe(replace(/\.\.\/node_modules\/angular.*\/angular/g, 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular'))
 		.pipe(replace('\.\.\/node_modules/mobile-angular-ui/dist/js/mobile-angular-ui', 'https://cdnjs.cloudflare.com/ajax/libs/mobile-angular-ui/1.3.4/js/mobile-angular-ui'))
 		.pipe(replace('app.js', 'os-app.min.js'))
+		.pipe(replace(/.*src="app\..+\.js".*\r?\n|\r/g, ''))
 		.pipe(replace('templates.js', 'os-app.templates.js'))
 		.pipe(replace(/.*src="(common|components)(\/.+)+\.js".*\r?\n|\r/g, ''))
 		.pipe(gulp.dest(DIST_DIR));

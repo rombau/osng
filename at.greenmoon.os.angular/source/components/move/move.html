@@ -4,7 +4,7 @@
 	<div style="position: relative; ">
 		<div style="position: absolute; top: -6px;">
 		    <span style="white-space: nowrap;">
-		    	<span class="hidden-xs">Zugabgabe </span>ZAT {{$ctrl.move.information.zat}} <span class="hidden-xs hidden-sm hidden-md">am {{$ctrl.move.information.date | date : "EEEE, d. LLLL yyyy 'um' HH:mm 'Uhr'"}}</span>
+		    	<span class="hidden-xs">Zugabgabe </span><span ng-if="$ctrl.move.information.zat">ZAT {{$ctrl.move.information.zat}} <span class="hidden-xs hidden-sm hidden-md">{{$ctrl.move.information.date | date : "'am ' EEEE, d. LLLL yyyy 'um' HH:mm 'Uhr'"}}</span></span>
 		    </span>
 		    <br>
 		    <span style="font-size: 10px; line-height: 1.2; white-space: nowrap;">
@@ -12,7 +12,7 @@
 		    		<span ui-if="activeTab == 1">Aufstellung</span>
 		    		<span ui-if="activeTab == 2">Wechsel & Einstellungen</span>
 		    	</span>
-		    	<span class="hidden-xs">{{$ctrl.move.information.type}}<span class="hidden-sm"> {{$ctrl.move.information.home ? 'Heim' : 'Auswärts'}}</span> gegen {{$ctrl.move.information.against.name}}</span>
+		    	<span class="hidden-xs" ng-if="$ctrl.move.information.zat">{{$ctrl.move.information.type}}<span class="hidden-sm"> {{$ctrl.move.information.home ? 'Heim' : 'Auswärts'}}</span> gegen {{$ctrl.move.information.against.name}}</span>
 		    </span>
 	    </div>
     </div>
@@ -84,11 +84,11 @@
 				<div ui-if="activeTab == 1">
 					<h5><b>Statistik Startaufstellung</b></h5>
 					<div style="margin-bottom: 10px;">
-						Ø Alter: {{$ctrl.move.getStartPlayersAverage('alter') | number}}<br>
-						Ø Skill: {{$ctrl.move.getStartPlayersAverage('skill') | number}}<br>
-						Ø Opti: {{$ctrl.move.getStartPlayersAverage('opti') | number}}<br>
-						Ø Moral: {{$ctrl.move.getStartPlayersAverage('moral') | number}}<br>
-						Ø Fitness: {{$ctrl.move.getStartPlayersAverage('fitness') | number}}</div>
+						Ø Alter: {{$ctrl.move.getStartPlayersAverage('alter') | number : 2}}<br>
+						Ø Skill: {{$ctrl.move.getStartPlayersAverage('skill') | number : 2}}<br>
+						Ø Opti: {{$ctrl.move.getStartPlayersAverage('opti') | number : 2}}<br>
+						Ø Moral: {{$ctrl.move.getStartPlayersAverage('moral') | number : 2}}<br>
+						Ø Fitness: {{$ctrl.move.getStartPlayersAverage('fitness') | number : 2}}</div>
 				</div>
 				
 			</div>

@@ -18,7 +18,7 @@ describe('Player transformation service', function () {
 
 	it('should extract information from player html', function () {
 
-		var fixture = __html__['test/fixtures/player.html'];
+		var fixture = __html__['test/_fixtures/player.html'];
 
 		var player = transformationService.transformPlayer(fixture);
 
@@ -27,7 +27,7 @@ describe('Player transformation service', function () {
 		expect(player.alter).toEqual(20);
 		expect(player.gehalt).toEqual(43919);
 		expect(player.land).toEqual('Dänemark');
-		expect(player.flagge).toEqual('images/flaggen/DEN.gif');
+		expect(player.flagge).toEqual('/images/flaggen/DEN.gif');
 		expect(player.geburtstag).toEqual(12);
 		expect(player.vertrag).toEqual(59);
 		expect(player.marktwert).toEqual(5756644);

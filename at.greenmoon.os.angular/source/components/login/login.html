@@ -3,7 +3,7 @@
 </div>
 
 <div ui-content-for="navbarAction">
-	<div ng-hide="$ctrl.account.loggedIn" class="btn btn-navbar">
+	<div ng-hide="$ctrl.loggedIn" class="btn btn-navbar">
 		<i class="fa fa-user-plus"></i> <a ng-href="#/os_anmeldung.html" class="btn-navbar hidden-xs">Registrieren</a>
 	</div>
 </div>
@@ -16,11 +16,11 @@
 					<fieldset>
 						<div class="form-group">
 							<label>Manageremail</label>
-							<input type="email" ng-model="$ctrl.account.email"  class="form-control" placeholder="E-Mailadresse eingeben">
+							<input type="email" ng-model="$ctrl.email"  class="form-control" placeholder="E-Mailadresse eingeben">
 						</div>
 						<div class="form-group">
 							<label>Passwort</label>
-							<input type="password" ng-model="$ctrl.account.password" class="form-control" placeholder="Passwort eingeben">
+							<input type="password" ng-model="$ctrl.password" class="form-control" placeholder="Passwort eingeben">
 						</div>
 					</fieldset>
 					<button class="btn btn-success" style="margin-top: 10px; margin-bottom: 10px;">Einloggen</button>

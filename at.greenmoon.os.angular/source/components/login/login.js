@@ -1,7 +1,4 @@
-/**
- * Login Form component.
- */
-osApp.component('loginForm', {
+osApp.component('loginComponent', {
 
 	templateUrl : 'components/login/login.html',
 
@@ -9,16 +6,15 @@ osApp.component('loginForm', {
 
 		var ctrl = this;
 
-		ctrl.account = Account;
+		ctrl.loggedIn = false;
 
 		ctrl.login = function () {
 
-			ctrl.account.login(ctrl.account.email, ctrl.account.password).then(function (response) {
+			Account.login(ctrl.email, ctrl.password).then(function (response) {
 				if (response.data) {
-					ctrl.account.loggedIn = true;
-					ctrl.account.initialize().then(function () {
-						$location.path("/haupt.php");
-					});
+					ctrl.loggedIn = true;
+					Account.clearTeams();
+					$location.path("/haupt.php");
 				}
 			});
 		};

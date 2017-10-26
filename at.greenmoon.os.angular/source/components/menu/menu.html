@@ -3,15 +3,15 @@
 		<div class="scrollable-header" style="padding:15px; float: left;">
 			<div style="float: left;">
 				<a ng-href="#/haupt.php">
-					<img title="{{$ctrl.account.getCurrentTeam().name}}"
-						ng-src="../images/wappen/{{$ctrl.account.getCurrentTeam().image}}">
+					<img title="{{$ctrl.account.getTeams()[0].name}}"
+						ng-src="../images/wappen/{{$ctrl.account.getTeams()[0].image}}">
 					</img>
 				</a>
 			</div>
-			<div style="float: left;" ng-if="$ctrl.account.teams.length > 1">
+			<div style="float: left;" ng-if="$ctrl.account.getTeams().length > 1 && $ctrl.account.getTeams()[1].image != '00000000.png'">
 				<a ng-click="$ctrl.changeToOtherTeam()">
-					<img title="{{$ctrl.account.getOtherTeam().name}}" style="padding-left: 15px; opacity: 0.3;"
-						ng-src="../images/wappen/{{$ctrl.account.getOtherTeam().image}}">
+					<img title="{{$ctrl.account.getTeams()[1].name}}" style="padding-left: 15px; opacity: 0.3;"
+						ng-src="../images/wappen/{{$ctrl.account.getTeams()[1].image}}">
 					</img>
 				</a>
 			</div>

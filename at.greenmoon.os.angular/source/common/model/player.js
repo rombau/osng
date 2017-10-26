@@ -26,13 +26,13 @@ osApp.factory('Player', [function () {
 	}
 
 	Player.Position = {
-		LEI : "LEI",
-		TOR : "TOR",
-		ABW : "ABW",
-		DMI : "DMI",
-		MIT : "MIT",
-		OMI : "OMI",
-		STU : "STU"
+		LEI : 'LEI',
+		TOR : 'TOR',
+		ABW : 'ABW',
+		DMI : 'DMI',
+		MIT : 'MIT',
+		OMI : 'OMI',
+		STU : 'STU'
 	};
 
 	Player.Skill = {
@@ -60,7 +60,7 @@ osApp.factory('Player', [function () {
 		getShortName : function () {
 			var space = this.name.indexOf(' ');
 			if (space !== -1) {
-				return this.name.substr(space);
+				return this.name.substr(space + 1);
 			} else {
 				return this.name;
 			}
@@ -102,42 +102,42 @@ osApp.factory('Player', [function () {
 			return false;
 		},
 
-		getSkillCaption : function (index, player) {
+		getSkillCaption : function (index) {
 			switch (index) {
 			case Player.Skill.SCH:
-				return this.pos === Player.Position.TOR ? "Abstoss" : "Schuss";
+				return this.pos === Player.Position.TOR ? 'Abstoss' : 'Schuss';
 			case Player.Skill.BAK:
-				return this.pos === Player.Position.TOR ? "Stellungsspiel" : "Ballkontrolle";
+				return this.pos === Player.Position.TOR ? 'Stellungsspiel' : 'Ballkontrolle';
 			case Player.Skill.KOB:
-				return this.pos === Player.Position.TOR ? "Fangsicherheit" : "Kopfball";
+				return this.pos === Player.Position.TOR ? 'Fangsicherheit' : 'Kopfball';
 			case Player.Skill.ZWK:
-				return this.pos === Player.Position.TOR ? "Strafraumbeh." : "Zweikampf";
+				return this.pos === Player.Position.TOR ? 'Strafraumbeh.' : 'Zweikampf';
 			case Player.Skill.DEC:
-				return this.pos === Player.Position.TOR ? "Spiel auf der Linie" : "Deckung";
+				return this.pos === Player.Position.TOR ? 'Spiel auf der Linie' : 'Deckung';
 			case Player.Skill.GES:
-				return this.pos === Player.Position.TOR ? "Reflexe" : "Geschwindigkeit";
+				return this.pos === Player.Position.TOR ? 'Reflexe' : 'Geschwindigkeit';
 			case Player.Skill.FUQ:
-				return "Führungsfertigkeit";
+				return 'Führungsfertigkeit';
 			case Player.Skill.ERF:
-				return "Erfahrung";
+				return 'Erfahrung';
 			case Player.Skill.AGG:
-				return "Aggressivität";
+				return 'Aggressivität';
 			case Player.Skill.PAS:
-				return "Passgenauigkeit";
+				return 'Passgenauigkeit';
 			case Player.Skill.AUS:
-				return "Ausdauer";
+				return 'Ausdauer';
 			case Player.Skill.UEB:
-				return "Übersicht";
+				return 'Übersicht';
 			case Player.Skill.WID:
-				return "Widerstandskraft";
+				return 'Widerstandskraft';
 			case Player.Skill.SEL:
-				return "Selbstbewusstsein";
+				return 'Selbstbewusstsein';
 			case Player.Skill.DIS:
-				return "Disziplin";
+				return 'Disziplin';
 			case Player.Skill.ZUV:
-				return "Zuverlässigkeit";
+				return 'Zuverlässigkeit';
 			case Player.Skill.EIN:
-				return "Einstellung";
+				return 'Einstellung';
 			}
 		}
 

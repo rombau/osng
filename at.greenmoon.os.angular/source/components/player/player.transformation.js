@@ -1,4 +1,4 @@
-osApp.factory('PlayerTransformation', ['Player','Team','HtmlTransformationUtil',function (Player, Team, HtmlTransformationUtil) {
+osApp.factory('PlayerTransformation', ['Player','Team','HtmlUtil',function (Player, Team, HtmlUtil) {
 
 	var transformation = {
 
@@ -6,7 +6,7 @@ osApp.factory('PlayerTransformation', ['Player','Team','HtmlTransformationUtil',
 
 			var player = new Player();
 
-			var doc = HtmlTransformationUtil.getEnsuredDocument(html);
+			var doc = HtmlUtil.getEnsuredDocument(html);
 
 			var face = doc.querySelector('img[alt=Face]');
 
@@ -19,7 +19,7 @@ osApp.factory('PlayerTransformation', ['Player','Team','HtmlTransformationUtil',
 			player.gehalt = +tables[0].rows[0].cells[8].textContent.match(/([\d|\.]+) EUR/)[1].replace(/\./g, '');
 
 			player.land = tables[0].rows[1].cells[1].textContent.trim();
-			player.flagge = tables[0].rows[1].cells[1].firstChild.getAttribute("src");
+			player.flagge = '/' + tables[0].rows[1].cells[1].firstChild.getAttribute("src");
 			player.geburtstag = +tables[0].rows[1].cells[4].textContent.substring(4);
 			player.vertrag = +tables[0].rows[1].cells[7].textContent;
 
@@ -30,7 +30,7 @@ osApp.factory('PlayerTransformation', ['Player','Team','HtmlTransformationUtil',
 
 			var teamNodes = tables[0].rows[2].cells[7].childNodes;
 
-			player.team.id = HtmlTransformationUtil.extractIdFromHref(teamNodes[0].href);
+			player.team.id = HtmlUtil.extractIdFromHref(teamNodes[0].href);
 			player.team.name = teamNodes[0].textContent;
 			player.team.liga = +teamNodes[2].textContent.split('. Liga')[0];
 			player.team.liganame = teamNodes[2].textContent.trim();

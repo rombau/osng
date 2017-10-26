@@ -19,7 +19,7 @@ osApp.component('mainMenu', {
 
 	templateUrl : 'components/menu/menu.html',
 
-	controller : ['$http','$location','$route','Account','SharedState',function ($http, $location, $route, Account, SharedState) {
+	controller : ['$http','$route','Account','SharedState',function ($http, $route, Account, SharedState) {
 
 		var ctrl = this;
 
@@ -50,8 +50,6 @@ osApp.component('mainMenu', {
 			}
 		}).then(function success (response) {
 			ctrl.menuItems = response.data;
-		}, function error (response) {
-		// TODO error handling
 		});
 
 		ctrl.handleItemClick = function (item) {
@@ -80,13 +78,8 @@ osApp.component('mainMenu', {
 		};
 
 		ctrl.changeToOtherTeam = function () {
-			Account.loadTeamData(true).then(function () {
-				Account.toggleCurrentTeam();
-				if ($location.path() !== '/haupt.php') {
-					$location.path('/haupt.php');
-				} else {
-					$route.reload();
-				}
+			Account.toggleTeam().then(function () {
+				$route.reload();
 			});
 		};
 

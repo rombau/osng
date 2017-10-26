@@ -21,8 +21,8 @@ module.exports = function (config) {
 		frameworks : ['jasmine'],
 
 		// list of files / patterns to load in the browser
-		files : ['test/fixtures/**/*.html',
-			'test/polyfill/*.js',
+		files : ['test/_fixtures/**/*.html',
+			'test/_polyfill/*.js',
 			'node_modules/angular/angular.js',
 			'node_modules/angular-route/angular-route.min.js',
 			'node_modules/angular-sanitize/angular-sanitize.min.js',
@@ -31,14 +31,17 @@ module.exports = function (config) {
 			'node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.min.js',
 			'node_modules/angular-mocks/angular-mocks.js',
 			'source/app.js',
+			'source/app.*.js',
 			'source/common/model/*.js',
+			'source/common/util/*.js',
 			'source/common/services/*.js',
+			'source/components/login/*.js',
+			'source/components/menu/*.js',
 			'source/components/emedded/*.js',
+			'source/components/office/*.js',
 			'source/components/player/player.transformation.js',
 			'source/components/player/player.webclient.js',
 			'source/components/player/*.js',
-			'source/components/login/*.js',
-			'source/components/menu/*.js',
 			'source/components/move/move.transformation.js',
 			'source/components/move/move.webclient.js',
 			'source/components/move/move.player.js',
@@ -53,7 +56,7 @@ module.exports = function (config) {
 		// https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors : {
 			'source/**/*.js' : 'coverage',
-			'test/fixtures/**/*.html' : 'html2js'
+			'test/_fixtures/**/*.html' : 'html2js'
 		},
 
 		// test results reporter to use
@@ -71,7 +74,7 @@ module.exports = function (config) {
 		},
 
 		client : {
-			captureConsole : false,
+			captureConsole : true,
 		},
 
 		// web server port

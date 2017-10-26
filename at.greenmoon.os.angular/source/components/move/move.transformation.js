@@ -1,7 +1,7 @@
 /**
  * Move transformations.
  */
-osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',function (Move, Player, HtmlTransformationUtil) {
+osApp.factory('MoveTransformation', ['Move','Player','HtmlUtil',function (Move, Player, HtmlUtil) {
 
 	var transformation = {
 
@@ -9,7 +9,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 
 			var move = new Move();
 
-			var doc = HtmlTransformationUtil.getEnsuredDocument(html);
+			var doc = HtmlUtil.getEnsuredDocument(html);
 
 			var tables = doc.getElementsByTagName('table');
 
@@ -19,14 +19,14 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 			var tableRaster = tables[3];
 			var tableSpieler = tables[4];
 
-			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+, ([A-z]+ )*(\d+)\.[ ]*([\w|ä]+)[\.| ]*(\d\d\d\d) ([A-z]+ )*(\d+):(\d+):*(\d+)*/gm;
+			var pattern = /ZA f.+r ZAT (\d+) Termin: \w+,* ([A-z]+ )*(\d+)\.[ ]*([\w|ä]+)[\.| ]*(\d\d\d\d)* ([A-z]+ )*(\d+)[\.|:](\d+)[\.|:]*(\d+)*/gm;
 			var matches = pattern.exec(timeInformation.textContent);
 
 			if (matches) {
 				move.information.zat = +matches[1];
 				var day = matches[3];
 				var month = (+matches[4] - 1) || ["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"].indexOf(matches[4]);
-				var year = matches[5];
+				var year = matches[5] || new Date().getFullYear();
 				var hour = matches[7];
 				var min = matches[8];
 				var second = matches[9] || 0;
@@ -61,7 +61,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 
 					var player = new Player();
 
-					player.id = HtmlTransformationUtil.extractIdFromHref(row.cells[1].firstChild.href);
+					player.id = HtmlUtil.extractIdFromHref(row.cells[1].firstChild.href);
 
 					player.name = row.cells[1].textContent;
 					player.pos = row.cells[1].className;
@@ -124,7 +124,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 
 			var move = new Move();
 
-			var doc = HtmlTransformationUtil.getEnsuredDocument(html);
+			var doc = HtmlUtil.getEnsuredDocument(html);
 
 			var optionmap = {}, key;
 
@@ -170,7 +170,7 @@ osApp.factory('MoveTransformation', ['Move','Player','HtmlTransformationUtil',fu
 				lines : []
 			};
 
-			var doc = HtmlTransformationUtil.getEnsuredDocument(html);
+			var doc = HtmlUtil.getEnsuredDocument(html);
 
 			var table = doc.getElementsByTagName('table')[3];
 			for (var r = 0; r < table.rows.length - 1; r++) {

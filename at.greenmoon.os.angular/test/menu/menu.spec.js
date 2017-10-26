@@ -1,14 +1,16 @@
 describe('Menu controller', function () {
 
-	var sharedState, $httpBackend, ctrl;
+	var sharedState, $httpBackend, ctrl, accountMock;
 
 	beforeEach(function () {
 
 		module('OnlineSoccer');
 
 		module(function ($provide) {
-			$provide.factory('Account', function () {
-				return jasmine.createSpyObj('AccountMock', ['initialize','login']);
+			$provide.factory('Account', function ($q) {
+				accountMock = jasmine.createSpyObj('AccountMock', ['toggleTeam']);
+				accountMock.toggleTeam.and.returnValue($q.when());
+				return accountMock;
 			});
 		});
 
@@ -110,6 +112,14 @@ describe('Menu controller', function () {
 		ctrl.handleItemClick(ctrl.menuItems[1]);
 
 		expect(ctrl.getIconClass(ctrl.menuItems[1])).toEqual('fa-chevron-circle-down');
+
+	});
+
+	it('should toggle team', function () {
+
+		ctrl.changeToOtherTeam();
+
+		expect(accountMock.toggleTeam).toHaveBeenCalled();
 
 	});
 

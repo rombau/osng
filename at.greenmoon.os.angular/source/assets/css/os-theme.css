@@ -9307,17 +9307,33 @@ ui-switch {
   position: absolute;
   top: 0px;
   left: 0px;
-  bottom: 0px;
+  bottom: 1px;
   right: 0px;
   z-index: -1;
 }
+.app-progress-indicator:after {
+  display: block;
+  position: absolute;
+  opacity: 1;
+  left: 0px;
+  bottom: -1px;
+  width: 0px;
+  height: 1px;
+  background-color: #FBF9B3;
+  content: "";
+  opacity: 1 !important;
+  z-index: 10000;
+  transition: width 1s;
+}
 .app-progress-indicator.loading {
   background-color: #0d0d50;
-  background-image: url('../images/spinner.gif');
   background-position: 50% 50%;
   background-repeat: no-repeat;
-  opacity: 0.5;
+  opacity: 0.6;
   z-index: 9999;
+}
+.app-progress-indicator.loading:after {
+  width: 100%;
 }
 .navbar .btn-group .btn-navbar {
   border-radius: 0px;
@@ -9388,6 +9404,9 @@ ui-switch {
 }
 .modal {
   overflow: auto;
+}
+.modal.loading {
+  display: none !important;
 }
 .modal-header .close {
   color: #FFFFFF;

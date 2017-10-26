@@ -20,7 +20,7 @@ describe(
 
 		it('should extract information from setup html', function () {
 
-			var fixture = __html__['test/fixtures/move.setup.1.html'];
+			var fixture = __html__['test/_fixtures/move.setup.1.html'];
 
 			var move = transformationService.transformSetup(fixture);
 
@@ -72,7 +72,7 @@ describe(
 			'should format player setup for commit',
 			function () {
 
-				var fixture = __html__['test/fixtures/move.setup.1.html'];
+				var fixture = __html__['test/_fixtures/move.setup.1.html'];
 
 				var move = transformationService.transformSetup(fixture);
 				var playerSetup = transformationService.transformPlayers(move.players);
@@ -84,7 +84,7 @@ describe(
 
 		it('should extract alternativ date representation #1 from setup html', function () {
 
-			var fixture = __html__['test/fixtures/move.setup.2.html'];
+			var fixture = __html__['test/_fixtures/move.setup.2.html'];
 
 			var move = transformationService.transformSetup(fixture);
 
@@ -98,7 +98,7 @@ describe(
 
 		it('should extract alternativ date representation #2 from setup html', function () {
 
-			var fixture = __html__['test/fixtures/move.setup.3.html'];
+			var fixture = __html__['test/_fixtures/move.setup.3.html'];
 
 			var move = transformationService.transformSetup(fixture);
 
@@ -107,6 +107,20 @@ describe(
 			expect(move.information).toBeDefined();
 			expect(move.information.zat).toEqual(15);
 			expect(move.information.date.toUTCString()).toEqual('Tue, 28 Feb 2017 18:30:00 GMT');
+
+		});
+
+		it('should extract alternativ date representation #3 from setup html', function () {
+
+			var fixture = __html__['test/_fixtures/move.setup.4.html'];
+
+			var move = transformationService.transformSetup(fixture);
+
+			expect(move.valid).toBeDefined();
+			expect(move.valid).toBeFalsy();
+			expect(move.information).toBeDefined();
+			expect(move.information.zat).toEqual(8);
+			expect(move.information.date.toUTCString()).toEqual('Sat, 28 Oct ' + new Date().getFullYear() + ' 11:00:00 GMT');
 
 		});
 
@@ -120,7 +134,7 @@ describe(
 
 		it('should extract information from actions html', function () {
 
-			var fixture = __html__['test/fixtures/move.actions.html'];
+			var fixture = __html__['test/_fixtures/move.actions.html'];
 
 			var move = transformationService.transformActions(fixture);
 
@@ -190,7 +204,7 @@ describe(
 
 		it('should extract information from options html', function () {
 
-			var fixture = __html__['test/fixtures/move.options.html'];
+			var fixture = __html__['test/_fixtures/move.options.html'];
 
 			var move = transformationService.transformOptions(fixture);
 
@@ -275,7 +289,7 @@ describe(
 
 		it('should extract information from adjustment html', function () {
 
-			var fixture = __html__['test/fixtures/move.actions.subst.html'];
+			var fixture = __html__['test/_fixtures/move.actions.subst.html'];
 
 			var form = transformationService.transformAdjustmentForm(fixture);
 
@@ -314,7 +328,7 @@ describe(
 
 		it('should extract information from option adjustment html', function () {
 
-			var fixture = __html__['test/fixtures/move.options.capt.html'];
+			var fixture = __html__['test/_fixtures/move.options.capt.html'];
 
 			var form = transformationService.transformAdjustmentForm(fixture);
 
