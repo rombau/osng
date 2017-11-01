@@ -51,6 +51,12 @@
 
 // overrides ---------------------------------------------
 
+@media (max-width: @screen-xs-max) {
+	body {
+		font-size: @font-size-base + 1px;
+	}
+}
+
 .app-progress-indicator {
 	position: absolute;
 	top: 0px;
@@ -339,10 +345,10 @@ select {
 		padding-left: calc(@grid-view-width ~"/" @grid-cell-cols ~"+ 6px"); 
 	    height: calc(@grid-view-width ~"/" @grid-cell-cols); 
 	    max-height: @grid-cell-max;
-		font-size: smaller;
+		font-size: @font-size-base - 1px;
 	}
 	.player-info a, .player-info a:hover {
-		font-size: small;
+		font-size: @font-size-base + 1px;
 		line-height: 1;
 	}
 	.grid-container {
@@ -360,7 +366,7 @@ select {
 	    max-height: @grid-cell-max;
 	}
 	.grid-face-name, .grid-face-name > div {
-		font-size: 10px;
+		font-size: @font-size-base - 1px;
 	}
 	.subst-container {
 	    height: calc(@grid-view-width ~"/" @grid-cell-cols); 

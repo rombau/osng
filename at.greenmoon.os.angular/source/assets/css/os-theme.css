@@ -9303,6 +9303,11 @@ ui-switch {
     transform: translate3d(-220px, 0, 0);
   }
 }
+@media (max-width: 767px) {
+  body {
+    font-size: 13px;
+  }
+}
 .app-progress-indicator {
   position: absolute;
   top: 0px;
@@ -9566,11 +9571,11 @@ select::-ms-expand {
     padding-left: calc(94vw / 11 + 6px);
     height: calc(94vw / 11);
     max-height: 40px;
-    font-size: smaller;
+    font-size: 11px;
   }
   .player-info a,
   .player-info a:hover {
-    font-size: small;
+    font-size: 13px;
     line-height: 1;
   }
   .grid-container {
@@ -9591,7 +9596,7 @@ select::-ms-expand {
   }
   .grid-face-name,
   .grid-face-name > div {
-    font-size: 10px;
+    font-size: 11px;
   }
   .subst-container {
     height: calc(94vw / 11);
