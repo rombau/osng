@@ -17,7 +17,8 @@ osApp.component('movePlayer', {
 		'$timeout',
 		'$interval',
 		'SharedState',
-		function ($scope, $element, $document, $drag, $touch, $transform, $timeout, $interval, SharedState) {
+		'Popup',
+		function ($scope, $element, $document, $drag, $touch, $transform, $timeout, $interval, SharedState, Popup) {
 
 			var ctrl = this;
 
@@ -240,6 +241,8 @@ osApp.component('movePlayer', {
 				end : function (touch) {
 					if (!dragMove) {
 						setMovingStyle(false);
+						Popup.open('modalPlayer', ctrl.player);
+						$scope.$apply();
 					}
 				}
 			}, { /* touch options */});
