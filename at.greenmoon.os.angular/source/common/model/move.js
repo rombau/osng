@@ -90,7 +90,7 @@ osApp.factory('Move', ['Player',function (Player) {
 					count++;
 				}
 			}
-			var result = Math.round(sum / 11 * 100)/100;
+			var result = Math.round(sum / count * 100)/100;
 			return isNaN(result) ? 0 : result;
 		},
 
