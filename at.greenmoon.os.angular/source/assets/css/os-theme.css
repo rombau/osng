@@ -9630,7 +9630,8 @@ select::-ms-expand {
   .grid-border {
     width: 444px;
   }
-  .grid-cell {
+  .grid-cell,
+  .grid-cell div {
     width: 40px;
     height: 40px;
   }
