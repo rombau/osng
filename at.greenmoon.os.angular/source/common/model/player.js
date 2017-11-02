@@ -3,10 +3,10 @@
  */
 osApp.factory('Player', [function () {
 
-	function Player () {
+	function Player (name) {
 
 		this.id = 0;
-		this.name = '';
+		this.name = name || '';
 		this.pos = '';
 		this.alter = 0;
 		this.geburtstag = 0;
@@ -58,12 +58,19 @@ osApp.factory('Player', [function () {
 	Player.prototype = {
 
 		getShortName : function () {
-			var space = this.name.indexOf(' ');
-			if (space !== -1) {
-				return this.name.substr(space + 1);
-			} else {
-				return this.name;
+			var separators = [' ',' Van ',' van ',' De ',' de '];
+			var shortname = this.name;
+			var index = this.name.length;
+			for (var s = 0; s < separators.length; s++) {
+				var i = this.name.lastIndexOf(separators[s]);
+				if (i > -1 && i < index) {
+					index = i;
+				}
 			}
+			if (index !== this.name.length) {
+				shortname = this.name.substr(index + 1);
+			}
+			return shortname.replace(' ', '&nbsp;');
 		},
 
 		isPrimarySkill : function (index) {

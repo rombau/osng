@@ -2,7 +2,5 @@
 	title="{{$ctrl.player.name}}" ng-style="{ 'background-image' : 'url(\'/faceprev.php?sid={{$ctrl.player.id}}\')' }">
 </div>
 <div class="grid-face-name" ng-if="$ctrl.player.row != null && $ctrl.player.row >= 0">
-	<div class="grid-face-{{$ctrl.player.pos}} noselect">
-		{{$ctrl.player.getShortName()}}
-	</div>
+	<div class="grid-face-{{$ctrl.player.pos}} noselect" ng-bind-html="$ctrl.player.getShortName()"></div>
 </div>

@@ -1633,7 +1633,7 @@ function confirmdelete() {
 
 			</td>
 
-			<td class="STU" align="left"><a href="javascript:spielerinfo(30081)">Jonathan Croly</a></td>
+			<td class="STU" align="left"><a href="javascript:spielerinfo(30081)">Jonathan Van de Croly</a></td>
 
 			<td class="STU">30</td>
 
@@ -1691,7 +1691,7 @@ function confirmdelete() {
 
 			</td>
 
-			<td class="STU" align="left"><a href="javascript:spielerinfo(75105)">Gavin Sheehan</a></td>
+			<td class="STU" align="left"><a href="javascript:spielerinfo(75105)">Gavin McDonald-Sheehan</a></td>
 
 			<td class="STU">24</td>
 

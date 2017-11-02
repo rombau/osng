@@ -13,17 +13,25 @@ describe('Player', function () {
 
 	it('should return short name', function () {
 
+		player.name = 'Krisztof Vámosi';
+
+		expect(player.getShortName()).toEqual('Vámosi');
+
 		player.name = 'Ronaldo';
 
 		expect(player.getShortName()).toEqual('Ronaldo');
 
-		player.name = 'Marco Van Basten';
+		player.name = 'Geert Van Queckelberghe';
 
-		expect(player.getShortName()).toEqual('Van Basten');
+		expect(player.getShortName()).toEqual('Van&nbsp;Queckelberghe');
 
-		player.name = 'Marco Van Basten';
+		player.name = 'Manu Van der Heyden';
 
-		expect(player.getShortName()).toEqual('Van Basten');
+		expect(player.getShortName()).toEqual('Van&nbsp;der Heyden');
+
+		player.name = 'Charles Semba Sangare';
+
+		expect(player.getShortName()).toEqual('Sangare');
 
 	});
 
