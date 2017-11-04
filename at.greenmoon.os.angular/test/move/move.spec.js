@@ -9,10 +9,12 @@ describe('Move', function () {
 		var Player = $injector.get('Player');
 
 		move = new Move();
-		createPlayer = function (pos, opti) {
+		createPlayer = function (pos, opti, row, col) {
 			var player = new Player();
 			player.pos = pos;
 			player.opti = opti;
+			player.row = row;
+			player.col = col;
 			return player;
 		}
 
@@ -43,6 +45,20 @@ describe('Move', function () {
 		expect(sorted[5].pos).toEqual('DMI');
 		expect(sorted[6].pos).toEqual('ABW');
 		expect(sorted[7].pos).toEqual('TOR');
+
+	});
+
+	it('should calculate start players average', function () {
+
+		move.players.push(createPlayer('TOR', 1, 1, 0));
+		move.players.push(createPlayer('DMI', 2, 6, 3));
+		move.players.push(createPlayer('ABW', 3, 3, 7));
+		move.players.push(createPlayer('MIT', 4, 8, 7));
+		move.players.push(createPlayer('OMI', 5, 10, 8));
+		move.players.push(createPlayer('STU', 6, 13, 6));
+
+		expect(move.getStartPlayersAverage('opti')).toEqual(3.5);
+		expect(move.getStartPlayersAverage('unknown')).toEqual(0);
 
 	});
 
