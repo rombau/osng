@@ -1,6 +1,6 @@
 describe('Move', function () {
 
-	var move, playerFactory;
+	var move;
 
 	beforeEach(module('OnlineSoccer'));
 

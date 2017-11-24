@@ -18,7 +18,7 @@ describe('Player transformation service', function () {
 
 	it('should extract information from player html', function () {
 
-		var fixture = __html__['test/_fixtures/player.html'];
+		var fixture = __html__['test/fixtures/player.html'];
 
 		var player = transformationService.transformPlayer(fixture);
 

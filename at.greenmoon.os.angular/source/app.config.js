@@ -12,6 +12,10 @@ osApp.config(['$provide','$routeProvider','$locationProvider','$httpProvider',fu
 		template : '<div class="scrollable"><div class="scrollable-content"><div class="section"><span ng-bind-html="error"></span></div></div></div>'
 	}).when('/zugabgabe.php', {
 		template : "<move-component></move-component>"
+	}).when('/trainer.php', {
+		template : "<training-component></training-component>"
+	}).when('/training.php', {
+		template : "<training-component></training-component>"
 	}).when('/player/:id', {
 		template : function ($routeProvider) {
 			return '<embedded-site site="../sp.php?s=' + $routeProvider.id + '"></embedded-site>';

@@ -1,7 +1,7 @@
 
+@import "mobile-angular-ui/src/less/sm-grid.less";
 @import "mobile-angular-ui/src/less/mobile-angular-ui-base.less";
 @import "mobile-angular-ui/src/less/mobile-angular-ui-desktop.less";
-@import "mobile-angular-ui/src/less/sm-grid.less";
 
 
 // variables ---------------------------------------------
@@ -118,8 +118,9 @@
 	.list-group-item {
 		padding: 3px 2px;
 		display: inline-block;
-		a {
+		a > i {
 			color: @brand-primary;
+			margin-left: 7px;
 		}
 	}
 	.btn {
@@ -190,17 +191,23 @@ label {
 	display: block;
 }
 
-select {
-	margin-bottom: 6px;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	&::-ms-expand { 
-	    display: none; /* remove default arrow in IE 10 and 11 */
-	}
-}
-
 .combo {
+
+	select {
+		
+		option {
+			padding: 4px 8px;
+		}
+		
+		margin-bottom: 6px;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		&::-ms-expand { 
+		    display: none; /* remove default arrow in IE 10 and 11 */
+		}
+	}
+
 	position: relative;
 	padding-left: 0px; 
 	padding-right: 5px;
@@ -220,7 +227,7 @@ select {
 		&:after {
 			right: 8px;
 		}
-	}	
+	}
 }
 
 .form-control {
@@ -448,7 +455,7 @@ select {
 }
 
 .player-container {
-	padding-top: 5px; 
+	padding-bottom: 5px; 
 	width: 430px;
 	float: left;
 	.unavailable {

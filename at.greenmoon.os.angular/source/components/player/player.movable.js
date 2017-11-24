@@ -1,9 +1,10 @@
-osApp.component('movePlayer', {
+osApp.component('movablePlayer', {
 
-	templateUrl : 'components/move/move.player.html',
+	templateUrl : 'components/player/player.movable.html',
 
 	bindings : {
 		player : '<object',
+		dropAreaSelector : '<',
 		onMove : '&',
 		onRemove : '&'
 	},
@@ -22,10 +23,7 @@ osApp.component('movePlayer', {
 
 			var ctrl = this;
 
-			var possibleDropAreas = [];
-			possibleDropAreas.push(document.querySelector('.grid-container'));
-			possibleDropAreas.push(document.querySelector('.keeper-container'));
-			possibleDropAreas.push(document.querySelector('.subst-container'));
+			var possibleDropAreas = document.querySelectorAll(ctrl.dropAreaSelector);
 
 			var playerElement = $element[0].firstChild;
 			var playerRect = playerElement.getBoundingClientRect();

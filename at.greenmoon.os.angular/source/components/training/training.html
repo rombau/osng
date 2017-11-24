@@ -1,0 +1,84 @@
+<div class="navbar-brand navbar-brand-center" ui-content-for="title">
+	Training<span class="hidden-xs">seinstellungen</span>
+</div>
+
+<div class="btn-group pull-right" ui-content-for="navbarAction">
+    <a class="btn btn-navbar" ng-click="$ctrl.load(false)">
+		<i class="fa fa-folder-open-o"></i> <span class="hidden-xs">Laden</span>
+    </a>
+    <a class="btn btn-navbar" ng-click="$ctrl.save()">
+       	<i class="fa fa-save"></i> <span class="hidden-xs">Speichern</span>
+    </a>
+</div>
+
+<div class="scrollable">
+	<div class="scrollable-content scroll-area">
+    	<div class="section">
+	    	<div ng-repeat="player in $ctrl.training.players" class="list-group-item" style="width: 100%">
+	    		<div class="grid-cell">
+    				<div ng-click="$ctrl.openPlayer(player)" class="grid-face grid-face-{{player.pos}} noselect"
+    					style="background-image: url('/faceprev.php?sid={{player.id}}'); cursor: pointer;"></div>
+	    		</div>
+	    		<div class="noselect player-info" style="float: left; display: inline-block; padding-left: 8px;">
+					<div style="width: 200px; text-overflow: ellipsis;">
+						<player-link object="player"/>
+					</div>
+					<div style="white-space: nowrap;">
+						{{player.alter}} J<span class="hidden-xs">ahre</span> - 
+						Opti {{player.opti | number : 2}} 
+						<span class="visible-xs-inline" ng-if="player.setting">
+							-
+							<span style="font-weight: bold;">{{$ctrl.training.getSkillName(player, true)}}</span>
+							mit 
+							<span style="font-weight: bold;">{{player.setting.trainer.skill}}er</span> 
+							<span>bei {{player.setting.chance | number : 2}}%</span>
+						</span>
+					</div>
+				</div>
+				<div class="visible-xs" style="float: right; display: inline-block;">
+					<a style="color: #FBF9B3;" ng-if="player.setting" ng-click="$ctrl.editPlayerSetting(player)">
+						<i class="fa fa-pencil"></i>
+					</a>
+					<a style="color: #FBF9B3;" ng-if="!player.setting" ng-click="$ctrl.editPlayerSetting(player)">
+						<i class="fa fa-plus"></i>
+					</a>
+				</div>
+				<div class="combo hidden-xs" style="float: left; display: inline-block; margin-top: 2px; margin-left: 10px; width: 150px;">
+					<select class="form-control" id="skill-select" name="skill-select" ng-model="player.setting.skillnr" 
+						ng-options="skill.nr as skill.label for skill in $ctrl.training.getSkillSelection(player)">
+					</select>
+				</div>
+				<div class="hidden-xs" style="float: left; display: inline-block; margin-top: 2px; padding: 6px;	">
+					{{player.setting.skillvalue}}
+				</div>
+	    	</div>
+		</div>
+	</div>
+</div>
+
+<div ui-content-for="modals">
+	<div class="modal" ui-if="trainingLoad" ui-state="trainingLoad">
+		<div class="modal-backdrop in"></div>
+    	<div class="modal-dialog">
+      		<div class="modal-content">
+        		<div class="modal-header">
+          			<button class="close" ui-turn-off="trainingLoad">&times;</button>
+          			<h4 class="modal-title" >Trainingseinstellungen laden</h4>
+        		</div>
+        		<div class="modal-body">
+					<label for="zat">Name</label>
+					<div class="combo">
+						<select class="form-control" id="training-name" name="training-name" ng-model="$ctrl.training.id" 
+							ng-options="training.id as training.label for training in $ctrl.training.selection">
+						</select>
+					</div>
+        		</div>
+				<div class="modal-footer">
+					<button ui-turn-off="trainingLoad" class="btn btn-success" ng-click="$ctrl.load(true)">Laden</button>
+					<button ui-turn-off="trainingLoad" class="btn btn-primary">Schließen</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>

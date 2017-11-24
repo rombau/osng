@@ -21,8 +21,8 @@ module.exports = function (config) {
 		frameworks : ['jasmine'],
 
 		// list of files / patterns to load in the browser
-		files : ['test/_fixtures/**/*.html',
-			'test/_polyfill/*.js',
+		files : ['test/fixtures/**/*.html',
+			'test/polyfill/*.js',
 			'node_modules/angular/angular.js',
 			'node_modules/angular-route/angular-route.min.js',
 			'node_modules/angular-sanitize/angular-sanitize.min.js',
@@ -44,9 +44,11 @@ module.exports = function (config) {
 			'source/components/player/*.js',
 			'source/components/move/move.transformation.js',
 			'source/components/move/move.webclient.js',
-			'source/components/move/move.player.js',
 			'source/components/move/move.js',
-			'test/**/*.spec.js'],
+			'source/components/training/training.transformation.js',
+			'source/components/training/training.webclient.js',
+			'source/components/training/training.js',
+			'source/**/*.spec.js'],
 
 		// list of files to exclude
 		exclude : ['source/_lib/js/*.js'],
@@ -55,8 +57,8 @@ module.exports = function (config) {
 		// available preprocessors:
 		// https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors : {
-			'source/**/*.js' : 'coverage',
-			'test/_fixtures/**/*.html' : 'html2js'
+			'source/**/!(*spec).js' : 'coverage',
+			'test/fixtures/**/*.html' : 'html2js'
 		},
 
 		// test results reporter to use

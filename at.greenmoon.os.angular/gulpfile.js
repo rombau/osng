@@ -52,6 +52,7 @@ gulp.task('js', function () {
 			  'source/common/model/player.js',
 			  'source/common/model/team.js',
 			  'source/common/model/move.js',
+			  'source/common/model/training.js',
 			  'source/common/services/*.js',
 			  'source/common/util/*.js',
 			  'source/components/login/*.js',
@@ -63,7 +64,11 @@ gulp.task('js', function () {
 			  'source/components/player/*.js',
 			  'source/components/move/move.transformation.js',
 			  'source/components/move/move.webclient.js',
-			  'source/components/move/*.js'])
+			  'source/components/move/*.js',
+			  'source/components/training/training.transformation.js',
+			  'source/components/training/training.webclient.js',
+			  'source/components/training/*.js',
+			  '!source/**/*.spec.js'])
         .pipe(concat('os-app.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('mobile'));

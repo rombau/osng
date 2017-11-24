@@ -109,45 +109,44 @@ osApp.factory('Player', [function () {
 			return false;
 		},
 
-		getSkillCaption : function (index) {
+		getSkillCaption : function (index, shortForm) {
 			switch (index) {
 			case Player.Skill.SCH:
-				return this.pos === Player.Position.TOR ? 'Abstoss' : 'Schuss';
+				return this.pos === Player.Position.TOR ? (shortForm ? 'ABS' : 'Abstoss') : (shortForm ? 'SCH' : 'Schuss');
 			case Player.Skill.BAK:
-				return this.pos === Player.Position.TOR ? 'Stellungsspiel' : 'Ballkontrolle';
+				return this.pos === Player.Position.TOR ? (shortForm ? 'STS' : 'Stellungsspiel') : (shortForm ? 'BAK' : 'Ballkontrolle');
 			case Player.Skill.KOB:
-				return this.pos === Player.Position.TOR ? 'Fangsicherheit' : 'Kopfball';
+				return this.pos === Player.Position.TOR ? (shortForm ? 'FAN' : 'Fangsicherheit') : (shortForm ? 'KOB' : 'Kopfball');
 			case Player.Skill.ZWK:
-				return this.pos === Player.Position.TOR ? 'Strafraumbeh.' : 'Zweikampf';
+				return this.pos === Player.Position.TOR ? (shortForm ? 'STB' : 'Strafraumbeh.') : (shortForm ? 'ZWK' : 'Zweikampf');
 			case Player.Skill.DEC:
-				return this.pos === Player.Position.TOR ? 'Spiel auf der Linie' : 'Deckung';
+				return this.pos === Player.Position.TOR ? (shortForm ? 'SPL' : 'Spiel auf der Linie') : (shortForm ? 'DEC' : 'Deckung');
 			case Player.Skill.GES:
-				return this.pos === Player.Position.TOR ? 'Reflexe' : 'Geschwindigkeit';
+				return this.pos === Player.Position.TOR ? (shortForm ? 'REF' : 'Reflexe') : (shortForm ? 'GES' : 'Geschwindigkeit');
 			case Player.Skill.FUQ:
-				return 'Führungsfertigkeit';
+				return shortForm ? 'FUQ' : 'Führungsfertigkeit';
 			case Player.Skill.ERF:
-				return 'Erfahrung';
+				return shortForm ? 'ERF' : 'Erfahrung';
 			case Player.Skill.AGG:
-				return 'Aggressivität';
+				return shortForm ? 'AGG' : 'Aggressivität';
 			case Player.Skill.PAS:
-				return 'Passgenauigkeit';
+				return shortForm ? 'PAS' : 'Passgenauigkeit';
 			case Player.Skill.AUS:
-				return 'Ausdauer';
+				return shortForm ? 'AUS' : 'Ausdauer';
 			case Player.Skill.UEB:
-				return 'Übersicht';
+				return shortForm ? 'UEB' : 'Übersicht';
 			case Player.Skill.WID:
-				return 'Widerstandskraft';
+				return shortForm ? 'WID' : 'Widerstandskraft';
 			case Player.Skill.SEL:
-				return 'Selbstbewusstsein';
+				return shortForm ? 'SEL' : 'Selbstbewusstsein';
 			case Player.Skill.DIS:
-				return 'Disziplin';
+				return shortForm ? 'DIS' : 'Disziplin';
 			case Player.Skill.ZUV:
-				return 'Zuverlässigkeit';
+				return shortForm ? 'ZUV' : 'Zuverlässigkeit';
 			case Player.Skill.EIN:
-				return 'Einstellung';
+				return shortForm ? 'EIN' : 'Einstellung';
 			}
 		}
-
 	};
 
 	return Player;

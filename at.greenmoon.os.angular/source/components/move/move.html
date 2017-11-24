@@ -47,8 +47,9 @@
 			    	<div class="grid-container">
 						<div ng-repeat="row in $ctrl.grid">
 							<div ng-repeat="cell in row track by $index" class="grid-cell">
-								<move-player ng-if="cell.id" 
+								<movable-player ng-if="cell.id" 
 									object="cell" 
+									drop-area-selector="'.grid-container, .keeper-container, .subst-container'"
 									on-move="$ctrl.grid.setPlayer(player, x, y)"
 									on-remove="$ctrl.grid.removePlayer(player)"/>
 							</div>
@@ -63,8 +64,8 @@
 				<div class="grid-cell"></div>
 				<div class="grid-cell keeper-container">
 					<div></div>
-					<move-player ng-if="$ctrl.getKeeper()" 
-						object="$ctrl.getKeeper()" 
+					<movable-player ng-if="$ctrl.getKeeper()" 
+						object="$ctrl.getKeeper()" drop-area-selector="'.grid-container, .keeper-container, .subst-container'"
 						on-move="$ctrl.grid.setPlayer(player, x, y)"
 						on-remove="$ctrl.grid.removePlayer(player)"></player>
 				</div>
@@ -73,8 +74,8 @@
 				<div class="subst-border">
 					<div class="subst-container">
 						<div ng-repeat="cell in $ctrl.getSubst() track by $index" class="grid-cell">
-							<move-player ng-if="cell.id" 
-								object="cell" 
+							<movable-player ng-if="cell.id" 
+								object="cell" drop-area-selector="'.grid-container, .keeper-container, .subst-container'"
 								on-move="$ctrl.grid.setPlayer(player, x, y)"
 								on-remove="$ctrl.grid.removePlayer(player)"/>
 						</div>
@@ -107,8 +108,8 @@
 			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.item==1">
 							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
-							<a ng-click="$ctrl.removeAdjustment(adjustment)"
-								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
+							<a ng-click="$ctrl.removeAdjustment(adjustment)">
+								<i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></a>
 						</div> 
 					</div> 
 				</div>
@@ -116,8 +117,8 @@
 			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.item==5">
 							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
-							<a ng-click="$ctrl.removeAdjustment(adjustment)"
-								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
+							<a ng-click="$ctrl.removeAdjustment(adjustment)">
+								<i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></a>
 						</div> 
 					</div> 
 				</div>
@@ -132,8 +133,8 @@
 			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.page==1 && adjustment.option.item!=1 && adjustment.option.item!=5">
 							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
-							<a ng-click="$ctrl.removeAdjustment(adjustment)"
-								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
+							<a ng-click="$ctrl.removeAdjustment(adjustment)">
+								<i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></a>
 						</div> 
 					</div> 
 				</div>
@@ -148,8 +149,8 @@
 			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.page==2 && adjustment.option.item<16">
 							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
-							<a ng-click="$ctrl.removeAdjustment(adjustment)"
-								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
+							<a ng-click="$ctrl.removeAdjustment(adjustment)">
+								<i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></a>
 						</div> 
 					</div> 
 				</div>
@@ -164,8 +165,8 @@
 			  		<div ng-repeat="adjustment in $ctrl.getAdjustments()">
 						<div class="list-group-item" ng-if="adjustment.option.page==2 && adjustment.option.item>=16">
 							<span ng-bind-html="adjustment.text" ng-class="{markdeleted: adjustment.markDeleted, marknew: (!adjustment.id)}"></span> 
-							<a ng-click="$ctrl.removeAdjustment(adjustment)"
-								style="margin-left: 5px;"><b><i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></b></a>
+							<a ng-click="$ctrl.removeAdjustment(adjustment)">
+								<i class="fa" ng-class="adjustment.markDeleted ? 'fa-undo' : 'fa-trash'"></i></a>
 						</div> 
 					</div>
 				</div>
@@ -185,8 +186,9 @@
 		    		<div class="grid-cell">
 	    				<div class="grid-face grid-face-{{player.pos}} noselect btn-group pull-right unavailable"
 	    					style="background-image: url('/faceprev.php?sid={{player.id}}'); cursor: inherit;"></div>
-	    				<move-player ng-if="!$ctrl.isPlayerSet(player)"
-	    					object="player" on-move="$ctrl.grid.setPlayer(player, x, y)"></player>
+	    				<movable-player ng-if="!$ctrl.isPlayerSet(player)"
+	    					object="player" drop-area-selector="'.grid-container, .keeper-container, .subst-container'" 
+	    					on-move="$ctrl.grid.setPlayer(player, x, y)"></player>
 		    		</div>
 		    		<div class="noselect player-info" ng-class="{unavailable: ($ctrl.isPlayerSet(player))}">
 						<div><player-link object="player"></player-link></div>
