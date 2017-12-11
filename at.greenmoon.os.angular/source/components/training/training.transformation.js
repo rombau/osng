@@ -45,10 +45,10 @@ osApp.factory('TrainingTransformation', ['Training','Trainer','Player','HtmlUtil
 
 			var trainingSelect = doc.getElementsByName('trainingload')[0];
 			for (var o = 1; o < trainingSelect.options.length; o++) {
-				var selection = new training.Selection();
-				selection.id = +trainingSelect.options[o].value;
-				selection.label = trainingSelect.options[o].text;
-				training.selection.push(selection);
+				var config = new training.Config();
+				config.id = +trainingSelect.options[o].value;
+				config.label = trainingSelect.options[o].text;
+				training.config.push(config);
 			}
 
 			var tableSpieler = doc.getElementsByTagName('table')[2];
@@ -61,6 +61,7 @@ osApp.factory('TrainingTransformation', ['Training','Trainer','Player','HtmlUtil
 
 					player.id = HtmlUtil.extractIdFromHref(row.cells[1].firstChild.href);
 
+					player.verletzt = (row.cells[0].childNodes.length > 0 ? true : false);
 					player.name = row.cells[1].textContent;
 					player.pos = row.cells[1].className;
 					player.alter = +row.cells[2].textContent;
@@ -69,26 +70,26 @@ osApp.factory('TrainingTransformation', ['Training','Trainer','Player','HtmlUtil
 					var trainerSelect = doc.getElementsByName('tr1' + player.id)[0];
 					var skillSelect = doc.getElementsByName('tr2' + player.id)[0];
 
-					if (trainerSelect.value !== '0' && skillSelect.value !== '0') {
-
-						var pattern = /T (\d) ([\d|\.]+)/gm;
-						var matches = pattern.exec(trainerSelect.selectedOptions[0].text);
-
-						if (matches) {
-
-							var trainer = training.trainer[matches[1] - 1];
-
-							trainer.skill = +matches[2];
-							trainer.name = Trainer.NAME + ' ' + (Trainer.SKILLS.indexOf(trainer.skill) + 1);
-
-							trainer.slots--;
-
-							player.setting = new training.Setting();
-							player.setting.trainer = trainer;
-							player.setting.skillnr = +skillSelect.value;
-							player.setting.skillvalue = +row.cells[6].textContent;
-							player.setting.chance = +row.cells[7].textContent.split(' %')[0];
+					if (r === 1) {
+						for (var t = 1; t < trainerSelect.options.length; t++) {
+							var pattern = /T (\d) ([\d|\.]+)/gm;
+							var matches = pattern.exec(trainerSelect.options[t].text);
+							if (matches) {
+								var key = Trainer.SKILLS.indexOf(+matches[2]) + 1;
+								training.trainer[t - 1] = new Trainer(key);
+							}
 						}
+					}
+
+					if (trainerSelect.value !== '0' && skillSelect.value !== '0' && !player.verletzt) {
+
+						training.trainer[trainerSelect.value - 1].players += 1;
+
+						player.setting = new training.Setting();
+						player.setting.trainerkey = training.trainer[trainerSelect.value - 1].getKey();
+						player.setting.skillnr = +skillSelect.value;
+						player.setting.skillvalue = +row.cells[6].textContent;
+						player.setting.chance = +row.cells[7].textContent.split(' %')[0];
 					}
 
 					training.players.push(player);

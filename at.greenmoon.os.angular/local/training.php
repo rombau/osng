@@ -237,10 +237,10 @@
 
 		<option value="0">---</option>
 <option value="1">ABS</option>
-<option value="2" SELECTED>STS</option>
+<option value="2">STS</option>
 <option value="3">FAN</option>
 <option value="4">STB</option>
-<option value="5">SPL</option>
+<option value="5" SELECTED>SPL</option>
 <option value="6">REF</option>
 <option value="7">AGG</option>
 <option value="8">PAS</option>
@@ -307,7 +307,7 @@
 
 </tr><tr align="right">
 
-	<td></td>
+	<td><img src="images/verletzt.png" style="width:10px;height:10px" alt="verletzt"></td>
 
 	<td class="TOR" align="left"><a href="javascript:spielerinfo(116667)">Connor Whelan</a></td>
 
@@ -757,7 +757,7 @@
 
 </tr><tr align="right">
 
-	<td></td>
+	<td><img src="images/verletzt.png" style="width:10px;height:10px" alt="verletzt"></td>
 
 	<td class="DMI" align="left"><a href="javascript:spielerinfo(43418)">Martin Downey</a></td>
 

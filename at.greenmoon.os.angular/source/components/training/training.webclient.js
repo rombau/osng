@@ -22,7 +22,7 @@ osApp.factory('TrainingWebClient', ['$q','$http','Training','TrainingTransformat
 
 				var training = responses[0].data;
 				for (var t = 0; t < training.trainer.length; t++) {
-					training.trainer[t].gehalt = responses[1].data[t].gehalt;
+					training.trainer[t].gehalt += responses[1].data[t].gehalt;
 					training.trainer[t].vertrag = responses[1].data[t].vertrag;
 					training.trainer[t].abfindung = responses[1].data[t].abfindung;
 				}

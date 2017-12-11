@@ -32,6 +32,7 @@ describe('Player transformation service', function () {
 		expect(player.vertrag).toEqual(59);
 		expect(player.marktwert).toEqual(5756644);
 		expect(player.pos).toEqual('STU');
+		expect(player.verletzt).toEqual(3);
 
 		expect(player.team.id).toEqual(57);
 		expect(player.team.name).toEqual('FC Nivellois');

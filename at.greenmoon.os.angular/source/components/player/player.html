@@ -48,7 +48,7 @@
 
 <div class="row" style="margin-bottom: 10px;">
 	<div ng-repeat="skill in $ctrl.player.skills track by $index" class="col-xs-12 col-sm-4">
-		<span ng-class="{ 'bold': $ctrl.player.isPrimarySkill($index) }">{{$ctrl.player.getSkillCaption($index, $ctrl.player)}}: {{skill | number}}</span>
+		<span ng-class="{ 'bold': $ctrl.player.isPrimarySkill($index) }">{{$ctrl.player.getSkillCaption($index)}}: {{skill | number}}</span>
 		<div class="progress skill"><div class="progress-bar" style="width: {{skill | number}}%"></div><div class="rest" style="width: {{100-skill | number}}%"></div></div>
 	</div>
 </div>

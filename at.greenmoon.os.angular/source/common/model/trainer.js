@@ -1,14 +1,15 @@
 osApp.factory('Trainer', [function () {
 
-	function Trainer () {
+	function Trainer (key) {
 
-		this.name = Trainer.NAME;
-		this.skill = 0;
+		this.name = Trainer.NAME + ' ' + (key || 1);
+		this.skill = Trainer.SKILLS[(key - 1) || 0];
 		this.gehalt = 0;
 		this.vertrag = 0;
 		this.abfindung = 0;
 
-		this.slots = Trainer.MAX_PLAYERS;
+		this.max = Trainer.MAX_PLAYERS;
+		this.players = 0;
 	}
 
 	Trainer.NAME = 'Trainer';
@@ -19,6 +20,12 @@ osApp.factory('Trainer', [function () {
 
 	Trainer.prototype = {
 
+		getKey : function () {
+			if (!this.name || this.name.indexOf(' ') === -1) {
+				return null;
+			}
+			return this.name.split(' ')[1];
+		}
 	};
 
 	return Trainer;

@@ -1,5 +1,18 @@
 <div class="navbar-brand navbar-brand-center" ui-content-for="title">
-	Training<span class="hidden-xs">seinstellungen</span>
+	<div style="position: relative; ">
+		<div style="position: absolute; top: -6px;">
+		    <span style="white-space: nowrap;">
+		    	Training<span class="hidden-xs">seinstellungen</span>
+		    </span>
+		    <br>
+		    <span ng-repeat="trainer in $ctrl.getTrainerSelection()" 
+		    	style="font-size: x-small; white-space: nowrap;">
+					T<span class="hidden-xs">rainer</span> {{trainer.getKey()}}: 
+					<span ng-class="{STU:trainer.players > trainer.max, ABW:trainer.players == trainer.max}"><b>{{trainer.players}}</b></span> <span class="hidden-xs">Spieler</span>
+					<span ng-if="!$last"> - </span>
+		    </span>
+	    </div>
+    </div>
 </div>
 
 <div class="btn-group pull-right" ui-content-for="navbarAction">
@@ -26,50 +39,93 @@
 					<div style="white-space: nowrap;">
 						{{player.alter}} J<span class="hidden-xs">ahre</span> - 
 						Opti {{player.opti | number : 2}} 
-						<span class="visible-xs-inline" ng-if="player.setting">
+						<span class="visible-xs-inline" ng-if="player.setting" ng-class="{marknew: (!player.setting.chance)}">
 							-
-							<span style="font-weight: bold;">{{$ctrl.training.getSkillName(player, true)}}</span>
+							<span style="font-weight: bold;">{{$ctrl.getPlayerSkillName(player, true)}}</span>
 							mit 
-							<span style="font-weight: bold;">{{player.setting.trainer.skill}}er</span> 
-							<span>bei {{player.setting.chance | number : 2}}%</span>
+							<span style="font-weight: bold;">{{player.setting.trainerkey}}er</span> 
+							<span ng-if="player.setting.chance">bei {{player.setting.chance | number : 2}}%</span>
 						</span>
+						<span class="visible-xs-inline" ng-if="player.verletzt">- verletzt</span>
 					</div>
 				</div>
 				<div class="visible-xs" style="float: right; display: inline-block;">
-					<a style="color: #FBF9B3;" ng-if="player.setting" ng-click="$ctrl.editPlayerSetting(player)">
+					<a style="color: #FBF9B3;" ng-if="player.setting && !player.verletzt" ng-click="$ctrl.editPlayerSetting(player)">
 						<i class="fa fa-pencil"></i>
 					</a>
-					<a style="color: #FBF9B3;" ng-if="!player.setting" ng-click="$ctrl.editPlayerSetting(player)">
+					<a style="color: #FBF9B3;" ng-if="!player.setting && !player.verletzt" ng-click="$ctrl.editPlayerSetting(player)">
 						<i class="fa fa-plus"></i>
 					</a>
 				</div>
-				<div class="combo hidden-xs" style="float: left; display: inline-block; margin-top: 2px; margin-left: 10px; width: 150px;">
-					<select class="form-control" id="skill-select" name="skill-select" ng-model="player.setting.skillnr" 
-						ng-options="skill.nr as skill.label for skill in $ctrl.training.getSkillSelection(player)">
+				<div ng-if="player.setting && !player.verletzt" class="combo hidden-xs" style="float: left; display: inline-block; margin-top: 2px; margin-left: 10px; width: 190px;">
+					<select class="form-control" id="skill-select" name="skill-select" ng-model="player.setting.skillnr"
+						ng-options="skill.nr as skill.label for skill in $ctrl.getPlayerSkillSelection(player)">
 					</select>
 				</div>
-				<div class="hidden-xs" style="float: left; display: inline-block; margin-top: 2px; padding: 6px;	">
-					{{player.setting.skillvalue}}
+				<div ng-if="player.setting && !player.verletzt" class="combo hidden-xs" style="float: left; display: inline-block; margin-top: 2px; margin-left: 10px; width: 155px;">
+					<select class="form-control" id="trainer-select" name="trainer-select" ng-model="player.setting.trainerkey"
+						ng-options="trainer.getKey() as trainer.name + ' bis ' + trainer.skill for trainer in $ctrl.getTrainerSelection()"
+						ng-change="$ctrl.changeTrainerSelection()">
+					</select>
 				</div>
+				<div class="hidden-xs" style="float: left; display: inline-block; margin-top: 2px; padding: 6px;">
+					<span ng-if="player.verletzt" style="color: #FBF9B3; padding-left: 7px;">
+						<i class="fa fa-medkit"></i> verletzt</span>
+					<a ng-if="!player.setting && !player.verletzt" style="color: #FBF9B3;" 
+						ng-click="$ctrl.addPlayerSetting(player)"><i class="fa fa-plus"></i> Training festlegen</a>
+					<a ng-if="player.setting && !player.verletzt" style="color: #FBF9B3;" 
+						ng-click="$ctrl.deletePlayerSetting(player)"><i class="fa fa-trash"></i></a>
+				</div>
+
 	    	</div>
 		</div>
 	</div>
 </div>
 
 <div ui-content-for="modals">
+	<div class="modal" ui-if="trainingsetting" ui-state="trainingsetting">
+		<div class="modal-backdrop in"></div>
+    	<div class="modal-dialog">
+      		<div class="modal-content">
+        		<div class="modal-header">
+          			<button ng-if="$ctrl.dialog.player.setting" class="close" ui-turn-off="trainingsetting" ng-click="$ctrl.deletePlayerSetting()"><i class="fa fa-trash"></i></button>
+          			<h4 class="modal-title" >Training für {{$ctrl.dialog.player.name}}</h4>
+        		</div>
+        		<div class="modal-body">
+					<label for="zat">Skill</label>
+					<div class="combo" style="padding-right: 0px;">
+						<select class="form-control" id="dialog-skill-select" name="dialog-skill-select" ng-model="$ctrl.dialog.setting.skillnr" 
+							ng-options="skill.nr as skill.label for skill in $ctrl.getPlayerSkillSelection($ctrl.dialog.player, true)">
+						</select>
+					</div>
+					<label for="zat">Trainer</label>
+					<div class="combo">
+						<select class="form-control" id="dialog-trainer-select" name="dialog-trainer-select" ng-model="$ctrl.dialog.setting.trainerkey" 
+							ng-options="trainer.getKey() as trainer.name + ' bis ' + trainer.skill for trainer in $ctrl.getTrainerSelection()">
+						</select>
+					</div>
+        		</div>
+				<div class="modal-footer">
+					<button ui-turn-off="trainingsetting" class="btn btn-success" ng-click="$ctrl.savePlayerSetting()">Speichern</button>
+					<button ui-turn-off="trainingsetting" class="btn btn-primary">Schließen</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="modal" ui-if="trainingLoad" ui-state="trainingLoad">
 		<div class="modal-backdrop in"></div>
     	<div class="modal-dialog">
       		<div class="modal-content">
         		<div class="modal-header">
-          			<button class="close" ui-turn-off="trainingLoad">&times;</button>
+          			<button class="close fa fa-close" ui-turn-off="trainingLoad"></button>
           			<h4 class="modal-title" >Trainingseinstellungen laden</h4>
         		</div>
         		<div class="modal-body">
 					<label for="zat">Name</label>
 					<div class="combo">
 						<select class="form-control" id="training-name" name="training-name" ng-model="$ctrl.training.id" 
-							ng-options="training.id as training.label for training in $ctrl.training.selection">
+							ng-options="selection.id as selection.label for selection in $ctrl.training.selection">
 						</select>
 					</div>
         		</div>
@@ -80,5 +136,4 @@
 			</div>
 		</div>
 	</div>
-	
 </div>

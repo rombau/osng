@@ -16,11 +16,11 @@ describe('Training web client', function () {
 
 		webClient.loadTraining().then(function (training) {
 
-			expect(training.selection.length).toEqual(2);
+			expect(training.config.length).toEqual(2);
 			expect(training.players.length).toEqual(32);
 			expect(training.trainer.length).toEqual(6);
 
-			expect(training.players[1].setting.trainer).toBe(training.trainer[0]);
+			expect(training.players[1].setting.trainerkey).toEqual('17');
 
 		});
 

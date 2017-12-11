@@ -26,6 +26,8 @@ osApp.factory('PlayerTransformation', ['Player','Team','HtmlUtil',function (Play
 			player.marktwert = +tables[0].rows[2].cells[1].textContent.match(/([\d|\.]+) EUR/)[1].replace(/\./g, '');
 			player.pos = tables[0].rows[2].cells[4].textContent;
 
+			player.verletzt = +tables[0].rows[3].cells[1].textContent;
+
 			player.team = new Team();
 
 			var teamNodes = tables[0].rows[2].cells[7].childNodes;
