@@ -22,7 +22,7 @@ osApp.factory('Training', [function () {
 		 */
 		this.Setting = function () {
 
-			this.trainername = null;
+			this.trainerkey = null;
 			this.skillnr = 1;
 			this.skillvalue = null;
 			this.chance = null;

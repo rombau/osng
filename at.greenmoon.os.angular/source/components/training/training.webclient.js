@@ -2,14 +2,17 @@ osApp.factory('TrainingWebClient', ['$q','$http','Training','TrainingTransformat
 
 	return {
 
-		loadTraining : function () {
+		loadTraining : function (id) {
 
 			var deferred = $q.defer();
 			var promises = [];
 
 			promises.push($http({
 				url : '../training.php',
-				method : 'GET',
+				method : id ? 'POST' : 'GET',
+				data : id ? {
+					trainingload : id
+				} : null,
 				transformResponse : TrainingTransformation.transformTraining
 			}));
 			promises.push($http({
@@ -34,8 +37,18 @@ osApp.factory('TrainingWebClient', ['$q','$http','Training','TrainingTransformat
 			return deferred.promise;
 		},
 
-		saveTraining : function () {
+		saveTraining : function (training) {
 
+			return $http({
+				url : '../training.php',
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded'
+				},
+				data : training,
+				transformRequest : TrainingTransformation.transformTrainingData,
+				transformResponse : TrainingTransformation.transformTraining
+			});
 		}
 	};
 }]);

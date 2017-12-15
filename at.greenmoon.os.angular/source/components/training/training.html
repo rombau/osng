@@ -20,14 +20,16 @@
 		<i class="fa fa-folder-open-o"></i> <span class="hidden-xs">Laden</span>
     </a>
     <a class="btn btn-navbar" ng-click="$ctrl.save()">
-       	<i class="fa fa-save"></i> <span class="hidden-xs">Speichern</span>
+    	{{ctrl.isModified()}}<span ng-class="$ctrl.isModified() ? 'STU' : 'ABW'">
+       		<i class="fa fa-save"></i> <span class="hidden-xs">Speichern</span>
+       	</span>
     </a>
 </div>
 
 <div class="scrollable">
 	<div class="scrollable-content scroll-area">
     	<div class="section">
-	    	<div ng-repeat="player in $ctrl.training.players" class="list-group-item" style="width: 100%">
+	    	<div ng-repeat="player in $ctrl.training.players" class="list-group-item" style="width: 100%;">
 	    		<div class="grid-cell">
     				<div ng-click="$ctrl.openPlayer(player)" class="grid-face grid-face-{{player.pos}} noselect"
     					style="background-image: url('/faceprev.php?sid={{player.id}}'); cursor: pointer;"></div>
@@ -41,39 +43,40 @@
 						Opti {{player.opti | number : 2}} 
 						<span class="visible-xs-inline" ng-if="player.setting" ng-class="{marknew: (!player.setting.chance)}">
 							-
-							<span style="font-weight: bold;">{{$ctrl.getPlayerSkillName(player, true)}}</span>
+							<b>{{$ctrl.getPlayerSkillName(player, true)}}</b>
 							mit 
-							<span style="font-weight: bold;">{{player.setting.trainerkey}}er</span> 
+							<b>{{player.setting.trainerkey}}er</b> 
 							<span ng-if="player.setting.chance">bei {{player.setting.chance | number : 2}}%</span>
 						</span>
 						<span class="visible-xs-inline" ng-if="player.verletzt">- verletzt</span>
 					</div>
 				</div>
-				<div class="visible-xs" style="float: right; display: inline-block;">
-					<a style="color: #FBF9B3;" ng-if="player.setting && !player.verletzt" ng-click="$ctrl.editPlayerSetting(player)">
+				<div class="visible-xs noselect" style="float: right; display: inline-block;">
+					<a class="brand" ng-if="player.setting && !player.verletzt" ng-click="$ctrl.editPlayerSetting(player)">
 						<i class="fa fa-pencil"></i>
 					</a>
-					<a style="color: #FBF9B3;" ng-if="!player.setting && !player.verletzt" ng-click="$ctrl.editPlayerSetting(player)">
+					<a class="brand" ng-if="!player.setting && !player.verletzt" ng-click="$ctrl.editPlayerSetting(player)">
 						<i class="fa fa-plus"></i>
 					</a>
 				</div>
-				<div ng-if="player.setting && !player.verletzt" class="combo hidden-xs" style="float: left; display: inline-block; margin-top: 2px; margin-left: 10px; width: 190px;">
+				<div ng-if="player.setting && !player.verletzt" class="combo hidden-xs left-input" style="margin-left: 10px; width: 190px;">
 					<select class="form-control" id="skill-select" name="skill-select" ng-model="player.setting.skillnr"
 						ng-options="skill.nr as skill.label for skill in $ctrl.getPlayerSkillSelection(player)">
 					</select>
 				</div>
-				<div ng-if="player.setting && !player.verletzt" class="combo hidden-xs" style="float: left; display: inline-block; margin-top: 2px; margin-left: 10px; width: 155px;">
+				<div ng-if="player.setting && !player.verletzt" class="combo hidden-xs left-input" style="margin-left: 10px; width: 155px;">
 					<select class="form-control" id="trainer-select" name="trainer-select" ng-model="player.setting.trainerkey"
 						ng-options="trainer.getKey() as trainer.name + ' bis ' + trainer.skill for trainer in $ctrl.getTrainerSelection()"
 						ng-change="$ctrl.changeTrainerSelection()">
 					</select>
 				</div>
-				<div class="hidden-xs" style="float: left; display: inline-block; margin-top: 2px; padding: 6px;">
-					<span ng-if="player.verletzt" style="color: #FBF9B3; padding-left: 7px;">
+				<div class="hidden-xs noselect left-input" style="padding: 6px;">
+					<span ng-if="player.setting && !player.verletzt && player.setting.chance"> bei {{player.setting.chance | number : 2}}%</span>
+					<span ng-if="player.verletzt" class="brand" style="padding-left: 7px;">
 						<i class="fa fa-medkit"></i> verletzt</span>
-					<a ng-if="!player.setting && !player.verletzt" style="color: #FBF9B3;" 
+					<a ng-if="!player.setting && !player.verletzt" class="brand" 
 						ng-click="$ctrl.addPlayerSetting(player)"><i class="fa fa-plus"></i> Training festlegen</a>
-					<a ng-if="player.setting && !player.verletzt" style="color: #FBF9B3;" 
+					<a ng-if="player.setting && !player.verletzt" class="brand" 
 						ng-click="$ctrl.deletePlayerSetting(player)"><i class="fa fa-trash"></i></a>
 				</div>
 
@@ -124,8 +127,8 @@
         		<div class="modal-body">
 					<label for="zat">Name</label>
 					<div class="combo">
-						<select class="form-control" id="training-name" name="training-name" ng-model="$ctrl.training.id" 
-							ng-options="selection.id as selection.label for selection in $ctrl.training.selection">
+						<select class="form-control" id="config-name" name="config-name" ng-model="$ctrl.training.configid" 
+							ng-options="config.id as config.label for config in $ctrl.training.config">
 						</select>
 					</div>
         		</div>

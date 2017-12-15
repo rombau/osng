@@ -97,6 +97,45 @@ osApp.factory('TrainingTransformation', ['Training','Trainer','Player','HtmlUtil
 			}
 
 			return training;
+		},
+
+		transformTrainingData : function (training) {
+
+			var p, player, data = '', t, trainer;
+
+			var getTrainerNumber = function (key) {
+				for (t = 0; t < training.trainer.length; t++) {
+					trainer = training.trainer[t];
+					trainer._count = trainer._count || 0;
+					if (trainer.getKey() === key && trainer._count < Trainer.MAX_PLAYERS) {
+						trainer._count++;
+						return t + 1;
+					}
+				}
+				for (t = 0; t < training.trainer.length; t++) {
+					trainer = training.trainer[t];
+					if (trainer.getKey() === key) {
+						trainer._count++;
+						return t + 1;
+					}
+				}
+				return 0;
+			};
+
+			for (p = 0; p < training.players.length; p++) {
+				player = training.players[p];
+				if (p > 0) {
+					data += '&';
+				}
+				data = data + 'tr1' + player.id + '=' + (player.setting ? getTrainerNumber(player.setting.trainerkey) : 0);
+				data = data + '&tr2' + player.id + '=' + (player.setting ? player.setting.skillnr : 0);
+			}
+
+			for (t = 0; t < training.trainer.length; t++) {
+				training.trainer[t]._count = 0;
+			}
+
+			return data + '&trainingspeichern=Trainingseinstellung+speichern';
 		}
 	};
 

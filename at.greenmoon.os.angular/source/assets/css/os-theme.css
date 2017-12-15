@@ -9362,7 +9362,7 @@ ui-switch {
   }
 }
 .section .list-group-item {
-  padding: 3px 2px;
+  padding: 2px 2px;
   display: inline-block;
 }
 .section .list-group-item a > i {
@@ -9371,6 +9371,11 @@ ui-switch {
 }
 .section .btn {
   margin: 0px 2px 10px 0px;
+}
+.section .left-input {
+  float: left;
+  display: inline-block;
+  margin-top: 2px;
 }
 .sidebar .list-group-item,
 .selection-container .list-group-item,
@@ -9427,7 +9432,11 @@ span.markdeleted {
   text-decoration: line-through;
   opacity: 0.8;
 }
-span.marknew {
+span.marknew,
+span.brand {
+  color: #FBF9B3;
+}
+a.brand {
   color: #FBF9B3;
 }
 label {

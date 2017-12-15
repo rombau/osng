@@ -35,7 +35,7 @@ osApp.config(['$provide','$routeProvider','$locationProvider','$httpProvider',fu
 		return {
 			responseError : function (response) {
 				$rootScope.error = '' + response;
-				$location.path('error');
+				// $location.path('error');
 			}
 		};
 

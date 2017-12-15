@@ -11,19 +11,42 @@ osApp.component('trainingComponent', {
 
 			var ctrl = this;
 
+			var persistedState;
+
 			ctrl.training = new Training();
+
+			var getCurrentState = function () {
+				var state = '';
+				for (var p = 0; p < ctrl.training.players.length; p++) {
+					var player = ctrl.training.players[p];
+					state = state + ';' + player.id + ';' + (player.setting ? player.setting.trainerkey : 0);
+					state = state + ';' + player.id + ';' + (player.setting ? player.setting.skillnr : 0);
+				}
+				return state;
+			};
+
+			ctrl.isModified = function () {
+				return getCurrentState() !== persistedState;
+			};
 
 			var loadSuccessHandler = function (training) {
 				ctrl.training = training;
+				persistedState = getCurrentState();
 			};
 
 			TrainingWebClient.loadTraining().then(loadSuccessHandler);
 
 			ctrl.save = function () {
-
+				TrainingWebClient.saveTraining(ctrl.training).then(function (response) {
+					loadSuccessHandler(response.data);
+				});
 			};
 
 			ctrl.load = function (approved) {
+				if (approved) {
+					TrainingWebClient.loadTraining(ctrl.training.configid).then(loadSuccessHandler);
+					return;
+				}
 				Popup.open('trainingLoad');
 			};
 
