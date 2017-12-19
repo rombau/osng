@@ -29,7 +29,7 @@
 <div class="scrollable">
 	<div class="scrollable-content scroll-area">
     	<div class="section">
-	    	<div ng-repeat="player in $ctrl.training.players" class="list-group-item" style="width: 100%;">
+	    	<div ng-repeat="player in $ctrl.training.players" class="list-group-item player-line" style="width: 100%;">
 	    		<div class="grid-cell">
     				<div ng-click="$ctrl.openPlayer(player)" class="grid-face grid-face-{{player.pos}} noselect"
     					style="background-image: url('/faceprev.php?sid={{player.id}}'); cursor: pointer;"></div>
