@@ -14,6 +14,7 @@
 	<natures>
 		<nature>org.nodeclipse.ui.NodeNature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
+		<nature>net.vtst.ow.eclipse.less.nature</nature>
 		<nature>tern.eclipse.ide.core.ternnature</nature>
 	</natures>
 </projectDescription>
