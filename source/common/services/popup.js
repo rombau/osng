@@ -1,30 +1,24 @@
 osApp.factory('Popup', ['SharedState',function (SharedState) {
 
-	var lastState = null;
-
 	return {
-		open : function (popupState, value) {
-			if (popupState) {
+		open : function (state, value) {
+			if (state) {
 				if (value) {
-					SharedState.setOne(popupState, value);
+					SharedState.setOne(state, value);
 				} else {
-					SharedState.turnOn(popupState);
+					SharedState.turnOn(state);
 				}
-				lastState = popupState;
 			}
 		},
 		hide : function () {
-			if (lastState) {
-				SharedState.turnOff(lastState);
-				lastState = null;
-				return true;
+			var allSharedStates = SharedState.values();
+			for ( var state in allSharedStates) {
+				if (allSharedStates.hasOwnProperty(state) && state.indexOf("popup") !== -1 && allSharedStates[state]) {
+					SharedState.turnOff(state);
+					return true;
+				}
 			}
 			return false;
-		},
-		sidebar : function (popupState) {
-			if (popupState) {
-				lastState = popupState;
-			}
 		}
 	};
 }]);

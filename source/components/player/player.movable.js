@@ -158,7 +158,7 @@ osApp.component('movablePlayer', {
 				start : function (drag, event) {
 					dragMove = true;
 					setMovingStyle(true);
-					SharedState.turnOff('leftSwipe');
+					SharedState.turnOff('popupSwipeSelection');
 					scroll.offset = 0;
 				},
 
@@ -239,7 +239,7 @@ osApp.component('movablePlayer', {
 				end : function (touch) {
 					if (!dragMove) {
 						setMovingStyle(false);
-						Popup.open('modalPlayer', ctrl.player);
+						Popup.open('popupPlayer', ctrl.player);
 						$scope.$apply();
 					}
 				}

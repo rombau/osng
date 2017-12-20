@@ -6,9 +6,4 @@ osApp.run(['$rootScope','Popup',function ($rootScope, Popup) {
 		}
 	});
 
-	$rootScope.$on('mobile-angular-ui.state.changed.leftSwipe', function (evt, newVal, oldVal) {
-		if (newVal) {
-			Popup.sidebar('leftSwipe');
-		}
-	});
 }]);

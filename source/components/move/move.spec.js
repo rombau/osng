@@ -48,7 +48,7 @@ describe('Move controller', function () {
 		rootScope = $injector.get('$rootScope').$new();
 
 		SharedState.initialize(rootScope, 'activeTab');
-		SharedState.initialize(rootScope, 'moveAction');
+		SharedState.initialize(rootScope, 'popupMoveAction');
 
 		$componentController = $injector.get('$componentController');
 		ctrl = $componentController('moveComponent');
@@ -209,7 +209,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(1);
 		expect(ctrl.option.text).toEqual('');
@@ -246,7 +246,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(5);
 		expect(ctrl.option.text).toEqual('Positionswechsel');
@@ -269,7 +269,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(1);
 		expect(ctrl.option.text).toEqual('Einwechslung');
@@ -294,7 +294,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(1);
 		expect(ctrl.option.text).toEqual('Einwechslung');
@@ -317,7 +317,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(1);
 		expect(ctrl.option.text).toEqual('Einwechslung');
@@ -342,7 +342,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(1);
 		expect(ctrl.option.text).toEqual('Einwechslung');
@@ -365,7 +365,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(1);
 		expect(ctrl.option.text).toEqual('Einwechslung');
@@ -391,7 +391,7 @@ describe('Move controller', function () {
 
 		rootScope.$digest();
 
-		expect(SharedState.isActive('moveAction')).toBeTruthy();
+		expect(SharedState.isActive('popupMoveAction')).toBeTruthy();
 		expect(ctrl.option.page).toEqual(1);
 		expect(ctrl.option.item).toEqual(1);
 		expect(ctrl.option.text).toEqual('Einwechslung');
@@ -480,7 +480,7 @@ describe('Move controller', function () {
 
 		ctrl.saveAdjustment();
 
-		expect(SharedState.isActive('moveAction')).toBeFalsy();
+		expect(SharedState.isActive('popupMoveAction')).toBeFalsy();
 		expect(ctrl.move.adjustments[0].option.item).toEqual(9);
 		expect(ctrl.move.adjustments[0].option.page).toEqual(2);
 		expect(ctrl.move.adjustments[0].option.text).toEqual('Spielmacher');

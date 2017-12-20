@@ -19,7 +19,7 @@
 </div>
 
 <div class="btn-group pull-right" ui-content-for="navbarAction">
-	<a ui-set="{'activeTab': 1}" ui-turn-off="leftSwipe"
+	<a ui-set="{'activeTab': 1}" ui-turn-off="popupSwipeSelection"
 	    ui-class="{'active': activeTab == 1}" class="btn btn-navbar">
 	    <i class="fa fa-th"></i><span class="hidden-xs"> Aufstellung</span>
 	</a>
@@ -173,14 +173,14 @@
 
 			</div>
 
-			<a ui-toggle="leftSwipe" class="selection-container-button visible-xs">
+			<a ui-toggle="popupSwipeSelection" class="selection-container-button visible-xs">
 				<i ui-if="activeTab == 1" class="fa fa-user-plus"></i>
 				<i ui-if="activeTab == 2" class="fa fa-plus"></i>
 			</a>
 			
 		    <div class="selection-container" 
-		    	ui-class="{'visible': leftSwipe == true, 'visible-xs': activeTab == 2}"
-		    	ui-turn-off="leftSwipe">
+		    	ui-class="{'visible': popupSwipeSelection == true, 'visible-xs': activeTab == 2}"
+		    	ui-turn-off="popupSwipeSelection">
 		    	
 		    	<div ui-if="activeTab == 1" class="player-container" ng-repeat="player in $ctrl.move.players">
 		    		<div class="grid-cell">
@@ -219,12 +219,12 @@
 </div>
 
 <div ui-content-for="modals">
-	<div class="modal" ui-if="moveAction" ui-state="moveAction">
+	<div class="modal" ui-if="popupMoveAction" ui-state="popupMoveAction">
 		<div class="modal-backdrop in"></div>
     	<div class="modal-dialog">
       		<div class="modal-content">
         		<div class="modal-header">
-          			<button class="close fa fa-close" ui-turn-off="moveAction"></button>
+          			<button class="close fa fa-close" ui-turn-off="popupMoveAction"></button>
           			<h4 class="modal-title" >{{$ctrl.option.text}}</h4>
         		</div>
         		<div class="modal-body">
@@ -238,18 +238,18 @@
 					</div>
         		</div>
 				<div class="modal-footer">
-					<button ui-turn-off="moveAction" class="btn btn-success" ng-click="$ctrl.saveAdjustment()">Speichern</button>
-					<button ui-turn-off="moveAction" class="btn btn-primary">Schließen</button>
+					<button ui-turn-off="popupMoveAction" class="btn btn-success" ng-click="$ctrl.saveAdjustment()">Speichern</button>
+					<button ui-turn-off="popupMoveAction" class="btn btn-primary">Schließen</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal" ui-if="moveLoad" ui-state="moveLoad">
+	<div class="modal" ui-if="popupMoveLoad" ui-state="popupMoveLoad">
 		<div class="modal-backdrop in"></div>
     	<div class="modal-dialog">
       		<div class="modal-content">
         		<div class="modal-header">
-          			<button class="close fa fa-close" ui-turn-off="moveLoad"></button>
+          			<button class="close fa fa-close" ui-turn-off="popupMoveLoad"></button>
           			<h4 class="modal-title" >Zugabgabe laden</h4>
         		</div>
         		<div class="modal-body">
@@ -261,25 +261,25 @@
 					</div>
         		</div>
 				<div class="modal-footer">
-					<button ui-turn-off="moveLoad" class="btn btn-success" ng-click="$ctrl.load(true)">Laden</button>
-					<button ui-turn-off="moveLoad" class="btn btn-primary">Schließen</button>
+					<button ui-turn-off="popupMoveLoad" class="btn btn-success" ng-click="$ctrl.load(true)">Laden</button>
+					<button ui-turn-off="popupMoveLoad" class="btn btn-primary">Schließen</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal" ui-state="moveCheck" ui-if="moveCheck">
+	<div class="modal" ui-state="popupMoveCheck" ui-if="popupMoveCheck">
 		<div class="modal-backdrop in"></div>
 	   	<div class="modal-dialog">
 	     	<div class="modal-content">
 	       		<div class="modal-header">
-         			<button class="close fa fa-close" ui-turn-off="moveCheck"></button>
+         			<button class="close fa fa-close" ui-turn-off="popupMoveCheck"></button>
          			<h4 class="modal-title">Zugabgabe</h4>
 	       		</div>
 	       		<div class="modal-body">
 	       			<embedded-site site="../checkza.php"></embedded-site>
 	       		</div>
 				<div class="modal-footer">
-					<button ui-turn-off="moveCheck" class="btn btn-primary">Schließen</button>
+					<button ui-turn-off="popupMoveCheck" class="btn btn-primary">Schließen</button>
 				</div>
 			</div>
 		</div>

@@ -62,9 +62,9 @@
 	<main-menu></main-menu>
 
 	<div class="app"
-		ui-shared-state="leftSwipe"
+		ui-shared-state="popupSwipeSelection"
 		ui-swipe-right="Ui.turnOn('uiSidebarLeft')"
-		ui-swipe-left="Ui.turnOn('leftSwipe')">
+		ui-swipe-left="Ui.turnOn('popupSwipeSelection')">
 
 		<div class="navbar navbar-app navbar-absolute-top">
 			<div class="btn-group pull-left">
@@ -89,19 +89,19 @@
 	
 	<div ui-yield-to="modals"></div>
 
-	<div class="modal" ui-state="modalPlayer" ui-if="modalPlayer">
+	<div class="modal" ui-state="popupPlayer" ui-if="popupPlayer">
 		<div class="modal-backdrop in"></div>
 	   	<div class="modal-dialog">
 	     	<div class="modal-content">
 	       		<div class="modal-header">
-         			<button class="close fa fa-close" ui-turn-off="modalPlayer"></button>
-         			<h4 class="modal-title">{{Ui.get('modalPlayer').name}} <small class="{{Ui.get('modalPlayer').pos}}">{{Ui.get('modalPlayer').pos}}</small></h4>
+         			<button class="close fa fa-close" ui-turn-off="popupPlayer"></button>
+         			<h4 class="modal-title">{{Ui.get('popupPlayer').name}} <small class="{{Ui.get('popupPlayer').pos}}">{{Ui.get('popupPlayer').pos}}</small></h4>
 	       		</div>
 	       		<div class="modal-body">
-	       			<player object="Ui.get('modalPlayer')"></player>
+	       			<player object="Ui.get('popupPlayer')"></player>
 	       		</div>
 				<div class="modal-footer">
-					<button ui-turn-off="modalPlayer" class="btn btn-primary">Schließen</button>
+					<button ui-turn-off="popupPlayer" class="btn btn-primary">Schließen</button>
 				</div>
 			</div>
 		</div>

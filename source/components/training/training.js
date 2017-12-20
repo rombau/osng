@@ -47,7 +47,7 @@ osApp.component('trainingComponent', {
 					TrainingWebClient.loadTraining(ctrl.training.configid).then(loadSuccessHandler);
 					return;
 				}
-				Popup.open('trainingLoad');
+				Popup.open('popupTrainingLoad');
 			};
 
 			ctrl.addPlayerSetting = function (player) {
@@ -67,7 +67,7 @@ osApp.component('trainingComponent', {
 				} else {
 					ctrl.dialog.setting.trainerkey = ctrl.training.trainer[0].getKey();
 				}
-				Popup.open('trainingsetting', player);
+				Popup.open('popupTrainingSetting', player);
 			};
 
 			ctrl.savePlayerSetting = function () {
@@ -96,7 +96,7 @@ osApp.component('trainingComponent', {
 			};
 
 			ctrl.openPlayer = function (player) {
-				Popup.open('modalPlayer', player);
+				Popup.open('popupPlayer', player);
 			};
 
 			ctrl.changeTrainerSelection = function () {

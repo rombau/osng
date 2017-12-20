@@ -219,7 +219,7 @@ osApp.component('moveComponent', {
 					if (callback) {
 						callback(ctrl.adjustmentForm);
 					}
-					Popup.open('moveAction');
+					Popup.open('popupMoveAction');
 				}
 			});
 		};
@@ -288,7 +288,7 @@ osApp.component('moveComponent', {
 			} else {
 				MoveWebClient.saveMove(ctrl.move).then(function () {
 					MoveWebClient.loadMove().then(loadSuccessHandler);
-					Popup.open('moveCheck');
+					Popup.open('popupMoveCheck');
 				});
 			}
 		};
@@ -300,7 +300,7 @@ osApp.component('moveComponent', {
 				return;
 			}
 			ctrl.zat = ctrl.move.zats[0].value;
-			Popup.open('moveLoad');
+			Popup.open('popupMoveLoad');
 		};
 
 		MoveWebClient.loadMove().then(loadSuccessHandler);
