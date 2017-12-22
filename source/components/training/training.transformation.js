@@ -90,6 +90,11 @@ osApp.factory('TrainingTransformation', ['Training','Trainer','Player','HtmlUtil
 						player.setting.skillnr = +skillSelect.value;
 						player.setting.skillvalue = +row.cells[6].textContent;
 						player.setting.chance = +row.cells[7].textContent.split(' %')[0];
+
+						// "Trainerskill zu niedrig!"
+						if (isNaN(player.setting.chance)) {
+							player.setting.chance = 0;
+						}
 					}
 
 					training.players.push(player);

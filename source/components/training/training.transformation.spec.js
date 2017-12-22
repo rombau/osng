@@ -59,6 +59,8 @@ describe(
 			expect(training.players[1].setting.skillvalue).toEqual(79);
 			expect(training.players[1].setting.chance).toEqual(13.65);
 
+			expect(training.players[2].setting.chance).toEqual(0);
+
 			expect(training.players[3].verletzt).toBeTruthy();
 
 			expect(training.trainer).toBeDefined();
@@ -68,7 +70,7 @@ describe(
 			expect(training.trainer[0]).toBeDefined();
 			expect(training.trainer[0].name).toEqual('Trainer 17');
 			expect(training.trainer[0].skill).toEqual(99.5);
-			expect(training.trainer[0].players).toEqual(4);
+			expect(training.trainer[0].players).toEqual(3);
 
 			expect(training.trainer[3]).toBeDefined();
 			expect(training.trainer[3].name).toEqual('Trainer 14');
@@ -78,7 +80,7 @@ describe(
 			expect(training.trainer[5]).toBeDefined();
 			expect(training.trainer[5].name).toEqual('Trainer 1');
 			expect(training.trainer[5].skill).toEqual(60);
-			expect(training.trainer[5].players).toEqual(0);
+			expect(training.trainer[5].players).toEqual(1);
 
 		});
 
@@ -111,6 +113,6 @@ describe(
 
 				expect(data)
 					.toEqual(
-						'tr141930=0&tr241930=0&tr181726=1&tr281726=2&tr1105508=1&tr2105508=3&tr1116667=0&tr2116667=0&tr14147=0&tr24147=0&tr158271=4&tr258271=2&tr158642=1&tr258642=7&tr160807=1&tr260807=9&tr192290=4&tr292290=9&tr1100065=1&tr2100065=6&tr1100690=2&tr2100690=5&tr1111254=2&tr2111254=3&tr143418=0&tr243418=0&tr145479=2&tr245479=11&tr145662=4&tr245662=3&tr189863=2&tr289863=8&tr1111249=2&tr2111249=8&tr141361=0&tr241361=0&tr165138=4&tr265138=11&tr175108=3&tr275108=6&tr1111198=3&tr2111198=4&tr141344=0&tr241344=0&tr168491=4&tr268491=5&tr187418=3&tr287418=4&tr1106389=3&tr2106389=2&tr1116668=3&tr2116668=6&tr130081=0&tr230081=0&tr146019=0&tr246019=0&tr175105=5&tr275105=11&tr183700=5&tr283700=4&tr1110564=5&tr2110564=3&tr1113415=5&tr2113415=1&trainingspeichern=Trainingseinstellung+speichern');
+						'tr141930=0&tr241930=0&tr181726=1&tr281726=2&tr1105508=6&tr2105508=3&tr1116667=0&tr2116667=0&tr14147=0&tr24147=0&tr158271=4&tr258271=2&tr158642=1&tr258642=7&tr160807=1&tr260807=9&tr192290=4&tr292290=9&tr1100065=1&tr2100065=6&tr1100690=1&tr2100690=5&tr1111254=2&tr2111254=3&tr143418=0&tr243418=0&tr145479=2&tr245479=11&tr145662=4&tr245662=3&tr189863=2&tr289863=8&tr1111249=2&tr2111249=8&tr141361=0&tr241361=0&tr165138=4&tr265138=11&tr175108=2&tr275108=6&tr1111198=3&tr2111198=4&tr141344=0&tr241344=0&tr168491=4&tr268491=5&tr187418=3&tr287418=4&tr1106389=3&tr2106389=2&tr1116668=3&tr2116668=6&tr130081=0&tr230081=0&tr146019=0&tr246019=0&tr175105=3&tr275105=11&tr183700=5&tr283700=4&tr1110564=5&tr2110564=3&tr1113415=5&tr2113415=1&trainingspeichern=Trainingseinstellung+speichern');
 			});
 	});
