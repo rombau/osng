@@ -80,11 +80,11 @@ var server = http.createServer(function (req, res) {
 
 	try {
 		proxy.web(req, res, {
-			target : 'http://os.ongapo.com'
+			target : 'https://os.ongapo.com'
 		});
 	} catch (e) {
 		res.writeHead(503);
-		res.write("Fehler beim Laden von http://os.ongapo.com" + req.url + "\n\n" + e.message);
+		res.write("Fehler beim Laden von https://os.ongapo.com" + req.url + "\n\n" + e.message);
 		res.end();
 	}
 });
